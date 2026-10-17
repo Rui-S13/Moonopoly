@@ -1,3 +1,16 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+import { Home } from './pages/home/home';
+import { Listings } from './pages/listings/listings';
+import { ListingDetail } from './pages/listing-detail/listing-detail';
+import { Publish } from './pages/publish/publish';
+import { Favorites } from './pages/favorites/favorites';
+
+export const routes: Routes = [
+  { path: '', component: Home },
+  { path: 'listings', component: Listings },
+  { path: 'listings/:id', component: ListingDetail },
+  { path: 'publish', component: Publish },
+  { path: 'favorites', component: Favorites },
+  { path: '**', redirectTo: '' },
+];
