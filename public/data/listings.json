@@ -1,0 +1,51 @@
+[
+    {
+        "id": 1,
+        "title": "Quiet plot near the Apollo 11 site",
+        "description": "Flat, dusty, great sunsets. Neighbours are mostly historic.",
+        "type": "sale",
+        "price": 1500000,
+        "status": "available",
+        "center": [
+            0.67,
+            23.47
+        ],
+        "widthKm": 5,
+        "heightKm": 3,
+        "imageUrl": "images/listing-1.jpg",
+        "publishedAt": "2026-10-01",
+        "contactEmail": "agent@moonopoly.com"
+    },
+    {
+        "id": 2,
+        "title": "Polar plot with ice access",
+        "description": "Cold, dark, and close to the water. Bring a jacket.",
+        "type": "rent",
+        "price": 8000,
+        "status": "reserved",
+        "center": [
+            -89.9,
+            0
+        ],
+        "widthKm": 2,
+        "heightKm": 2,
+        "publishedAt": "2026-10-05",
+        "contactEmail": "agent@moonopoly.com"
+    },
+    {
+        "id": 3,
+        "title": "Spacious lot by Tycho",
+        "description": "Big views of the crater rays. Full moon every two weeks.",
+        "type": "sale",
+        "price": 900000,
+        "status": "available",
+        "center": [
+            -43.3,
+            -11.4
+        ],
+        "widthKm": 10,
+        "heightKm": 6,
+        "publishedAt": "2026-10-08",
+        "contactEmail": "agent@moonopoly.com"
+    }
+]
