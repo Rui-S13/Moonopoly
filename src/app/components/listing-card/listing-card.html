@@ -1,0 +1,19 @@
+<article>
+  <h2>{{ listing.title }}</h2>
+
+  @switch (listing.status) {
+    @case ('available') { <span class="badge available">Available</span> }
+    @case ('reserved') { <span class="badge reserved">Reserved</span> }
+    @case ('sold') { <span class="badge sold">Sold</span> }
+  }
+
+  <p>
+    {{ listing.price | currency: 'USD' }}
+    @if (listing.type === 'rent') { / month }
+  </p>
+  <p>{{ listing.widthKm * listing.heightKm }} km²</p>
+  <p>Published {{ listing.publishedAt | date }}</p>
+
+  <button type="button" (click)="onFavorite()">Add to favorites</button>
+  <a [routerLink]="['/listings', listing.id]">View details</a>
+</article>

@@ -2,9 +2,10 @@ import { Component, OnInit, signal } from '@angular/core';
 import { Listing } from '../../models/listing.models';
 import { ListingService } from '../../services/listing';
 import { CurrencyPipe, DatePipe } from '@angular/common';
+import { ListingCard } from '../../components/listing-card/listing-card';
 
 @Component({
-  imports: [CurrencyPipe, DatePipe],
+  imports: [CurrencyPipe, DatePipe, ListingCard],
   selector: 'app-listings',
   styleUrl: './listings.css',
   templateUrl: './listings.html',
@@ -28,4 +29,8 @@ export class Listings implements OnInit {
       },
     });
   }
+
+  onFavorite(listing: Listing): void {
+  console.log('Favorite clicked:', listing.title);
+}
 }
