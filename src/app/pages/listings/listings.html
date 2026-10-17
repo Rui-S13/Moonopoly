@@ -1,17 +1,13 @@
 <h1>Listings</h1>
 
 @if (loading()) {
-<p>Loading listings...</p>
+  <p>Loading listings...</p>
 } @else if (error()) {
-<p>Could not load the listings. Please try again later.</p>
+  <p>Could not load the listings. Please try again later.</p>
 } @else {
-@for (listing of listings(); track listing.id) {
-<article>
-    <h2>{{ listing.title }}</h2>
-    <p>{{ listing.price | currency: 'USD' }}</p>
-    <p>Published {{ listing.publishedAt | date }}</p>
-</article>
-} @empty {
-<p>No listings found.</p>
-}
+  @for (listing of listings(); track listing.id) {
+    <app-listing-card [listing]="listing" (favorite)="onFavorite($event)" />
+  } @empty {
+    <p>No listings found.</p>
+  }
 }
