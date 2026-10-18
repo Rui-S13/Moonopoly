@@ -12,9 +12,9 @@ import { ListingService } from '../../services/listing';
   templateUrl: './listing-detail.html',
 })
 export class ListingDetail implements OnInit, OnDestroy {
-  listing = signal<Listing | undefined>(undefined);
-  loading = signal(true);
-  error = signal(false);
+  listing: (Listing | undefined)= undefined;
+  loading: boolean = true;
+  error: boolean = false;
   private subscription?: Subscription;
 
   constructor(
@@ -26,19 +26,19 @@ export class ListingDetail implements OnInit, OnDestroy {
     this.subscription = this.route.paramMap
       .pipe(
         switchMap((params) => {
-          this.loading.set(true);
-          this.error.set(false);
+          this.loading = true;
+          this.error = false;
           return this.listingService.getListing(Number(params.get('id')));
         })
       )
       .subscribe({
         next: (listing) => {
-          this.listing.set(listing);
-          this.loading.set(false);
+          this.listing = listing;
+          this.loading = false;
         },
         error: () => {
-          this.error.set(true);
-          this.loading.set(false);
+          this.error = true;
+          this.loading = false;
         },
       });
   }

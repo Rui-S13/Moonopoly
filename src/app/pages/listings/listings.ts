@@ -5,6 +5,7 @@ import { ListingService } from '../../services/listing';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ListingCard } from '../../components/listing-card/listing-card';
 import { FavoritesService } from '../../services/favorites';
+import { priceRangeValidator } from '../../utils/validators';
 import {
   FormControl,
   FormGroup,
@@ -15,17 +16,6 @@ import {
   ValidatorFn,
 } from '@angular/forms';
 
-const priceRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-  const minPrice = control.get('minPrice')?.value;
-  const maxPrice = control.get('maxPrice')?.value;
-
-  if (minPrice !== null && maxPrice !== null && minPrice > maxPrice) {
-    return { invalidPriceRange: true };
-  }
-
-  return null;
-};
-
 @Component({
   imports: [CurrencyPipe, DatePipe, ListingCard, ReactiveFormsModule],
   selector: 'app-listings',
@@ -33,9 +23,9 @@ const priceRangeValidator: ValidatorFn = (control: AbstractControl): ValidationE
   templateUrl: './listings.html',
 })
 export class Listings implements OnInit {
-  listings = signal<Listing[]>([]);
-  loading = signal(true);
-  error = signal(false);
+  listings: Listing[] = [];
+  loading: boolean = true;
+  error: boolean = false;
 
   filteredListings: Listing[] = [];
 
@@ -47,13 +37,13 @@ export class Listings implements OnInit {
   ngOnInit(): void {
     this.listingService.getListings().subscribe({
       next: (data) => {
-        this.listings.set(data);
-        this.loading.set(false);
+        this.listings = data;
+        this.loading = false;
         this.filteredListings = data;
       },
       error: () => {
-        this.error.set(true);
-        this.loading.set(false);
+        this.error = true;
+        this.loading = false;
       },
     });
   }
@@ -73,7 +63,7 @@ export class Listings implements OnInit {
   onInputSearch() {
     const s = this.search.getRawValue();
 
-    this.filteredListings = this.listings().filter((l) => {
+    this.filteredListings = this.listings.filter((l) => {
       if (s.title.trim() !== '' && !l.title.toLowerCase().includes(s.title.trim().toLowerCase())) {
         return false;
       }

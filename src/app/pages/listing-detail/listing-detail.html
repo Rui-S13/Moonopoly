@@ -1,11 +1,11 @@
 <a routerLink="/listings">← Back to listings</a>
 
-@if (loading()) {
+@if (loading) {
   <p>Loading listing...</p>
-} @else if (error()) {
+} @else if (error) {
   <p>Could not load the listing. Please try again later.</p>
 } @else {
-  @if (listing(); as l) {
+  @if (listing; as l) {
     <h1>{{ l.title }}</h1>
     <p>{{ l.description }}</p>
 
