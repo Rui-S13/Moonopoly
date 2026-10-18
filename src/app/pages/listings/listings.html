@@ -6,7 +6,7 @@
   <p>Could not load the listings. Please try again later.</p>
 } @else {
   @for (listing of listings(); track listing.id) {
-    <app-listing-card [listing]="listing" (favorite)="onFavorite($event)" />
+    <app-listing-card [listing]="listing" [isFavorite]="favorites.isFavorite(listing.id)" (favorite)="onFavorite($event)" />
   } @empty {
     <p>No listings found.</p>
   }
