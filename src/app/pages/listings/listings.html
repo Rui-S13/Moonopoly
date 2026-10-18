@@ -1,13 +1,53 @@
 <h1>Listings</h1>
 
-@if (loading()) {
-  <p>Loading listings...</p>
-} @else if (error()) {
-  <p>Could not load the listings. Please try again later.</p>
-} @else {
-  @for (listing of listings(); track listing.id) {
-    <app-listing-card [listing]="listing" [isFavorite]="favorites.isFavorite(listing.id)" (favorite)="onFavorite($event)" />
-  } @empty {
-    <p>No listings found.</p>
+<form [formGroup]="search">
+  <label>
+    Title
+    <input formControlName="title" (input)="onInputSearch()">
+  </label>
+
+  @if (search.controls.title.hasError('minlength')
+  && search.controls.title.value.length > 0) {
+  <small>Enter at least 5 characters.</small>
   }
+
+  <label>
+    Type
+    <select formControlName="type" (change)="onInputSearch()">
+      <option [ngValue]="null">All types</option>
+      <option value="sale">For sale</option>
+      <option value="rent">For rent</option>
+    </select>
+  </label>
+
+  <label>
+    Min Price (USD)
+    <input type="number" formControlName="minPrice" (input)="onInputSearch()">
+  </label>
+
+  @if (search.controls.minPrice.hasError('min')) {
+  <small>Minimum price must be at least 1.</small>
+  }
+
+  <label>
+    Max Price (USD)
+    <input type="number" formControlName="maxPrice" (input)="onInputSearch()">
+  </label>
+
+  @if (search.controls.maxPrice.hasError('min')) {
+  <small>Maximum price must be at least 1.</small>
+  }
+</form>
+
+
+@if (loading()) {
+<p>Loading listings...</p>
+} @else if (error()) {
+<p>Could not load the listings. Please try again later.</p>
+} @else if (filteredListings.length === 0) {
+<p>No listings found. Try adjusting your filters.</p>
+} @else {
+@for (listing of filteredListings; track listing.id) {
+<app-listing-card [listing]="listing" [isFavorite]="favorites.isFavorite(listing.id)" (favorite)="onFavorite($event)" />
+}
 }
