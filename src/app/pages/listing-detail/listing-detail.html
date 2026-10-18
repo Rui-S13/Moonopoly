@@ -1,1 +1,24 @@
-<h1>Listing-Detail</h1>
+<a routerLink="/listings">← Back to listings</a>
+
+@if (loading()) {
+  <p>Loading listing...</p>
+} @else if (error()) {
+  <p>Could not load the listing. Please try again later.</p>
+} @else {
+  @if (listing(); as l) {
+    <h1>{{ l.title }}</h1>
+    <p>{{ l.description }}</p>
+
+    <p>
+      {{ l.price | currency: 'USD' }}
+      @if (l.type === 'rent') { / month }
+    </p>
+    <p>Status: {{ l.status }}</p>
+    <p>Plot size: {{ l.widthKm }} × {{ l.heightKm }} km ({{ l.widthKm * l.heightKm }} km²)</p>
+    <p>Location: {{ l.center[0] }}°, {{ l.center[1] }}°</p>
+    <p>Published {{ l.publishedAt | date }}</p>
+    <p>Contact: <a [href]="'mailto:' + l.contactEmail">{{ l.contactEmail }}</a></p>
+  } @else {
+    <p>Listing not found.</p>
+  }
+}
