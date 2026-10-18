@@ -11,6 +11,7 @@ import { Listing } from '../../models/listing.models';
 })
 export class ListingCard {
   @Input({ required: true }) listing!: Listing;
+  @Input() isFavorite = false;
   @Output() favorite = new EventEmitter<Listing>();
 
   onFavorite(): void {

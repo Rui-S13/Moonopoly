@@ -2,9 +2,9 @@
   <h2>{{ listing.title }}</h2>
 
   @switch (listing.status) {
-    @case ('available') { <span class="badge available">Available</span> }
-    @case ('reserved') { <span class="badge reserved">Reserved</span> }
-    @case ('sold') { <span class="badge sold">Sold</span> }
+  @case ('available') { <span class="badge available">Available</span> }
+  @case ('reserved') { <span class="badge reserved">Reserved</span> }
+  @case ('sold') { <span class="badge sold">Sold</span> }
   }
 
   <p>
@@ -14,6 +14,8 @@
   <p>{{ listing.widthKm * listing.heightKm }} km²</p>
   <p>Published {{ listing.publishedAt | date }}</p>
 
-  <button type="button" (click)="onFavorite()">Add to favorites</button>
+  <button type="button" (click)="onFavorite()">
+    {{ isFavorite ? 'Remove from favorites' : 'Add to favorites' }}
+  </button>
   <a [routerLink]="['/listings', listing.id]">View details</a>
 </article>
