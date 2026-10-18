@@ -40,9 +40,9 @@
 </form>
 
 
-@if (loading) {
+@if (loading()) {
 <p>Loading listings...</p>
-} @else if (error) {
+} @else if (error()) {
 <p>Could not load the listings. Please try again later.</p>
 } @else if (filteredListings.length === 0) {
 <p>No listings found. Try adjusting your filters.</p>

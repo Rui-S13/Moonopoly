@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { Listing } from '../../models/listing.models';
 import { ListingService } from '../../services/listing';
 import { FavoritesService } from '../../services/favorites';
@@ -11,31 +11,33 @@ import { ListingCard } from '../../components/listing-card/listing-card';
   templateUrl: './favorites.html',
 })
 export class Favorites implements OnInit {
-  listings: Listing[] = [];
-  loading: boolean = true;
-  error: boolean = false;
+  listings = signal<Listing[]>([]);
+  loading = signal(true);
+  error = signal(false);
 
-  favoriteListings: Listing[] = this.listings.filter((l) => this.favorites.ids().includes(l.id));
+  favoriteListings = computed(() =>
+    this.listings().filter((l) => this.favorites.ids().includes(l.id))
+  );
 
   constructor(
     private listingService: ListingService,
-    public favorites: FavoritesService,
-  ) {}
+    public favorites: FavoritesService
+  ) {};
 
   ngOnInit(): void {
     this.listingService.getListings().subscribe({
       next: (data) => {
-        this.listings = data;
-        this.loading = false;
+        this.listings.set(data);
+        this.loading.set(false);
       },
       error: () => {
-        this.error = true;
-        this.loading = false;
+        this.error.set(true);
+        this.loading.set(false);
       },
     });
-  }
+  };
 
   onFavorite(listing: Listing): void {
     this.favorites.toggle(listing.id);
-  }
+  };
 }

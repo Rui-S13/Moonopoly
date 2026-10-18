@@ -1,11 +1,11 @@
 <h1>Favorites</h1>
 
-@if (loading) {
+@if (loading()) {
   <p>Loading favorites...</p>
-} @else if (error) {
+} @else if (error()) {
   <p>Could not load your favorites. Please try again later.</p>
 } @else {
-  @for (listing of favoriteListings; track listing.id) {
+  @for (listing of favoriteListings(); track listing.id) {
     <app-listing-card
       [listing]="listing"
       [isFavorite]="true"
