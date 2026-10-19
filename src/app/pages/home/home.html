@@ -1,1 +1,47 @@
 <h1>Home</h1>
+
+<form [formGroup]="search">
+    <label>
+        Type
+        <select formControlName="type">
+            <option [ngValue]="null">All types</option>
+            <option value="sale">For sale</option>
+            <option value="rent">For rent</option>
+        </select>
+    </label>
+
+    <label>
+        Min Price (USD)
+        <input type="number" formControlName="minPrice">
+    </label>
+
+    @if (search.controls.minPrice.hasError('min')) {
+    <small>Minimum price must be at least 1.</small>
+    }
+
+    <label>
+        Max Price (USD)
+        <input type="number" formControlName="maxPrice">
+    </label>
+
+    @if (search.controls.maxPrice.hasError('min')) {
+    <small>Maximum price must be at least 1.</small>
+    }
+
+    @if (search.hasError('invalidPriceRange')) {
+    <small>Maximum price must be greater than or equal to minimum price.</small>
+    }
+
+    <label>Region
+        <select formControlName="region">
+            <option value="">All regions</option>
+            @for (r of regions; track r) {
+            <option [value]="r">{{ r }}</option>
+            }
+        </select>
+    </label>
+</form>
+
+<button type="button" (click)="searchListings()">
+    Search
+</button>

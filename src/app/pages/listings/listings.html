@@ -38,6 +38,10 @@
   <small>Maximum price must be at least 1.</small>
   }
 
+  @if (search.hasError('invalidPriceRange')) {
+  <small>Maximum price must be greater than or equal to minimum price.</small>
+  }
+
   <label>Region
     <select formControlName="region">
       <option value="">All regions</option>
@@ -60,6 +64,11 @@
 } @else if (filteredListings.length === 0) {
 <p>No listings found. Try adjusting your filters.</p>
 } @else {
+@if (filteredListings.length === 1) {
+<p>1 Property Found</p>
+} @else {
+<p>{{ filteredListings.length }} Properties Found</p>
+}
 @for (listing of filteredListings; track listing.id) {
 <app-listing-card [listing]="listing" [isFavorite]="favorites.isFavorite(listing.id)" (favorite)="onFavorite($event)" />
 }
