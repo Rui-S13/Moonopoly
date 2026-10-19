@@ -19,6 +19,8 @@ export class ListingDetail implements OnInit, OnDestroy {
   error = signal(false);
   private subscription?: Subscription;
 
+  imageFailed: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private listingService: ListingService,

@@ -16,6 +16,8 @@ export class ListingCard {
   @Input() isFavorite = false;
   @Output() favorite = new EventEmitter<Listing>();
 
+  imageFailed: boolean= false;
+
   constructor(private moon: MoonService) {}
 
   onFavorite(): void {
