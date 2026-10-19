@@ -14,6 +14,7 @@ import {
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
+import { MoonService } from '../../services/moon';
 
 const priceRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const minPrice = control.get('minPrice')?.value;
@@ -38,11 +39,15 @@ export class Listings implements OnInit {
   error = signal(false);
 
   filteredListings: Listing[] = [];
+  regions: string[] = [];
 
   constructor(
     private listingService: ListingService,
     public favorites: FavoritesService,
-  ) {}
+    private moon: MoonService,
+  ) {
+    this.regions = this.moon.getRegionNames();
+  }
 
   ngOnInit(): void {
     this.listingService.getListings().subscribe({
@@ -64,6 +69,7 @@ export class Listings implements OnInit {
       type: new FormControl<ListingType | null>(null),
       minPrice: new FormControl<number | null>(null, Validators.min(1)),
       maxPrice: new FormControl<number | null>(null, Validators.min(1)),
+      region: new FormControl<string>('', { nonNullable: true }),
     },
     {
       validators: priceRangeValidator,
@@ -87,6 +93,11 @@ export class Listings implements OnInit {
       }
 
       if (s.maxPrice !== null && l.price > s.maxPrice) {
+        return false;
+      }
+
+      const region = this.moon.getTerrainInfo(l.center).region;
+      if (s.region !== '' && s.region !== region) {
         return false;
       }
 

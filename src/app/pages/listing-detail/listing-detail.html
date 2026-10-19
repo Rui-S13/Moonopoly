@@ -16,6 +16,13 @@
     <p>Status: {{ l.status }}</p>
     <p>Plot size: {{ l.widthKm }} × {{ l.heightKm }} km ({{ l.widthKm * l.heightKm }} km²)</p>
     <p>Location: {{ l.center[0] }}°, {{ l.center[1] }}°</p>
+    <p>Region: {{terrain.region}}</p>
+    @if (terrain.earthFacing) {
+      <p>Earth Facing</p>
+    }
+    @if (terrain.likelyWaterIce) {
+      <p>Likely Water Ice</p>
+    }
     <p>Published {{ l.publishedAt | date }}</p>
     <p>Contact: <a [href]="'mailto:' + l.contactEmail">{{ l.contactEmail }}</a></p>
   } @else {

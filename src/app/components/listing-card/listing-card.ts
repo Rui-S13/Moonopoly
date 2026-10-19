@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Listing } from '../../models/listing.models';
+import { MoonService } from '../../services/moon';
+import { TerrainInfo } from '../../models/listing.models';
 
 @Component({
   selector: 'app-listing-card',
@@ -14,7 +16,13 @@ export class ListingCard {
   @Input() isFavorite = false;
   @Output() favorite = new EventEmitter<Listing>();
 
+  constructor(private moon: MoonService) {}
+
   onFavorite(): void {
     this.favorite.emit(this.listing);
+  }
+
+  get terrain(): TerrainInfo {
+    return this.moon.getTerrainInfo(this.listing.center);
   }
 }

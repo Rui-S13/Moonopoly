@@ -4,6 +4,8 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Subscription, switchMap } from 'rxjs';
 import { Listing } from '../../models/listing.models';
 import { ListingService } from '../../services/listing';
+import { MoonService } from '../../services/moon';
+import { TerrainInfo } from '../../models/listing.models';
 
 @Component({
   imports: [RouterLink, CurrencyPipe, DatePipe],
@@ -19,7 +21,8 @@ export class ListingDetail implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private listingService: ListingService
+    private listingService: ListingService,
+    private moon: MoonService,
   ) {}
 
   ngOnInit(): void {
@@ -29,7 +32,7 @@ export class ListingDetail implements OnInit, OnDestroy {
           this.loading.set(true);
           this.error.set(false);
           return this.listingService.getListing(Number(params.get('id')));
-        })
+        }),
       )
       .subscribe({
         next: (listing) => {
@@ -41,6 +44,10 @@ export class ListingDetail implements OnInit, OnDestroy {
           this.loading.set(false);
         },
       });
+  }
+
+  get terrain(): TerrainInfo {
+    return this.moon.getTerrainInfo(this.listing()!.center);
   }
 
   ngOnDestroy(): void {
