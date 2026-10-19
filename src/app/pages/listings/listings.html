@@ -37,6 +37,15 @@
   @if (search.controls.maxPrice.hasError('min')) {
   <small>Maximum price must be at least 1.</small>
   }
+
+  <label>Region
+    <select formControlName="region" (change)="onInputSearch()">
+      <option value="">All regions</option>
+      @for (r of regions; track r) {
+      <option [value]="r">{{ r }}</option>
+      }
+    </select>
+  </label>
 </form>
 
 

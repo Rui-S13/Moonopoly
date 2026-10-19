@@ -12,7 +12,16 @@
     @if (listing.type === 'rent') { / month }
   </p>
   <p>{{ listing.widthKm * listing.heightKm }} km²</p>
+  <p>{{terrain.region}}</p>
   <p>Published {{ listing.publishedAt | date }}</p>
+
+  @if (terrain.earthFacing) {
+    <p>Earth Facing</p>
+  }
+
+  @if (terrain.likelyWaterIce) {
+    <p>Likely Water Ice</p>
+  }
 
   <button type="button" (click)="onFavorite()">
     {{ isFavorite ? 'Remove from favorites' : 'Add to favorites' }}
