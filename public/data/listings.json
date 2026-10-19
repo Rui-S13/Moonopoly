@@ -12,7 +12,7 @@
         ],
         "widthKm": 5,
         "heightKm": 3,
-        "imageUrl": "images/listing-1.jpg",
+        "imageUrl": "data/images/listing-1.png",
         "publishedAt": "2026-10-01",
         "contactEmail": "agent@moonopoly.com"
     },

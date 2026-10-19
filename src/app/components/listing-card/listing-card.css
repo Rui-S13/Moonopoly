@@ -1,0 +1,5 @@
+img, .no-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
