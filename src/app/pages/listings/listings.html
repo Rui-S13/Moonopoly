@@ -3,7 +3,7 @@
 <form [formGroup]="search">
   <label>
     Title
-    <input formControlName="title" (input)="onInputSearch()">
+    <input formControlName="title">
   </label>
 
   @if (search.controls.title.hasError('minlength')
@@ -13,7 +13,7 @@
 
   <label>
     Type
-    <select formControlName="type" (change)="onInputSearch()">
+    <select formControlName="type">
       <option [ngValue]="null">All types</option>
       <option value="sale">For sale</option>
       <option value="rent">For rent</option>
@@ -22,7 +22,7 @@
 
   <label>
     Min Price (USD)
-    <input type="number" formControlName="minPrice" (input)="onInputSearch()">
+    <input type="number" formControlName="minPrice">
   </label>
 
   @if (search.controls.minPrice.hasError('min')) {
@@ -31,7 +31,7 @@
 
   <label>
     Max Price (USD)
-    <input type="number" formControlName="maxPrice" (input)="onInputSearch()">
+    <input type="number" formControlName="maxPrice">
   </label>
 
   @if (search.controls.maxPrice.hasError('min')) {
@@ -39,7 +39,7 @@
   }
 
   <label>Region
-    <select formControlName="region" (change)="onInputSearch()">
+    <select formControlName="region">
       <option value="">All regions</option>
       @for (r of regions; track r) {
       <option [value]="r">{{ r }}</option>
@@ -47,6 +47,10 @@
     </select>
   </label>
 </form>
+
+<button type="button" (click)="clearFilters()">
+  Clear filters
+</button>
 
 
 @if (loading()) {

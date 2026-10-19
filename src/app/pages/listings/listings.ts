@@ -41,6 +41,19 @@ export class Listings implements OnInit {
   filteredListings: Listing[] = [];
   regions: string[] = [];
 
+    search = new FormGroup(
+    {
+      title: new FormControl('', { nonNullable: true }),
+      type: new FormControl<ListingType | null>(null),
+      minPrice: new FormControl<number | null>(null, Validators.min(1)),
+      maxPrice: new FormControl<number | null>(null, Validators.min(1)),
+      region: new FormControl<string>('', { nonNullable: true }),
+    },
+    {
+      validators: priceRangeValidator,
+    },
+  );
+
   constructor(
     private listingService: ListingService,
     public favorites: FavoritesService,
@@ -61,20 +74,11 @@ export class Listings implements OnInit {
         this.loading.set(false);
       },
     });
-  }
 
-  search = new FormGroup(
-    {
-      title: new FormControl('', { nonNullable: true }),
-      type: new FormControl<ListingType | null>(null),
-      minPrice: new FormControl<number | null>(null, Validators.min(1)),
-      maxPrice: new FormControl<number | null>(null, Validators.min(1)),
-      region: new FormControl<string>('', { nonNullable: true }),
-    },
-    {
-      validators: priceRangeValidator,
-    },
-  );
+    this.search.valueChanges.subscribe(() => {
+      this.onInputSearch();
+    });
+  }
 
   onInputSearch() {
     const s = this.search.getRawValue();
@@ -102,6 +106,16 @@ export class Listings implements OnInit {
       }
 
       return true;
+    });
+  }
+
+  clearFilters(): void {
+    this.search.reset({
+      title: '',
+      type: null,
+      minPrice: null,
+      maxPrice: null,
+      region: '',
     });
   }
 
