@@ -1,11 +1,6 @@
 <main>
   <form [formGroup]="search" class="filters-form">
     <div class="filter-field">
-      <label for="title">Property Title</label>
-      <input id="title" type="text" formControlName="title" placeholder="Search by title..." />
-    </div>
-
-    <div class="filter-field">
       <label for="type">Property Type</label>
       <select id="type" formControlName="type">
         <option [ngValue]="null">All types</option>

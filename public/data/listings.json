@@ -1,7 +1,6 @@
 [
     {
         "id": 1,
-        "title": "Quiet plot near the Apollo 11 site",
         "description": "Flat, dusty, great sunsets. Neighbours are mostly historic.",
         "type": "sale",
         "price": 1500000,
@@ -18,7 +17,6 @@
     },
     {
         "id": 2,
-        "title": "Polar plot with ice access",
         "description": "Cold, dark, and close to the water. Bring a jacket.",
         "type": "rent",
         "price": 8000,
@@ -34,7 +32,6 @@
     },
     {
         "id": 3,
-        "title": "Spacious lot by Tycho",
         "description": "Big views of the crater rays. Full moon every two weeks.",
         "type": "sale",
         "price": 900000,

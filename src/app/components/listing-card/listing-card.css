@@ -93,10 +93,10 @@
 }
 
 .listing-price {
-    margin: 10px 0 0;
     color: var(--accent);
     font-size: 1.45rem;
     font-weight: 650;
+    margin: 0;
 }
 
 .listing-price span {

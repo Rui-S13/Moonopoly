@@ -31,8 +31,6 @@
           <div class="listing-detail-summary">
             <p class="listing-region">{{ terrain.region }}</p>
 
-            <h1>{{ l.title }}</h1>
-
             <p class="listing-price">
               {{ l.price | currency: 'USD' }}
               @if (l.type === 'rent') {
