@@ -26,7 +26,6 @@ export class Listings implements OnInit {
 
   search = new FormGroup(
     {
-      title: new FormControl('', { nonNullable: true }),
       type: new FormControl<ListingType | null>(null),
       minPrice: new FormControl<number | null>(null, Validators.min(1)),
       maxPrice: new FormControl<number | null>(null, Validators.min(1)),
@@ -89,9 +88,6 @@ export class Listings implements OnInit {
     const s = this.search.getRawValue();
 
     this.filteredListings = this.listings().filter((l) => {
-      if (s.title.trim() !== '' && !l.title.toLowerCase().includes(s.title.trim().toLowerCase())) {
-        return false;
-      }
 
       if (s.type !== null && l.type !== s.type) {
         return false;
@@ -116,7 +112,6 @@ export class Listings implements OnInit {
 
   clearFilters(): void {
     this.search.reset({
-      title: '',
       type: null,
       minPrice: null,
       maxPrice: null,
@@ -125,7 +120,7 @@ export class Listings implements OnInit {
   }
 
   onFavorite(listing: Listing): void {
-    console.log('Favorite clicked:', listing.title);
+    console.log('Favorite clicked:', listing.id);
     this.favorites.toggle(listing.id);
   }
 }

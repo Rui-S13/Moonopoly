@@ -7,14 +7,14 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ListingService } from '../../services/listing';
 import { Coordinates } from '../../models/listing.models';
 import { Listing } from '../../models/listing.models';
 import { getBounds, plotsOverlap } from '../../utils/plot-geometry';
 
 @Component({
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink, RouterLinkActive],
   selector: 'app-publish',
   styleUrl: './publish.css',
   templateUrl: './publish.html',
@@ -24,10 +24,6 @@ export class Publish {
 
   form = new FormGroup(
     {
-      title: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required, Validators.minLength(5)],
-      }),
       description: new FormControl('', {
         nonNullable: true,
         validators: [Validators.required, Validators.minLength(10)],
@@ -73,7 +69,7 @@ export class Publish {
     const clash = this.existing.find((l) =>
       plotsOverlap(mine, getBounds(l.center, l.widthKm, l.heightKm)),
     );
-    return clash ? { overlap: clash.title } : null;
+    return clash ? { overlap: clash.id } : null;
   }
 
   constructor(
@@ -89,7 +85,6 @@ export class Publish {
 
     const v = this.form.getRawValue();
     this.listingService.addListing({
-      title: v.title,
       description: v.description,
       type: v.type,
       price: v.price!,

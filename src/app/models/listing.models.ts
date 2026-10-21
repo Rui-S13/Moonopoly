@@ -4,7 +4,6 @@ export type ListingStatus = 'available' | 'reserved' | 'sold';
 
 export interface Listing {
   id: number;
-  title: string;
   description: string;
   type: ListingType;
   price: number;
