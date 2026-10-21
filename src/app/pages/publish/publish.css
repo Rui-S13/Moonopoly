@@ -1,0 +1,141 @@
+:host {
+    display: block;
+    min-width: 0;
+}
+
+main {
+    width: 100%;
+    max-width: 1000px;
+    margin-inline: auto;
+    padding: 40px 5% 64px;
+}
+
+h1 {
+    margin: 0 0 32px;
+    font-size: clamp(2rem, 4vw, 2.75rem);
+}
+
+/* Form layout */
+
+form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 24px;
+    padding: 32px;
+    background: var(--surface);
+    border: 1px solid rgba(138, 143, 154, 0.2);
+    border-radius: var(--radius);
+}
+
+/* Fields */
+
+.form-field label {
+    display: block;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* Inputs */
+
+form input,
+form select,
+form textarea {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 1px solid rgba(138, 143, 154, 0.35);
+    border-radius: 6px;
+    outline: none;
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.95rem;
+    letter-spacing: normal;
+    text-transform: none;
+    transition: border-color 0.2s ease;
+}
+
+form input,
+form select {
+    height: 46px;
+}
+
+form textarea {
+    min-height: 140px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+    border-color: var(--accent);
+}
+
+form input::placeholder,
+form textarea::placeholder {
+    color: var(--muted);
+    opacity: 0.7;
+}
+
+/* Title and description span both columns */
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Validation messages */
+
+.form-field small,
+.form-error {
+    color: #e59b9b;
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.form-error {
+    margin: 0;
+}
+
+/* Publish button */
+
+form button[type="submit"] {
+    grid-column: 1 / -1;
+    justify-self: start;
+    min-width: 160px;
+    min-height: 48px;
+    margin-top: 4px;
+    padding: 0 28px;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    background: var(--accent);
+    color: var(--bg);
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+form button[type="submit"]:hover:not(:disabled) {
+    background: transparent;
+    color: var(--accent);
+}
+
+form button[type="submit"]:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}

@@ -1,0 +1,9 @@
+main {
+    padding: 40px 5% 64px;
+}
+
+.listings-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}

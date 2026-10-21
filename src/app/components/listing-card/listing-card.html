@@ -1,36 +1,81 @@
-<article>
-  <h2>{{ listing.title }}</h2>
+<article class="listing-card">
+  <div class="listing-image">
+    @if (listing.imageUrl && !imageFailed) {
+      <img
+        [src]="listing.imageUrl"
+        [alt]="'Moon surface near ' + terrain.region"
+        (error)="imageFailed = true"
+      />
+    } @else {
+      <img
+        src="/data/images/no-photo.png"
+        alt="No image available"
+      />
+    }
 
-  @switch (listing.status) {
-  @case ('available') { <span class="badge available">Available</span> }
-  @case ('reserved') { <span class="badge reserved">Reserved</span> }
-  @case ('sold') { <span class="badge sold">Sold</span> }
-  }
+    @switch (listing.status) {
+      @case ('available') {
+        <span class="badge available">Available</span>
+      }
+      @case ('reserved') {
+        <span class="badge reserved">Reserved</span>
+      }
+      @case ('sold') {
+        <span class="badge sold">Sold</span>
+      }
+    }
+  </div>
 
-@if (listing.imageUrl && !imageFailed) {
-  <img [src]="listing.imageUrl" [alt]="'Moon surface near ' + terrain.region" (error)="imageFailed = true"/>
-  } @else {
-  <img src="data/images/no-photo.jpg" alt="No photo found">
-  }
+  <div class="listing-content">
+    <div class="listing-heading">
+      <h2>{{ listing.title }}</h2>
+      <p class="listing-price">
+        {{ listing.price | currency:'USD' }}
+        @if (listing.type === 'rent') {
+          <span>/ month</span>
+        }
+      </p>
+    </div>
 
-  <p>
-    {{ listing.price | currency: 'USD' }}
-    @if (listing.type === 'rent') { / month }
-  </p>
-  <p>{{ listing.widthKm * listing.heightKm }} km²</p>
-  <p>{{terrain.region}}</p>
-  <p>Published {{ listing.publishedAt | date }}</p>
+    <p class="listing-area">
+      {{ listing.widthKm * listing.heightKm }} km²
+    </p>
 
-  @if (terrain.earthFacing) {
-  <p>Earth Facing</p>
-  }
+    <p class="listing-region">
+      {{ terrain.region }}
+    </p>
 
-  @if (terrain.likelyWaterIce) {
-  <p>Likely Water Ice</p>
-  }
+    <div class="listing-features">
+      @if (terrain.earthFacing) {
+        <span class="feature">Earth Facing</span>
+      }
+      @if (terrain.likelyWaterIce) {
+        <span class="feature">Likely Water Ice</span>
+      }
+    </div>
 
-  <button type="button" (click)="onFavorite()">
-    {{ isFavorite ? 'Remove from favorites' : 'Add to favorites' }}
-  </button>
-  <a [routerLink]="['/listings', listing.id]">View details</a>
+    <p class="listing-date">
+      Published {{ listing.publishedAt | date }}
+    </p>
+
+    <div class="listing-actions">
+      <button
+        type="button"
+        class="favorite-button"
+        [class.is-favorite]="isFavorite"
+        [attr.aria-pressed]="isFavorite"
+        (click)="onFavorite()"
+      >
+        {{ isFavorite ? '♥ Saved' : '♡ Favorite' }}
+      </button>
+
+      <a
+        class="details-button"
+        [routerLink]="['/listings', listing.id]"
+      >
+        View details
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
 </article>

@@ -82,6 +82,10 @@ export class Listings implements OnInit {
   }
 
   applyFilters() {
+    if (this.search.invalid) {
+      return;
+    }
+
     const s = this.search.getRawValue();
 
     this.filteredListings = this.listings().filter((l) => {

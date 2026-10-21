@@ -1,37 +1,118 @@
-<a routerLink="/listings">← Back to listings</a>
+<main class="listing-details">
+  <a class="back-link" routerLink="/listings">← Back to listings</a>
 
-@if (loading()) {
-<p>Loading listing...</p>
-} @else if (error()) {
-<p>Could not load the listing. Please try again later.</p>
-} @else {
-@if (listing(); as l) {
-@if (l.imageUrl && !imageFailed) {
-<img [src]="l.imageUrl" [alt]="'Moon surface near ' + terrain.region" (error)="imageFailed = true" />
-} @else {
-<img src="data/images/no-photo.jpg" alt="No photo found" />
-}
+  @if (loading()) {
+    <p>Loading listing...</p>
+  } @else if (error()) {
+    <p>Could not load the listing. Please try again later.</p>
+  } @else {
+    @if (listing(); as l) {
+      <article class="listing-detail-card">
+        <section class="listing-detail-hero">
+          <div class="listing-detail-image">
+            @if (l.imageUrl && !imageFailed) {
+              <img
+                [src]="l.imageUrl"
+                [alt]="'Moon surface near ' + terrain.region"
+                (error)="imageFailed = true"
+              />
+            } @else {
+              <img
+                src="/data/images/no-photo.png"
+                alt="No image available for this lunar property"
+              />
+            }
 
-<h1>{{ l.title }}</h1>
-<p>{{ l.description }}</p>
+            <span class="status-badge" [class]=" 'status-badge ' + l.status">
+              {{ l.status }}
+            </span>
+          </div>
 
-<p>
-  {{ l.price | currency: 'USD' }}
-  @if (l.type === 'rent') { / month }
-</p>
-<p>Status: {{ l.status }}</p>
-<p>Plot size: {{ l.widthKm }} × {{ l.heightKm }} km ({{ l.widthKm * l.heightKm }} km²)</p>
-<p>Location: {{ l.center[0] }}°, {{ l.center[1] }}°</p>
-<p>Region: {{terrain.region}}</p>
-@if (terrain.earthFacing) {
-<p>Earth Facing</p>
-}
-@if (terrain.likelyWaterIce) {
-<p>Likely Water Ice</p>
-}
-<p>Published {{ l.publishedAt | date }}</p>
-<p>Contact: <a [href]="'mailto:' + l.contactEmail">{{ l.contactEmail }}</a></p>
-} @else {
-<p>Listing not found.</p>
-}
-}
+          <div class="listing-detail-summary">
+            <p class="listing-region">{{ terrain.region }}</p>
+
+            <h1>{{ l.title }}</h1>
+
+            <p class="listing-price">
+              {{ l.price | currency: 'USD' }}
+              @if (l.type === 'rent') {
+                <span>/ month</span>
+              }
+            </p>
+
+            <p class="listing-description">{{ l.description }}</p>
+
+            <div class="listing-summary-meta">
+              <span>{{ l.widthKm * l.heightKm }} km²</span>
+              <span>{{ l.type === 'rent' ? 'For rent' : 'For sale' }}</span>
+            </div>
+
+            <p class="published-date">
+              Published {{ l.publishedAt | date }}
+            </p>
+
+            <a class="contact-button" [href]="'mailto:' + l.contactEmail">
+              Contact advertiser
+            </a>
+          </div>
+        </section>
+
+        <section class="listing-detail-information">
+          <h2>Property details</h2>
+
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">Plot dimensions</span>
+              <span class="detail-value">
+                {{ l.widthKm }} × {{ l.heightKm }} km
+              </span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">Total area</span>
+              <span class="detail-value">
+                {{ l.widthKm * l.heightKm }} km²
+              </span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">Coordinates</span>
+              <span class="detail-value">
+                {{ l.center[0] }}°, {{ l.center[1] }}°
+              </span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">Lunar region</span>
+              <span class="detail-value">{{ terrain.region }}</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">Earth visibility</span>
+              <span class="detail-value">
+                {{ terrain.earthFacing ? 'Earth-facing' : 'Not Earth-facing' }}
+              </span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">Potential water ice</span>
+              <span class="detail-value">
+                {{ terrain.likelyWaterIce ? 'Likely present' : 'Not indicated' }}
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <section class="listing-contact-information">
+          <h2>Advertiser contact</h2>
+          <p>
+            Email:
+            <a [href]="'mailto:' + l.contactEmail">{{ l.contactEmail }}</a>
+          </p>
+        </section>
+      </article>
+    } @else {
+      <p>Listing not found.</p>
+    }
+  }
+</main>

@@ -1,1 +1,80 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    color-scheme: light;
+
+    /* Backgrounds */
+    --bg: #F8F8FC;
+    --surface: #FFFFFF;
+    --surface-muted: #F0EFF8;
+    --input-bg: #FFFFFF;
+
+    /* Text */
+    --text: #25263A;
+    --muted: #77798F;
+    --text-inverse: #FFFFFF;
+
+    /* Accent */
+    --accent: #7161E8;
+    --accent-hover: #5B4BD5;
+
+    /* Borders and effects */
+    --border: #E6E5EF;
+    --border-strong: #D3D1E2;
+    --shadow: 0 6px 24px rgba(37, 38, 58, 0.06);
+
+    /* Status colours */
+    --status-available-bg: #E6F4EA;
+    --status-available-text: #28633D;
+    --status-reserved-bg: #FFF1D6;
+    --status-reserved-text: #805B16;
+    --status-sold-bg: #FBE7E7;
+    --status-sold-text: #963F45;
+
+    /* Validation */
+    --error: #C52E3D;
+
+    /* Layout */
+    --radius: 10px;
+    --radius-control: 15px;
+    --border-weight: 1px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, system-ui, sans-serif;
+    line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+.price {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+a {
+    color: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}

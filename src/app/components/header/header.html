@@ -1,4 +1,4 @@
-<header>
+<header [class.header-home]="isHomePage" [class.header-default]="!isHomePage">
   <a routerLink="/">Moonopoly</a>
   <nav>
     <a routerLink="/listings" routerLinkActive="active">Listings</a>
