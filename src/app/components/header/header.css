@@ -1,0 +1,75 @@
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 76px;
+    padding: 0 5%;
+    z-index: 10;
+}
+
+.header-home {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: transparent;
+}
+
+.header-default {
+    position: relative;
+    background: var(--surface);
+    border-bottom: 1px solid rgba(138, 143, 154, 0.2);
+}
+
+/* Logo and navigation links */
+header a {
+    text-decoration: none;
+    color: var(--text);
+    transition: color 0.2s ease;
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+nav a {
+    position: relative;
+    padding: 8px 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--muted);
+}
+
+nav a:hover,
+nav a.active {
+    color: var(--accent);
+}
+
+/* Active link indicator */
+nav a.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+/* Home header: improve contrast over the hero */
+.header-home a {
+    color: var(--surface);
+}
+
+.header-home nav a {
+    color: var(--surface);
+}
+
+.header-home nav a:hover,
+.header-home nav a.active {
+    color: var(--accent);
+}

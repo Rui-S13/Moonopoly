@@ -1,72 +1,98 @@
-<h1>Publish a listing</h1>
+<main>
+    <h1>Publish a listing</h1>
 
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <label>Title
-        <input formControlName="title" />
-    </label>
-    @if (form.controls.title.touched && form.controls.title.invalid) {
-    <small>Title is required (at least 5 characters).</small>
-    }
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-    <label>Description
-        <textarea formControlName="description"></textarea>
-    </label>
-    @if (form.controls.description.touched && form.controls.description.invalid) {
-    <small>Description is required (at least 10 characters).</small>
-    }
+        <div class="form-field full-width">
+            <label for="title">Title</label>
+            <input id="title" formControlName="title" />
 
-    <label>Type
-        <select formControlName="type">
-            <option value="sale">For sale</option>
-            <option value="rent">For rent</option>
-        </select>
-    </label>
+            @if (form.controls.title.touched && form.controls.title.invalid) {
+                <small>Title is required (at least 5 characters).</small>
+            }
+        </div>
 
-    <label>Price (USD)
-        <input type="number" formControlName="price" />
-    </label>
-    @if (form.controls.price.touched && form.controls.price.invalid) {
-    <small>Enter a price greater than 0.</small>
-    }
+        <div class="form-field full-width">
+            <label for="description">Description</label>
+            <textarea id="description" formControlName="description"></textarea>
 
-    <label>Latitude
-        <input type="number" formControlName="latitude" />
-    </label>
-    @if (form.controls.latitude.touched && form.controls.latitude.invalid) {
-    <small>Latitude must be between -90 and 90.</small>
-    }
+            @if (form.controls.description.touched && form.controls.description.invalid) {
+                <small>Description is required (at least 10 characters).</small>
+            }
+        </div>
 
-    <label>Longitude
-        <input type="number" formControlName="longitude" />
-    </label>
-    @if (form.controls.longitude.touched && form.controls.longitude.invalid) {
-    <small>Longitude must be between -180 and 180.</small>
-    }
+        <div class="form-field">
+            <label for="type">Type</label>
+            <select id="type" formControlName="type">
+                <option value="sale">For sale</option>
+                <option value="rent">For rent</option>
+            </select>
+        </div>
 
-    <label>Width (km)
-        <input type="number" formControlName="widthKm" />
-    </label>
-    @if (form.controls.widthKm.touched && form.controls.widthKm.invalid) {
-    <small>Width must be at least 0.1 km.</small>
-    }
+        <div class="form-field">
+            <label for="price">Price (USD)</label>
+            <input id="price" type="number" formControlName="price" />
 
-    <label>Height (km)
-        <input type="number" formControlName="heightKm" />
-    </label>
-    @if (form.controls.heightKm.touched && form.controls.heightKm.invalid) {
-    <small>Height must be at least 0.1 km.</small>
-    }
+            @if (form.controls.price.touched && form.controls.price.invalid) {
+                <small>Enter a price greater than 0.</small>
+            }
+        </div>
 
-    <label>Contact email
-        <input type="email" formControlName="contactEmail" />
-    </label>
-    @if (form.controls.contactEmail.touched && form.controls.contactEmail.invalid) {
-    <small>Enter a valid email address.</small>
-    }
+        <div class="form-field">
+            <label for="latitude">Latitude</label>
+            <input id="latitude" type="number" formControlName="latitude" />
 
-    @if (form.errors?.['overlap']) {
-    <small>This area overlaps with "{{ form.errors?.['overlap'] }}". Choose a different location or size.</small>
-    }
+            @if (form.controls.latitude.touched && form.controls.latitude.invalid) {
+                <small>Latitude must be between -90 and 90.</small>
+            }
+        </div>
 
-    <button type="submit" [disabled]="form.invalid">Publish</button>
-</form>
+        <div class="form-field">
+            <label for="longitude">Longitude</label>
+            <input id="longitude" type="number" formControlName="longitude" />
+
+            @if (form.controls.longitude.touched && form.controls.longitude.invalid) {
+                <small>Longitude must be between -180 and 180.</small>
+            }
+        </div>
+
+        <div class="form-field">
+            <label for="widthKm">Width (km)</label>
+            <input id="widthKm" type="number" formControlName="widthKm" />
+
+            @if (form.controls.widthKm.touched && form.controls.widthKm.invalid) {
+                <small>Width must be at least 0.1 km.</small>
+            }
+        </div>
+
+        <div class="form-field">
+            <label for="heightKm">Height (km)</label>
+            <input id="heightKm" type="number" formControlName="heightKm" />
+
+            @if (form.controls.heightKm.touched && form.controls.heightKm.invalid) {
+                <small>Height must be at least 0.1 km.</small>
+            }
+        </div>
+
+        <div class="form-field full-width">
+            <label for="contactEmail">Contact email</label>
+            <input id="contactEmail" type="email" formControlName="contactEmail" />
+
+            @if (form.controls.contactEmail.touched && form.controls.contactEmail.invalid) {
+                <small>Enter a valid email address.</small>
+            }
+        </div>
+
+        @if (form.errors?.['overlap']) {
+            <small class="form-error full-width">
+                This area overlaps with "{{ form.errors?.['overlap'] }}".
+                Choose a different location or size.
+            </small>
+        }
+
+        <button type="submit" [disabled]="form.invalid">
+            Publish
+        </button>
+
+    </form>
+</main>

@@ -1,75 +1,80 @@
-<h1>Listings</h1>
+<main>
+  <form [formGroup]="search" class="filters-form">
+    <div class="filter-field">
+      <label for="title">Property Title</label>
+      <input id="title" type="text" formControlName="title" placeholder="Search by title..." />
+    </div>
 
-<form [formGroup]="search">
-  <label>
-    Title
-    <input formControlName="title">
-  </label>
+    <div class="filter-field">
+      <label for="type">Property Type</label>
+      <select id="type" formControlName="type">
+        <option [ngValue]="null">All types</option>
+        <option value="sale">For sale</option>
+        <option value="rent">For rent</option>
+      </select>
+    </div>
 
-  @if (search.controls.title.hasError('minlength')
-  && search.controls.title.value.length > 0) {
-  <small>Enter at least 5 characters.</small>
-  }
-
-  <label>
-    Type
-    <select formControlName="type">
-      <option [ngValue]="null">All types</option>
-      <option value="sale">For sale</option>
-      <option value="rent">For rent</option>
-    </select>
-  </label>
-
-  <label>
-    Min Price (USD)
-    <input type="number" formControlName="minPrice">
-  </label>
-
-  @if (search.controls.minPrice.hasError('min')) {
-  <small>Minimum price must be at least 1.</small>
-  }
-
-  <label>
-    Max Price (USD)
-    <input type="number" formControlName="maxPrice">
-  </label>
-
-  @if (search.controls.maxPrice.hasError('min')) {
-  <small>Maximum price must be at least 1.</small>
-  }
-
-  @if (search.hasError('invalidPriceRange')) {
-  <small>Maximum price must be greater than or equal to minimum price.</small>
-  }
-
-  <label>Region
-    <select formControlName="region">
-      <option value="">All regions</option>
-      @for (r of regions; track r) {
-      <option [value]="r">{{ r }}</option>
+    <div class="filter-field">
+      <label for="minPrice">Minimum Price (USD)</label>
+      <input type="number" formControlName="minPrice" min="0" step="1000" placeholder="Min. price" />
+      @if (search.controls.minPrice.hasError('min')) {
+      <small class="filter-error">
+        Minimum price must be at least 1 USD.
+      </small>
       }
-    </select>
-  </label>
-</form>
+    </div>
 
-<button type="button" (click)="clearFilters()">
-  Clear filters
-</button>
+    <div class="filter-field">
+      <label for="maxPrice">Maximum Price (USD)</label>
+      <input type="number" formControlName="maxPrice" min="0" step="1000" placeholder="Max. price" />
+      @if (search.controls.maxPrice.hasError('min')) {
+      <small class="filter-error">
+        Maximum price must be at least 1 USD.
+      </small>
+      }
+    </div>
+
+    @if (search.hasError('invalidPriceRange')) {
+    <small class="filter-error">
+      Maximum price must be greater than or equal to minimum price.
+    </small>
+    }
+
+    <div class="filter-field">
+      <label for="region">Lunar Region</label>
+      <select id="region" formControlName="region">
+        <option value="">All regions</option>
+        @for (r of regions; track r) {
+        <option [value]="r">{{ r }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-actions">
+      <button type="button" (click)="clearFilters()">
+        Clear filters
+      </button>
+    </div>
+  </form>
 
 
-@if (loading()) {
-<p>Loading listings...</p>
-} @else if (error()) {
-<p>Could not load the listings. Please try again later.</p>
-} @else if (filteredListings.length === 0) {
-<p>No listings found. Try adjusting your filters.</p>
-} @else {
-@if (filteredListings.length === 1) {
-<p>1 Property Found</p>
-} @else {
-<p>{{ filteredListings.length }} Properties Found</p>
-}
-@for (listing of filteredListings; track listing.id) {
-<app-listing-card [listing]="listing" [isFavorite]="favorites.isFavorite(listing.id)" (favorite)="onFavorite($event)" />
-}
-}
+  @if (loading()) {
+  <p>Loading listings...</p>
+  } @else if (error()) {
+  <p>Could not load the listings. Please try again later.</p>
+  } @else if (filteredListings.length === 0) {
+  <p>No listings found. Try adjusting your filters.</p>
+  } @else {
+  @if (filteredListings.length === 1) {
+  <p>1 Property Found</p>
+  } @else {
+  <p>{{ filteredListings.length }} Properties Found</p>
+  }
+  <div class="listings-grid">
+    @for (listing of filteredListings; track listing.id) {
+    <app-listing-card [listing]="listing" [isFavorite]="favorites.isFavorite(listing.id)"
+      (favorite)="onFavorite($event)" />
+    }
+  </div>
+  }
+</main>

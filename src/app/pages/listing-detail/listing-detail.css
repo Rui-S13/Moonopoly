@@ -1,0 +1,287 @@
+main {
+    padding: 40px 5% 64px;
+}
+
+:host {
+    display: block;
+    min-width: 0;
+}
+
+.listing-details {
+    width: 100%;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 28px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: var(--accent);
+}
+
+.listing-detail-card {
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid rgba(138, 143, 154, 0.2);
+    border-radius: var(--radius);
+}
+
+/* Hero section */
+
+.listing-detail-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 36px;
+    padding: 28px;
+}
+
+.listing-detail-image {
+    position: relative;
+    min-width: 0;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--bg);
+    border-radius: 8px;
+}
+
+.listing-detail-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.status-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 7px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    background: rgba(18, 20, 26, 0.88);
+    color: var(--text);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.status-badge.available {
+    color: #9dd6a7;
+}
+
+.status-badge.reserved {
+    color: #e8c878;
+}
+
+.status-badge.sold {
+    color: #e59b9b;
+}
+
+/* Summary */
+
+.listing-detail-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    padding: 8px 0;
+}
+
+.listing-region {
+    margin: 0 0 10px;
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.listing-detail-summary h1 {
+    margin: 0 0 16px;
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+}
+
+.listing-price {
+    margin: 0 0 22px;
+    color: var(--accent);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.listing-price span {
+    color: var(--muted);
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+.listing-description {
+    margin: 0 0 24px;
+    color: var(--text);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+.listing-summary-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.listing-summary-meta span {
+    padding: 8px 12px;
+    border: 1px solid rgba(138, 143, 154, 0.25);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 0.85rem;
+}
+
+.published-date {
+    margin: auto 0 20px;
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
+.contact-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0 22px;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.contact-button:hover {
+    background: transparent;
+    color: var(--accent);
+}
+
+/* Property details */
+
+.listing-detail-information,
+.listing-contact-information {
+    padding: 28px;
+    border-top: 1px solid rgba(138, 143, 154, 0.2);
+}
+
+.listing-detail-information h2,
+.listing-contact-information h2 {
+    margin: 0 0 24px;
+    font-size: 1.7rem;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid rgba(138, 143, 154, 0.18);
+    border-radius: 8px;
+    background: var(--bg);
+}
+
+.detail-label {
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.detail-value {
+    color: var(--text);
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+}
+
+.listing-contact-information p {
+    margin: 0;
+    color: var(--muted);
+    overflow-wrap: anywhere;
+}
+
+.listing-contact-information a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.listing-contact-information a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive layout */
+
+@media (max-width: 900px) {
+    .listing-detail-hero {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+    }
+
+    .listing-detail-image {
+        aspect-ratio: 16 / 9;
+    }
+
+    .listing-detail-summary {
+        padding: 0;
+    }
+
+    .published-date {
+        margin-top: 0;
+    }
+
+    .detail-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    .back-link {
+        margin-bottom: 20px;
+    }
+
+    .listing-detail-hero,
+    .listing-detail-information,
+    .listing-contact-information {
+        padding: 18px;
+    }
+
+    .listing-detail-summary h1 {
+        font-size: 2rem;
+    }
+
+    .listing-price {
+        font-size: 1.75rem;
+    }
+
+    .detail-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .contact-button {
+        width: 100%;
+    }
+}

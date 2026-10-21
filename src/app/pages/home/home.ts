@@ -35,6 +35,10 @@ export class Home {
   );
 
   searchListings(): void {
+    if (this.search.hasError('invalidPriceRange')) {
+      return;
+    };
+    
     const s = this.search.getRawValue();
 
     this.router.navigate(['/listings'], {

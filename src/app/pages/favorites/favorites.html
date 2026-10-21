@@ -1,16 +1,18 @@
-<h1>Favorites</h1>
+<main>
+  <h1>Favorites</h1>
 
-@if (loading()) {
+  @if (loading()) {
   <p>Loading favorites...</p>
-} @else if (error()) {
+  } @else if (error()) {
   <p>Could not load your favorites. Please try again later.</p>
-} @else {
-  @for (listing of favoriteListings(); track listing.id) {
-    <app-listing-card
-      [listing]="listing"
-      [isFavorite]="true"
-      (favorite)="onFavorite($event)" />
-  } @empty {
-    <p>No favorites yet. Browse the listings and add some!</p>
+  } @else {
+  <div class="listings-grid">
+    @for (listing of favoriteListings(); track listing.id) {
+    <app-listing-card [listing]="listing" [isFavorite]="true" (favorite)="onFavorite($event)" />
+    } @empty {
+    <p class="empty-message">
+      No favorites yet. Browse the listings and add some!
+    </p>
+    }
+  </div>
   }
-}

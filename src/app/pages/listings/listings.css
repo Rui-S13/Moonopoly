@@ -1,0 +1,136 @@
+
+main {
+    padding: 40px 5% 64px;
+}
+
+.listings-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px 20px;
+}
+
+/* Filters */
+
+form {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+    padding: 0 0 24px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+}
+
+/* Individual fields */
+
+.filter-field {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    min-width: 0;
+}
+
+.filter-field label {
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.filter-field input,
+.filter-field select {
+    width: 100%;
+    min-width: 0;
+    height: 46px;
+    padding: 0 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-control);
+    outline: none;
+    background: var(--input-bg);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.9rem;
+    transition: border-color 0.2s ease;
+}
+
+.filter-field input:focus,
+.filter-field select:focus {
+    border-color: var(--accent);
+}
+
+.filter-field input::placeholder {
+    color: var(--muted);
+    opacity: 1;
+}
+
+.filter-field select {
+    cursor: pointer;
+}
+
+.filter-field select option {
+    background: var(--surface);
+    color: var(--text);
+}
+
+/* Validation messages */
+
+.filter-field small,
+.filter-error {
+    color: var(--error);
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
+.filter-error {
+    grid-column: 1 / -1;
+}
+
+/* Clear filters */
+
+form button {
+    align-self: end;
+    min-height: 46px;
+    padding: 0 18px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-control);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+form button:hover {
+    background: var(--surface-muted);
+    border-color: var(--accent);
+}
+
+.filter-actions {
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 0;
+}
+
+.filter-actions button {
+    height: 46px;
+}
+
+/* Responsive layout */
+
+@media (max-width: 1000px) {
+    .listings-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    form {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
