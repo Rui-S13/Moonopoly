@@ -1,4 +1,4 @@
-import { Service, inject } from '@angular/core';
+/* import { Service, inject } from '@angular/core';
 import { SupabaseService } from './supabase-service';
 import { from, map } from 'rxjs';
 
@@ -20,4 +20,4 @@ export class ListingServiceTest {
       }),
     );
   }
-}
+} */

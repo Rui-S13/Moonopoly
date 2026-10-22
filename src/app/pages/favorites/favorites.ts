@@ -1,3 +1,4 @@
+import { Header } from '../../components/header/header';
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { Listing } from '../../models/listing.models';
 import { ListingService } from '../../services/listing';
@@ -5,7 +6,7 @@ import { FavoritesService } from '../../services/favorites';
 import { ListingCard } from '../../components/listing-card/listing-card';
 
 @Component({
-  imports: [ListingCard],
+  imports: [Header, ListingCard],
   selector: 'app-favorites',
   styleUrl: './favorites.css',
   templateUrl: './favorites.html',

@@ -1,3 +1,4 @@
+import { Header } from '../../components/header/header';
 import { Component, OnInit } from '@angular/core';
 import {
   FormControl,
@@ -14,7 +15,7 @@ import { Listing } from '../../models/listing.models';
 import { getBounds, plotsOverlap } from '../../utils/plot-geometry';
 
 @Component({
-  imports: [ReactiveFormsModule, RouterLink, RouterLinkActive],
+  imports: [Header, ReactiveFormsModule, RouterLink, RouterLinkActive],
   selector: 'app-publish',
   styleUrl: './publish.css',
   templateUrl: './publish.html',

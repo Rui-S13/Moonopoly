@@ -1,3 +1,4 @@
+import { Header } from '../../components/header/header';
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -7,7 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MoonService } from '../../services/moon';
 
 @Component({
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Header],
   selector: 'app-home',
   styleUrl: './home.css',
   templateUrl: './home.html',
