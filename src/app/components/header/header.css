@@ -60,6 +60,28 @@ nav a.active::after {
     border-radius: 2px;
 }
 
+/* Login Button */
+.login-button {
+    padding: 0.55rem 1rem;
+    border: 1px solid currentColor;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.login-button:hover {
+    background-color: var(--text);
+    color: var(--bg);
+}
+
+.login-button.active {
+    background-color: var(--text);
+    color: var(--bg);
+}
+
 /* Home header: improve contrast over the hero */
 .header-home a {
     color: var(--surface);

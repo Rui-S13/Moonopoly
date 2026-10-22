@@ -1,0 +1,171 @@
+:host {
+    display: block;
+    min-height: 100vh;
+}
+
+.login-page {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+    background: #ffffff;
+    color: #202020;
+}
+
+/* Left half: image */
+
+.login-image {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    background: #17191c;
+}
+
+.login-image img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    object-fit: cover;
+    object-position: center;
+}
+
+.login-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top,
+            rgb(0 0 0 / 65%),
+            transparent 55%);
+}
+
+.image-caption {
+    position: absolute;
+    z-index: 1;
+    bottom: 48px;
+    left: 48px;
+    right: 32px;
+    color: #ffffff;
+}
+
+.image-caption span {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+}
+
+.image-caption p {
+    max-width: 400px;
+    margin-bottom: 0;
+    font-size: clamp(1.5rem, 2.5vw, 2.4rem);
+    line-height: 1.2;
+}
+
+/* Right half: login form */
+
+.login-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 32px;
+}
+
+.login-content {
+    width: 100%;
+    max-width: 400px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 56px;
+    color: #666666;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    color: #111111;
+}
+
+.login-content header {
+    margin-bottom: 32px;
+}
+
+.login-content h1 {
+    margin: 0 0 12px;
+    font-size: clamp(2rem, 3vw, 2.7rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+}
+
+.login-content header p {
+    margin: 0;
+    color: #737373;
+    line-height: 1.6;
+}
+
+.login-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.login-content label {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.login-content input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 15px;
+    border: 1px solid #dedede;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #202020;
+    font: inherit;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login-content input::placeholder {
+    color: #a0a0a0;
+}
+
+.login-content input:focus {
+    border-color: #555555;
+    box-shadow: 0 0 0 3px rgb(0 0 0 / 5%);
+}
+
+.login-content input.ng-invalid.ng-touched {
+    border-color: #c62828;
+}
+
+.error-message {
+    color: #c62828;
+    font-size: 0.82rem;
+    line-height: 1.4;
+}
+
+.login-content button {
+    margin-top: 20px;
+    padding: 15px;
+    border: none;
+    border-radius: 7px;
+    background: #202020;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.login-content button:hover {
+    background: #414141;
+}
+
+.login-content button:focus-visible,
+.back-link:focus-visible {
+    outline: 2px solid #555555;
+    outline-offset: 4px;
+}

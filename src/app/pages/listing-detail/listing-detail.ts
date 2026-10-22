@@ -1,3 +1,4 @@
+import { Header } from '../../components/header/header';
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CurrencyPipe, DatePipe } from '@angular/common';
@@ -8,7 +9,7 @@ import { MoonService } from '../../services/moon';
 import { TerrainInfo } from '../../models/listing.models';
 
 @Component({
-  imports: [RouterLink, CurrencyPipe, DatePipe],
+  imports: [Header, RouterLink, CurrencyPipe, DatePipe],
   selector: 'app-listing-detail',
   styleUrl: './listing-detail.css',
   templateUrl: './listing-detail.html',

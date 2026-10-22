@@ -1,3 +1,4 @@
+import { Header } from '../../components/header/header';
 import { Component, OnInit, signal } from '@angular/core';
 import { Listing } from '../../models/listing.models';
 import { ListingType } from '../../models/listing.models';
@@ -11,7 +12,7 @@ import { priceRangeValidator } from '../../utils/validators';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  imports: [CurrencyPipe, DatePipe, ListingCard, ReactiveFormsModule],
+  imports: [Header, CurrencyPipe, DatePipe, ListingCard, ReactiveFormsModule],
   selector: 'app-listings',
   styleUrl: './listings.css',
   templateUrl: './listings.html',

@@ -5,6 +5,7 @@ import { Listings } from './pages/listings/listings';
 import { ListingDetail } from './pages/listing-detail/listing-detail';
 import { Publish } from './pages/publish/publish';
 import { Favorites } from './pages/favorites/favorites';
+import { Login } from './pages/login/login';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -12,5 +13,6 @@ export const routes: Routes = [
   { path: 'listings/:id', component: ListingDetail },
   { path: 'publish', component: Publish },
   { path: 'favorites', component: Favorites },
+  { path: 'login', component: Login },
   { path: '**', redirectTo: '' },
 ];
