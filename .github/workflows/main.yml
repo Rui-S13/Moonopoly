@@ -23,17 +23,28 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'latest'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
+      - name: Create environment file
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          mkdir -p src/environments
+          cat > src/environments/environment.ts <<EOF
+          export const environment = {
+            supabaseUrl: '${SUPABASE_URL}',
+            supabaseKey: '${SUPABASE_KEY}',
+          };
+          EOF
+
       - name: Build Angular Project
         run: |
           npm run build -- --configuration production --base-href "/Moonopoly/"
-          env:
-            SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
