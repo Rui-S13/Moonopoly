@@ -1,8 +1,8 @@
-/* import { Service, inject } from '@angular/core';
+/* import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase-service';
 import { from, map } from 'rxjs';
 
-@Service()
+@Injectable({ providedIn: 'root' })
 export class ListingServiceTest {
   readonly supabase = inject(SupabaseService).supabaseClient;
 
