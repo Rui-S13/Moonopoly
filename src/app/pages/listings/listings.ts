@@ -10,9 +10,11 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MoonService } from '../../services/moon';
 import { priceRangeValidator } from '../../utils/validators';
 import { ActivatedRoute } from '@angular/router';
+import { MoonMap } from '../../components/moon-map/moon-map';
+import { Bounds } from '../../utils/plot-geometry';
 
 @Component({
-  imports: [Header, CurrencyPipe, DatePipe, ListingCard, ReactiveFormsModule],
+  imports: [Header, MoonMap, CurrencyPipe, DatePipe, ListingCard, ReactiveFormsModule],
   selector: 'app-listings',
   styleUrl: './listings.css',
   templateUrl: './listings.html',
@@ -24,6 +26,11 @@ export class Listings implements OnInit {
 
   filteredListings: Listing[] = [];
   regions: string[] = [];
+
+  visibleListings = signal<Listing[]>([]);
+  private bounds: Bounds | null = null;
+
+  selectedListingId: number | null = null;
 
   search = new FormGroup(
     {
@@ -89,7 +96,6 @@ export class Listings implements OnInit {
     const s = this.search.getRawValue();
 
     this.filteredListings = this.listings().filter((l) => {
-
       if (s.type !== null && l.type !== s.type) {
         return false;
       }
@@ -109,6 +115,8 @@ export class Listings implements OnInit {
 
       return true;
     });
+
+    this.updateVisible();
   }
 
   clearFilters(): void {
@@ -117,6 +125,37 @@ export class Listings implements OnInit {
       minPrice: null,
       maxPrice: null,
       region: '',
+    });
+  }
+
+  onBoundsChange(b: Bounds): void {
+    this.bounds = b;
+    this.updateVisible();
+  }
+
+  private updateVisible(): void {
+    const b = this.bounds;
+    this.visibleListings.set(
+      b
+        ? this.filteredListings.filter(
+            (l) =>
+              l.center[0] >= b.south &&
+              l.center[0] <= b.north &&
+              l.center[1] >= b.west &&
+              l.center[1] <= b.east,
+          )
+        : this.filteredListings,
+    );
+  }
+
+  onListingSelected(listing: Listing): void {
+    this.selectedListingId = listing.id;
+
+    setTimeout(() => {
+      document.getElementById(`listing-${listing.id}`)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
     });
   }
 

@@ -1,3 +1,5 @@
+@import 'leaflet/dist/leaflet.css';
+
 :root {
     color-scheme: light;
 
@@ -56,7 +58,22 @@ h1,
 h2,
 h3,
 .price {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: -0.03em;
+}
+
+h1 {
+    font-weight: 600;
+}
+
+h2,
+h3 {
+    font-weight: 600;
+}
+
+.price {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
 }
 
 button,
