@@ -7,9 +7,10 @@ import { Listing } from '../../models/listing.models';
 import { ListingService } from '../../services/listing';
 import { MoonService } from '../../services/moon';
 import { TerrainInfo } from '../../models/listing.models';
+import { MoonMap } from '../../components/moon-map/moon-map';
 
 @Component({
-  imports: [Header, RouterLink, CurrencyPipe, DatePipe],
+  imports: [Header, RouterLink, CurrencyPipe, DatePipe, MoonMap],
   selector: 'app-listing-detail',
   styleUrl: './listing-detail.css',
   templateUrl: './listing-detail.html',
