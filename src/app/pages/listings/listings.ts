@@ -6,15 +6,22 @@ import { ListingService } from '../../services/listing';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ListingCard } from '../../components/listing-card/listing-card';
 import { FavoritesService } from '../../services/favorites';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+  FormsModule,
+} from '@angular/forms';
 import { MoonService } from '../../services/moon';
 import { priceRangeValidator } from '../../utils/validators';
 import { ActivatedRoute } from '@angular/router';
 import { MoonMap } from '../../components/moon-map/moon-map';
 import { Bounds } from '../../utils/plot-geometry';
+import { SortOption } from '../../utils/sort-option';
 
 @Component({
-  imports: [Header, MoonMap, CurrencyPipe, DatePipe, ListingCard, ReactiveFormsModule],
+  imports: [Header, MoonMap, CurrencyPipe, DatePipe, ListingCard, ReactiveFormsModule, FormsModule],
   selector: 'app-listings',
   styleUrl: './listings.css',
   templateUrl: './listings.html',
@@ -31,6 +38,9 @@ export class Listings implements OnInit {
   private bounds: Bounds | null = null;
 
   selectedListingId: number | null = null;
+
+  readonly sortOptions = SortOption;
+  sortBy: SortOption = SortOption.Newest;
 
   search = new FormGroup(
     {
@@ -146,6 +156,27 @@ export class Listings implements OnInit {
           )
         : this.filteredListings,
     );
+  }
+
+  get sortedListings() {
+    const listings = [...this.visibleListings()];
+
+    switch (this.sortBy) {
+      case SortOption.PriceLow:
+        return listings.sort((a, b) => a.price - b.price);
+
+      case SortOption.PriceHigh:
+        return listings.sort((a, b) => b.price - a.price);
+
+      case SortOption.Area:
+        return listings.sort((a, b) => b.widthKm * b.heightKm - a.widthKm * a.heightKm);
+
+      case SortOption.Newest:
+      default:
+        return listings.sort(
+          (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+        );
+    }
   }
 
   onListingSelected(listing: Listing): void {
