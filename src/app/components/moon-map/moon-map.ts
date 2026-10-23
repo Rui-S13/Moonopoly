@@ -31,6 +31,12 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
   @Input() zoom = 1;
   @Input() listings: Listing[] = [];
 
+  @Input() previewMode = false;
+  @Input() propertyWidthKm = 0;
+  @Input() propertyHeightKm = 0;
+
+  private propertyRectangle?: Leaflet.Rectangle;
+
   @Output() boundsChange = new EventEmitter<Bounds>();
   @Output() listingSelected = new EventEmitter<Listing>();
   @Output() mapClicked = new EventEmitter<void>();
@@ -83,11 +89,37 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
     this.map.on('click', () => {
       this.mapClicked.emit();
     });
+
+    if (this.previewMode) {
+      this.map.dragging.disable();
+      this.map.scrollWheelZoom.disable();
+      this.map.doubleClickZoom.disable();
+      this.map.touchZoom.disable();
+      this.map.boxZoom.disable();
+      this.map.keyboard.disable();
+    }
+
+    this.updatePropertyRectangle();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['listings'] && this.markerLayer) {
       this.updateMarkers();
+    }
+
+    if (changes['listings'] && this.markerLayer) {
+      this.updateMarkers();
+    }
+
+    if (this.map && changes['center']) {
+      this.map.setView(this.center, this.map.getZoom());
+    }
+
+    if (
+      this.map &&
+      (changes['center'] || changes['propertyWidthKm'] || changes['propertyHeightKm'])
+    ) {
+      this.updatePropertyRectangle();
     }
   }
 
@@ -96,26 +128,47 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
     this.markerLayer.clearLayers();
 
     for (const listing of this.listings) {
-      const marker = this.leaflet.circleMarker(listing.center, {
-        radius: 7,
-        color: '#242424',
-        weight: 2,
-        fillColor: '#7161E8',
-        fillOpacity: 1,
+      const markerIcon = this.leaflet.divIcon({
+        className: 'property-marker',
+        html: `
+    <div class="property-marker-icon">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <rect
+          x="5" y="5" width="22" height="22"
+          rx="2"
+          fill="#c9a86a"
+          fill-opacity="0.2"
+          stroke="#c9a86a"
+          stroke-width="1.5"
+        />
+        <path
+          d="M5 5 L27 27 M27 5 L5 27"
+          stroke="#c9a86a"
+          stroke-width="0.8"
+          stroke-opacity="0.65"
+        />
+        <circle cx="16" cy="16" r="2.5" fill="#c9a86a" />
+      </svg>
+    </div>
+  `,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+      });
+
+      const marker = this.leaflet.marker(listing.center, {
+        icon: markerIcon,
       });
 
       marker.on('mouseover', () => {
-        marker.setStyle({
-          radius: 9,
-          weight: 2,
-        });
+        const markerElement = marker.getElement();
+
+        markerElement?.classList.add('selected-marker');
       });
 
       marker.on('mouseout', () => {
-        marker.setStyle({
-          radius: 6,
-          weight: 2,
-        });
+        const markerElement = marker.getElement();
+
+        markerElement?.classList.remove('selected-marker');
       });
 
       const price = `$${listing.price.toLocaleString('en-US')}`;
@@ -137,6 +190,53 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
 
       marker.addTo(this.markerLayer);
     }
+  }
+
+  private updatePropertyRectangle(): void {
+    if (!this.map || !this.leaflet || !this.previewMode) {
+      return;
+    }
+
+    this.propertyRectangle?.remove();
+    this.propertyRectangle = undefined;
+
+    const [latitude, longitude] = this.center;
+    const width = this.propertyWidthKm;
+    const height = this.propertyHeightKm;
+
+    if (
+      !Number.isFinite(latitude) ||
+      !Number.isFinite(longitude) ||
+      !Number.isFinite(width) ||
+      !Number.isFinite(height) ||
+      Math.abs(latitude) > 90 ||
+      Math.abs(longitude) > 180 ||
+      width <= 0 ||
+      height <= 0
+    ) {
+      return;
+    }
+
+    // Aproximação da escala geográfica lunar.
+    const kmPerDegree = (2 * Math.PI * 1737.4) / 360;
+    const latDelta = height / 2 / kmPerDegree;
+    const cosLatitude = Math.max(Math.abs(Math.cos((latitude * Math.PI) / 180)), 0.01);
+    const lngDelta = width / 2 / (kmPerDegree * cosLatitude);
+
+    const bounds: Leaflet.LatLngBoundsExpression = [
+      [latitude - latDelta, longitude - lngDelta],
+      [latitude + latDelta, longitude + lngDelta],
+    ];
+
+    this.propertyRectangle = this.leaflet.rectangle(bounds, {
+      color: '#c9a86a',
+      weight: 2,
+      fillColor: '#c9a86a',
+      fillOpacity: 0.25,
+      interactive: false,
+    });
+
+    this.propertyRectangle.addTo(this.map);
   }
 
   private emitBounds(): void {

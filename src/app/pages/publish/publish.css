@@ -4,6 +4,10 @@
 }
 
 main {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    
     width: 100%;
     max-width: 1000px;
     margin-inline: auto;
@@ -11,8 +15,8 @@ main {
 }
 
 h1 {
-    margin: 0 0 32px;
     font-size: clamp(2rem, 4vw, 2.75rem);
+    margin: 0px;
 }
 
 /* Form layout */
@@ -138,4 +142,70 @@ form button[type="submit"]:hover:not(:disabled) {
 form button[type="submit"]:disabled {
     opacity: 0.45;
     cursor: not-allowed;
+}
+
+/* Property map preview */
+
+.map-preview {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+    margin-top: 4px;
+}
+
+.map-preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.map-preview-header h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.map-preview-header p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.map-preview-label {
+    flex-shrink: 0;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* Map frame */
+
+.map-preview-frame {
+    overflow: hidden;
+    height: 360px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: #17191d;
+}
+
+.map-preview-frame app-moon-map {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Map component's actual Leaflet container */
+
+app-moon-map {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
 }

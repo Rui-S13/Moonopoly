@@ -88,4 +88,20 @@
         </button>
 
     </form>
+
+    <section class="map-preview">
+        <div class="map-preview-header">
+            <div>
+                <h2>Property location</h2>
+                <p>Preview the position and size of your lunar property.</p>
+            </div>
+
+            <span class="map-preview-label">Live preview</span>
+        </div>
+
+        <div class="map-preview-frame">
+            <app-moon-map [previewMode]="true" [center]="previewCenter" [propertyWidthKm]="previewWidth"
+                [propertyHeightKm]="previewHeight" />
+        </div>
+    </section>
 </main>

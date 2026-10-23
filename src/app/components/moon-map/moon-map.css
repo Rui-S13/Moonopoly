@@ -80,3 +80,8 @@
 .leaflet-popup-close-button {
     color: #77736b !important;
 }
+
+:host ::ng-deep .property-marker.selected-marker .property-marker-icon {
+    transform: scale(1.2);
+    filter: brightness(1.25);
+}

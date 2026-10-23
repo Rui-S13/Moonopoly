@@ -13,15 +13,20 @@ import { ListingService } from '../../services/listing';
 import { Coordinates } from '../../models/listing.models';
 import { Listing } from '../../models/listing.models';
 import { getBounds, plotsOverlap } from '../../utils/plot-geometry';
+import { MoonMap } from '../../components/moon-map/moon-map';
 
 @Component({
-  imports: [Header, ReactiveFormsModule, RouterLink, RouterLinkActive],
+  imports: [Header, ReactiveFormsModule, RouterLink, RouterLinkActive, MoonMap],
   selector: 'app-publish',
   styleUrl: './publish.css',
   templateUrl: './publish.html',
 })
 export class Publish {
   private existing: Listing[] = [];
+
+  previewCenter: [number, number] = [0, 0];
+  previewWidth = 0;
+  previewHeight = 0;
 
   form = new FormGroup(
     {
@@ -76,7 +81,14 @@ export class Publish {
   constructor(
     private listingService: ListingService,
     private router: Router,
-  ) {}
+  ) {
+    this.form.valueChanges.subscribe((value) => {
+      this.previewCenter = [Number(value.latitude), Number(value.longitude)];
+
+      this.previewWidth = Number(value.widthKm);
+      this.previewHeight = Number(value.heightKm);
+    });
+  }
 
   onSubmit(): void {
     if (this.form.invalid) {
