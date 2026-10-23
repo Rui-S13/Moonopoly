@@ -32,6 +32,8 @@ jobs:
       - name: Build Angular Project
         run: |
           npm run build -- --configuration production --base-href "/Moonopoly/"
+          env:
+            SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
