@@ -48,6 +48,7 @@ export class Listings implements OnInit {
       minPrice: new FormControl<number | null>(null, Validators.min(1)),
       maxPrice: new FormControl<number | null>(null, Validators.min(1)),
       region: new FormControl<string>('', { nonNullable: true }),
+      favoritesOnly: new FormControl<boolean>(false),
     },
     {
       validators: priceRangeValidator,
@@ -123,6 +124,10 @@ export class Listings implements OnInit {
         return false;
       }
 
+      if(s.favoritesOnly && !this.favorites.isFavorite(l.id)) {
+        return false;
+      };
+
       return true;
     });
 
@@ -135,6 +140,7 @@ export class Listings implements OnInit {
       minPrice: null,
       maxPrice: null,
       region: '',
+      favoritesOnly: false,
     });
   }
 
@@ -193,5 +199,6 @@ export class Listings implements OnInit {
   onFavorite(listing: Listing): void {
     console.log('Favorite clicked:', listing.id);
     this.favorites.toggle(listing.id);
+    this.applyFilters();
   }
 }
