@@ -15,7 +15,7 @@
         @if (l.imageUrl && !imageFailed) {
         <img [src]="l.imageUrl" [alt]="'Moon surface near ' + terrain.region" (error)="imageFailed = true" />
         } @else {
-        <img src="/data/images/no-photo.png" alt="No image available for this lunar property" />
+        <img src="data/images/no-photo.png" alt="No image available for this lunar property" />
         }
 
         <span class="status-badge" [class]=" 'status-badge ' + l.status">
