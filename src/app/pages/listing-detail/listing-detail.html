@@ -43,10 +43,6 @@
         <p class="published-date">
           Published {{ l.publishedAt | date }}
         </p>
-
-        <a class="contact-button" [href]="'mailto:' + l.contactEmail">
-          Contact advertiser
-        </a>
       </div>
     </section>
 
@@ -94,14 +90,6 @@
           </span>
         </div>
       </div>
-    </section>
-
-    <section class="listing-contact-information">
-      <h2>Advertiser contact</h2>
-      <p>
-        Email:
-        <a [href]="'mailto:' + l.contactEmail">{{ l.contactEmail }}</a>
-      </p>
     </section>
 
     <section class="map-preview">
