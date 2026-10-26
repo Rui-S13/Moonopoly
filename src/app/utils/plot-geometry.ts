@@ -1,22 +1,78 @@
 import { Coordinates } from '../models/listing.models';
 
-const KM_PER_DEGREE = 30.3;
+const MOON_RADIUS_KM = 1737.4;
 
+// Still used by the map to describe the visible area
 export interface Bounds {
   south: number;
   north: number;
   west: number;
   east: number;
-};
+}
 
-export function getBounds(center: Coordinates, widthKm: number, heightKm: number): Bounds {
-  const [lat, lng] = center;
-  const cos = Math.max(Math.cos((lat * Math.PI) / 180), 0.01);
-  const halfLat = heightKm / 2 / KM_PER_DEGREE;
-  const halfLng = widthKm / 2 / (KM_PER_DEGREE * cos);
-  return { south: lat - halfLat, north: lat + halfLat, west: lng - halfLng, east: lng + halfLng };
-};
+export interface Plot {
+  center: Coordinates;
+  widthKm: number;
+  heightKm: number;
+}
 
-export function plotsOverlap(a: Bounds, b: Bounds): boolean {
-  return a.west < b.east && a.east > b.west && a.south < b.north && a.north > b.south;
-};
+const toRad = (deg: number) => (deg * Math.PI) / 180;
+
+/** How far `to` is from `from`, in km: x = east, y = north. */
+export function offsetKm(from: Coordinates, to: Coordinates): { x: number; y: number } {
+  const lat1 = toRad(from[0]);
+  const lat2 = toRad(to[0]);
+  const dLat = lat2 - lat1;
+  const dLng = toRad(to[1] - from[1]);
+
+  // Great-circle distance (haversine formula)
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+  const distance = 2 * MOON_RADIUS_KM * Math.asin(Math.min(1, Math.sqrt(h)));
+
+  // Direction from `from` to `to` (0 = north, 90° = east)
+  const bearing = Math.atan2(
+    Math.sin(dLng) * Math.cos(lat2),
+    Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng),
+  );
+
+  return { x: distance * Math.sin(bearing), y: distance * Math.cos(bearing) };
+}
+
+export function plotsOverlap(a: Plot, b: Plot): boolean {
+  const { x, y } = offsetKm(a.center, b.center);
+  return Math.abs(x) < (a.widthKm + b.widthKm) / 2 && Math.abs(y) < (a.heightKm + b.heightKm) / 2;
+}
+
+/** The point reached by moving xKm east and yKm north from `from`. */
+export function destination(from: Coordinates, xKm: number, yKm: number): Coordinates {
+  const angularDistance = Math.hypot(xKm, yKm) / MOON_RADIUS_KM;
+  const bearing = Math.atan2(xKm, yKm);
+  const lat1 = toRad(from[0]);
+  const lng1 = toRad(from[1]);
+
+  const lat2 = Math.asin(
+    Math.sin(lat1) * Math.cos(angularDistance) +
+      Math.cos(lat1) * Math.sin(angularDistance) * Math.cos(bearing),
+  );
+  const lng2 =
+    lng1 +
+    Math.atan2(
+      Math.sin(bearing) * Math.sin(angularDistance) * Math.cos(lat1),
+      Math.cos(angularDistance) - Math.sin(lat1) * Math.sin(lat2),
+    );
+
+  // Keep longitude between -180 and 180
+  return [(lat2 * 180) / Math.PI, (((lng2 * 180) / Math.PI + 540) % 360) - 180];
+}
+
+/** The four corners of a plot, in order, ready to draw. */
+export function plotCorners(plot: Plot): Coordinates[] {
+  const halfW = plot.widthKm / 2;
+  const halfH = plot.heightKm / 2;
+  return [
+    destination(plot.center, -halfW, -halfH),
+    destination(plot.center, halfW, -halfH),
+    destination(plot.center, halfW, halfH),
+    destination(plot.center, -halfW, halfH),
+  ];
+}

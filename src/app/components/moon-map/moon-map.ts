@@ -15,7 +15,7 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import type * as Leaflet from 'leaflet';
 import { Listing } from '../../models/listing.models';
-import { Bounds } from '../../utils/plot-geometry';
+import { Bounds, plotCorners } from '../../utils/plot-geometry';
 import { MoonService } from '../../services/moon';
 
 @Component({
@@ -35,7 +35,7 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
   @Input() propertyWidthKm = 0;
   @Input() propertyHeightKm = 0;
 
-  private propertyRectangle?: Leaflet.Rectangle;
+  private propertyRectangle?: Leaflet.Polygon;
 
   @Output() boundsChange = new EventEmitter<Bounds>();
   @Output() listingSelected = new EventEmitter<Listing>();
@@ -189,6 +189,15 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
       marker.on('click', () => this.listingSelected.emit(listing));
 
       marker.addTo(this.markerLayer);
+
+      const outline = this.leaflet.polygon(plotCorners(listing), {
+        color: '#c9a86a',
+        weight: 1,
+        fillColor: '#c9a86a',
+        fillOpacity: 0.25,
+      });
+      outline.on('click', () => this.listingSelected.emit(listing));
+      outline.addTo(this.markerLayer);
     }
   }
 
@@ -217,18 +226,13 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
       return;
     }
 
-    // Aproximação da escala geográfica lunar.
-    const kmPerDegree = (2 * Math.PI * 1737.4) / 360;
-    const latDelta = height / 2 / kmPerDegree;
-    const cosLatitude = Math.max(Math.abs(Math.cos((latitude * Math.PI) / 180)), 0.01);
-    const lngDelta = width / 2 / (kmPerDegree * cosLatitude);
+    const corners = plotCorners({
+      center: [latitude, longitude],
+      widthKm: width,
+      heightKm: height,
+    });
 
-    const bounds: Leaflet.LatLngBoundsExpression = [
-      [latitude - latDelta, longitude - lngDelta],
-      [latitude + latDelta, longitude + lngDelta],
-    ];
-
-    this.propertyRectangle = this.leaflet.rectangle(bounds, {
+    this.propertyRectangle = this.leaflet.polygon(corners, {
       color: '#c9a86a',
       weight: 2,
       fillColor: '#c9a86a',

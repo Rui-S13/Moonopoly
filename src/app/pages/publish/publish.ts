@@ -12,7 +12,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ListingService } from '../../services/listing';
 import { Coordinates } from '../../models/listing.models';
 import { Listing } from '../../models/listing.models';
-import { getBounds, plotsOverlap } from '../../utils/plot-geometry';
+import { Plot, plotsOverlap } from '../../utils/plot-geometry';
 import { MoonMap } from '../../components/moon-map/moon-map';
 
 @Component({
@@ -71,10 +71,12 @@ export class Publish {
     if ([v.latitude, v.longitude, v.widthKm, v.heightKm].some((x) => x == null)) {
       return null;
     }
-    const mine = getBounds([v.latitude, v.longitude], v.widthKm, v.heightKm);
-    const clash = this.existing.find((l) =>
-      plotsOverlap(mine, getBounds(l.center, l.widthKm, l.heightKm)),
-    );
+    const mine: Plot = {
+      center: [v.latitude, v.longitude],
+      widthKm: v.widthKm,
+      heightKm: v.heightKm,
+    };
+    const clash = this.existing.find((l) => plotsOverlap(mine, l));
     return clash ? { overlap: clash.id } : null;
   }
 
