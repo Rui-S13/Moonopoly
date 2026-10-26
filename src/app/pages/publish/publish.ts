@@ -24,6 +24,8 @@ import { MoonMap } from '../../components/moon-map/moon-map';
 export class Publish {
   private existing: Listing[] = [];
 
+  errorMessage = '';
+
   previewCenter: [number, number] = [0, 0];
   previewWidth = 0;
   previewHeight = 0;
@@ -93,25 +95,36 @@ export class Publish {
   }
 
   onSubmit(): void {
+    this.errorMessage = '';
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
     const v = this.form.getRawValue();
-    this.listingService.addListing({
-      description: v.description,
-      type: v.type,
-      price: v.price!,
-      status: 'available',
-      center: [v.latitude!, v.longitude!] as Coordinates,
-      widthKm: v.widthKm!,
-      heightKm: v.heightKm!,
-      publishedAt: new Date().toISOString().slice(0, 10),
-      contactEmail: v.contactEmail,
-    });
-
-    this.form.reset();
-    this.router.navigate(['/listings']);
+    this.listingService
+      .addListing({
+        description: v.description,
+        type: v.type,
+        price: v.price!,
+        status: 'available',
+        center: [v.latitude!, v.longitude!] as Coordinates,
+        widthKm: v.widthKm!,
+        heightKm: v.heightKm!,
+        publishedAt: new Date().toISOString().slice(0, 10),
+        contactEmail: v.contactEmail,
+      })
+      .subscribe({
+        next: () => {
+          this.errorMessage = '';
+          this.form.reset();
+          this.router.navigate(['/listings']);
+        },
+        error: () => {
+          console.error('Error creating listing:');
+          this.errorMessage = 'Failed to publish listing. Please try again.';
+        },
+      });
   }
 }

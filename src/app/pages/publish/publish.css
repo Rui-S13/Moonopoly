@@ -7,7 +7,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 30px;
-    
+
     width: 100%;
     max-width: 1000px;
     margin-inline: auto;
@@ -208,4 +208,10 @@ app-moon-map {
     width: 100%;
     height: 100%;
     min-width: 0;
+}
+
+.error-message {
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin-top: 0.75rem;
 }

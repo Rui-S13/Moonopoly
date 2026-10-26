@@ -4,14 +4,14 @@ export type ListingStatus = 'available' | 'reserved' | 'sold';
 
 export interface Listing {
   id: number;
-  description: string;
+  description: string | null;
   type: ListingType;
   price: number;
   status: ListingStatus;
   center: Coordinates;
   widthKm: number;
   heightKm: number;
-  imageUrl?: string;
+  imageUrl?: string | null;
   publishedAt: string;
   contactEmail: string;
 };

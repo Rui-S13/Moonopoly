@@ -98,6 +98,7 @@ export class Listings implements OnInit {
       this.applyFilters();
     });
   }
+  
 
   applyFilters() {
     if (this.search.invalid) {
