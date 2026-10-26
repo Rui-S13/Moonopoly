@@ -1,6 +1,8 @@
-import { ValidatorFn, AbstractControl, ValidationErrors } from "@angular/forms";
+import { ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 
-export const priceRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+export const priceRangeValidator: ValidatorFn = (
+  control: AbstractControl,
+): ValidationErrors | null => {
   const minPrice = control.get('minPrice')?.value;
   const maxPrice = control.get('maxPrice')?.value;
 
@@ -9,4 +11,12 @@ export const priceRangeValidator: ValidatorFn = (control: AbstractControl): Vali
   }
 
   return null;
+};
+
+export const passwordsMatchValidator: ValidatorFn = (
+  control: AbstractControl,
+): ValidationErrors | null => {
+  const password = control.get('password')?.value;
+  const confirm = control.get('confirmPassword')?.value;
+  return password && confirm && password !== confirm ? { passwordMismatch: true } : null;
 };
