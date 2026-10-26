@@ -2,7 +2,6 @@ import { Coordinates } from '../models/listing.models';
 
 const MOON_RADIUS_KM = 1737.4;
 
-// Still used by the map to describe the visible area
 export interface Bounds {
   south: number;
   north: number;
@@ -18,18 +17,15 @@ export interface Plot {
 
 const toRad = (deg: number) => (deg * Math.PI) / 180;
 
-/** How far `to` is from `from`, in km: x = east, y = north. */
 export function offsetKm(from: Coordinates, to: Coordinates): { x: number; y: number } {
   const lat1 = toRad(from[0]);
   const lat2 = toRad(to[0]);
   const dLat = lat2 - lat1;
   const dLng = toRad(to[1] - from[1]);
 
-  // Great-circle distance (haversine formula)
   const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
   const distance = 2 * MOON_RADIUS_KM * Math.asin(Math.min(1, Math.sqrt(h)));
 
-  // Direction from `from` to `to` (0 = north, 90° = east)
   const bearing = Math.atan2(
     Math.sin(dLng) * Math.cos(lat2),
     Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng),
@@ -61,11 +57,9 @@ export function destination(from: Coordinates, xKm: number, yKm: number): Coordi
       Math.cos(angularDistance) - Math.sin(lat1) * Math.sin(lat2),
     );
 
-  // Keep longitude between -180 and 180
   return [(lat2 * 180) / Math.PI, (((lng2 * 180) / Math.PI + 540) % 360) - 180];
 }
 
-/** The four corners of a plot, in order, ready to draw. */
 export function plotCorners(plot: Plot): Coordinates[] {
   const halfW = plot.widthKm / 2;
   const halfH = plot.heightKm / 2;

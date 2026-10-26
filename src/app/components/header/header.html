@@ -1,9 +1,17 @@
 <header [class.header-home]="isHomePage" [class.header-default]="!isHomePage">
-  <a routerLink="/">Moonopoly</a>
+  <a routerLink="/" class="header-logo">Moonopoly</a>
   <nav>
     <a routerLink="/listings" routerLinkActive="active">Listings</a>
     <a routerLink="/publish" routerLinkActive="active">Publish</a>
     <a routerLink="/favorites" routerLinkActive="active">Favorites</a>
   </nav>
+
+  @if (auth.currentUser(); as user) {
+  <div class="header-user-info">
+    <span>{{ user.email }}</span>
+    <button type="button" (click)="logout()">Log out</button>
+  </div>
+  } @else {
   <a routerLink="/login" routerLinkActive="active" class="login-button">Log in</a>
+  }
 </header>

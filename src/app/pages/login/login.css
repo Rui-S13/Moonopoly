@@ -80,6 +80,7 @@
     color: #666666;
     font-size: 0.9rem;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .back-link:hover {

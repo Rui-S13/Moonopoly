@@ -1,0 +1,65 @@
+<main class="signup-page">
+    <section class="signup-image">
+        <img src="/data/images/signup.jpg" alt="Half of the moon in detail" />
+        <div class="image-caption">
+            <span>MOONOPOLY</span>
+            <p>Your next property is out of this world.</p>
+        </div>
+    </section>
+
+    <section class="signup-panel">
+        <div class="signup-content">
+            <a routerLink="/" class="back-link">← Back to home</a>
+
+            <header>
+                <h1>Welcome</h1>
+                <p>Sign up to start managing your lunar properties.</p>
+            </header>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <label for="signup-email">E-mail</label>
+                <input type="email" id="signup-email" formControlName="email" autocomplete="email"
+                    placeholder="you@example.com" />
+
+                @if (form.controls.email.touched && form.controls.email.invalid) {
+                <small class="error-message">
+                    @if (form.controls.email.hasError('required')) {
+                    E-mail is required.
+                    } @else if (form.controls.email.hasError('email')) {
+                    Enter a valid e-mail address.
+                    }
+                </small>
+                }
+
+                <label for="signup-password">Password <span>(must be at least 8 char.)</span></label>
+                <input type="password" id="signup-password" formControlName="password" autocomplete="new-password"
+                    placeholder="Enter your password" />
+
+                @if (form.controls.password.touched && form.controls.password.hasError('minlength')) {
+                <small class="error-message">
+                    Password must be at least 8 characters long.
+                </small>
+                }
+
+                @if (form.controls.password.touched && form.controls.password.hasError('required')) {
+                <small class="error-message">Password is required.</small>
+                }
+
+                <label for="signup-password-confirm">Confirm Password</label>
+                <input type="password" id="signup-password-confirm" formControlName="confirmPassword"
+                    autocomplete="new-password" placeholder="Confirm your password" />
+
+                @if (form.controls.confirmPassword.touched && form.errors?.['passwordMismatch']) {
+                <small class="error-message">Both passwords must match.</small>
+                }
+
+                <button type="submit">Sign up</button>
+            </form>
+            @if (signUpError()) {
+            <small>Incorrect email or password.</small>
+            }
+
+            <a routerLink="/login" id="btn-to-login">Already have an account? Log in!→</a>
+        </div>
+    </section>
+</main>
