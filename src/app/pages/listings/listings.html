@@ -21,6 +21,18 @@
       }
     </select>
 
+    <label class="favorites-filter">
+      <input type="checkbox" formControlName="favoritesOnly" />
+
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true">
+        <path
+          d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z" />
+      </svg>
+
+      <span>Favorites only</span>
+    </label>
+
     <button type="button" class="clear-filters" (click)="clearFilters()">
       Clear
     </button>
@@ -47,12 +59,25 @@
     </aside>
 
     <section class="results">
-      <p class="results-count">{{ visibleListings().length }} of {{ filteredListings.length }} listings in this area</p>
-      @if (visibleListings().length === 0) {
+      <div class="results-toolbar">
+        <p class="results-count">{{ visibleListings().length }} of {{ filteredListings.length }} listings in this area
+        </p>
+
+        <label class="sort-control" for="sortBy">
+          <span>Sort by</span>
+          <select id="sortBy" [(ngModel)]="sortBy">
+            <option [value]="sortOptions.Newest">Newest first</option>
+            <option [value]="sortOptions.PriceLow">Price: Low to high</option>
+            <option [value]="sortOptions.PriceHigh">Price: High to low</option>
+            <option [value]="sortOptions.Area">Largest area</option>
+          </select>
+        </label>
+      </div>
+      @if (sortedListings.length === 0) {
       <p class="no-listings">No plots in this area. Move or zoom out the map, or adjust your filters.</p>
       } @else {
       <div class="results-grid">
-        @for (listing of visibleListings(); track listing.id) {
+        @for (listing of sortedListings; track listing.id) {
         <div [id]="'listing-' + listing.id" [class.selected-listing]="selectedListingId === listing.id">
           <app-listing-card [listing]="listing" [isFavorite]="favorites.isFavorite(listing.id)"
             (favorite)="onFavorite($event)" />

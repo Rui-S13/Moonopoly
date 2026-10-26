@@ -6,15 +6,22 @@ import { ListingService } from '../../services/listing';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ListingCard } from '../../components/listing-card/listing-card';
 import { FavoritesService } from '../../services/favorites';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+  FormsModule,
+} from '@angular/forms';
 import { MoonService } from '../../services/moon';
 import { priceRangeValidator } from '../../utils/validators';
 import { ActivatedRoute } from '@angular/router';
 import { MoonMap } from '../../components/moon-map/moon-map';
 import { Bounds } from '../../utils/plot-geometry';
+import { SortOption } from '../../utils/sort-option';
 
 @Component({
-  imports: [Header, MoonMap, CurrencyPipe, DatePipe, ListingCard, ReactiveFormsModule],
+  imports: [Header, MoonMap, CurrencyPipe, DatePipe, ListingCard, ReactiveFormsModule, FormsModule],
   selector: 'app-listings',
   styleUrl: './listings.css',
   templateUrl: './listings.html',
@@ -32,12 +39,16 @@ export class Listings implements OnInit {
 
   selectedListingId: number | null = null;
 
+  readonly sortOptions = SortOption;
+  sortBy: SortOption = SortOption.Newest;
+
   search = new FormGroup(
     {
       type: new FormControl<ListingType | null>(null),
       minPrice: new FormControl<number | null>(null, Validators.min(1)),
       maxPrice: new FormControl<number | null>(null, Validators.min(1)),
       region: new FormControl<string>('', { nonNullable: true }),
+      favoritesOnly: new FormControl<boolean>(false),
     },
     {
       validators: priceRangeValidator,
@@ -113,6 +124,10 @@ export class Listings implements OnInit {
         return false;
       }
 
+      if(s.favoritesOnly && !this.favorites.isFavorite(l.id)) {
+        return false;
+      };
+
       return true;
     });
 
@@ -125,6 +140,7 @@ export class Listings implements OnInit {
       minPrice: null,
       maxPrice: null,
       region: '',
+      favoritesOnly: false,
     });
   }
 
@@ -148,6 +164,27 @@ export class Listings implements OnInit {
     );
   }
 
+  get sortedListings() {
+    const listings = [...this.visibleListings()];
+
+    switch (this.sortBy) {
+      case SortOption.PriceLow:
+        return listings.sort((a, b) => a.price - b.price);
+
+      case SortOption.PriceHigh:
+        return listings.sort((a, b) => b.price - a.price);
+
+      case SortOption.Area:
+        return listings.sort((a, b) => b.widthKm * b.heightKm - a.widthKm * a.heightKm);
+
+      case SortOption.Newest:
+      default:
+        return listings.sort(
+          (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+        );
+    }
+  }
+
   onListingSelected(listing: Listing): void {
     this.selectedListingId = listing.id;
 
@@ -162,5 +199,6 @@ export class Listings implements OnInit {
   onFavorite(listing: Listing): void {
     console.log('Favorite clicked:', listing.id);
     this.favorites.toggle(listing.id);
+    this.applyFilters();
   }
 }
