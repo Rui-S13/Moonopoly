@@ -175,6 +175,10 @@
     outline-offset: 4px;
 }
 
+.to-login-container{
+    margin-top: 20px;
+}
+
 #btn-to-login {
     text-decoration: underline;
     cursor: pointer;

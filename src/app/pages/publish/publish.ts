@@ -32,10 +32,7 @@ export class Publish {
 
   form = new FormGroup(
     {
-      description: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required, Validators.minLength(10)],
-      }),
+      description: new FormControl('', { validators: [Validators.minLength(10)] }),
       type: new FormControl<'sale' | 'rent'>('sale', {
         nonNullable: true,
         validators: [Validators.required],
@@ -53,10 +50,6 @@ export class Publish {
       ]),
       widthKm: new FormControl<number | null>(null, [Validators.required, Validators.min(0.1)]),
       heightKm: new FormControl<number | null>(null, [Validators.required, Validators.min(0.1)]),
-      contactEmail: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required, Validators.email],
-      }),
     },
     { validators: [(group) => this.overlapValidator(group)] },
   );
@@ -113,7 +106,6 @@ export class Publish {
         widthKm: v.widthKm!,
         heightKm: v.heightKm!,
         publishedAt: new Date().toISOString().slice(0, 10),
-        contactEmail: v.contactEmail,
       })
       .subscribe({
         next: () => {
