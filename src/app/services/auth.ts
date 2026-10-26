@@ -1,42 +1,45 @@
-import { Injectable, signal, inject } from '@angular/core';
-import { from } from 'rxjs';
+import { Injectable, inject, signal } from '@angular/core';
+import { Observable, from, map } from 'rxjs';
+import type { User } from '@supabase/supabase-js';
 import { SupabaseService } from './supabase-service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly supabase = inject(SupabaseService).supabaseClient;
-
-  readonly currentUser = signal<{ email: string } | null>(null);
+  readonly currentUser = signal<User | null>(null);
 
   constructor() {
     this.supabase.auth.onAuthStateChange((_event, session) => {
-      const email = session?.user.email;
-
-      this.currentUser.set(email ? { email } : null);
-    });
-
-    this.supabase.auth.getSession().then(({ data, error }) => {
-      if (!error) {
-        const email = data.session?.user.email;
-
-        this.currentUser.set(email ? { email } : null);
-      }
+      this.currentUser.set(session?.user ?? null);
     });
   }
 
-  public signUp(email: string, password: string) {
-    return from(
-      this.supabase.auth.signUp({ email, password })
+  login(email: string, password: string): Observable<void> {
+    return from(this.supabase.auth.signInWithPassword({ email, password })).pipe(
+      map(({ error }) => {
+        if (error) throw error;
+      }),
     );
   }
 
-  public signIn(email: string, password: string) {
-    return from(
-      this.supabase.auth.signInWithPassword({ email, password })
+  signUp(email: string, password: string): Observable<void> {
+    return from(this.supabase.auth.signUp({ email, password })).pipe(
+      map(({ error }) => {
+        if (error) throw error;
+      }),
     );
   }
 
-  public signOut() {
-    return from(this.supabase.auth.signOut());
+  logout(): Observable<void> {
+    return from(this.supabase.auth.signOut()).pipe(
+      map(({ error }) => {
+        if (error) throw error;
+      }),
+    );
+  }
+
+  async isLoggedIn(): Promise<boolean> {
+    const { data } = await this.supabase.auth.getSession();
+    return data.session !== null;
   }
 }
