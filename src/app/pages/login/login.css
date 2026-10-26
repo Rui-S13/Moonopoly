@@ -170,3 +170,12 @@
     outline: 2px solid #555555;
     outline-offset: 4px;
 }
+
+.to-signup-container{
+    margin-top: 20px;
+}
+
+#btn-to-signup {
+    text-decoration: underline;
+    cursor: pointer;
+}

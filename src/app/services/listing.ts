@@ -29,7 +29,7 @@ export class ListingService {
     );
   }
 
-  addListing(data: Omit<Listing, 'id'>): Observable<Listing> {
+  addListing(data: Omit<Listing, 'id' | 'ownerId'>): Observable<Listing> {
     return from(this.supabase.from('listings').insert(this.toRow(data)).select().single()).pipe(
       map(({ data: row, error }) => {
         if (error) throw error;
@@ -48,13 +48,13 @@ export class ListingService {
       center: [row.latitude, row.longitude],
       widthKm: row.width_km,
       heightKm: row.height_km,
-      contactEmail: row.contact_email,
       publishedAt: row.published_at,
       imageUrl: row.image_url ?? undefined,
+      ownerId: row.owner_id ?? '',
     };
   }
 
-  private toRow(data: Omit<Listing, 'id'>): ListingInsert {
+  private toRow(data: Omit<Listing, 'id' | 'ownerId'>): ListingInsert {
     return {
       description: data.description,
       type: data.type,
@@ -64,7 +64,6 @@ export class ListingService {
       longitude: data.center[1],
       width_km: data.widthKm,
       height_km: data.heightKm,
-      contact_email: data.contactEmail,
       published_at: data.publishedAt,
       image_url: data.imageUrl ?? null,
     };

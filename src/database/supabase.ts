@@ -14,15 +14,41 @@ export type Database = {
   }
   public: {
     Tables: {
+      favorites: {
+        Row: {
+          created_at: string
+          listing_id: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          listing_id: number
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          listing_id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       listings: {
         Row: {
-          contact_email: string
           description: string | null
           height_km: number
           id: number
           image_url: string | null
           latitude: number
           longitude: number
+          owner_id: string | null
           price: number
           published_at: string
           status: Database["public"]["Enums"]["listing_status"]
@@ -30,13 +56,13 @@ export type Database = {
           width_km: number
         }
         Insert: {
-          contact_email: string
           description?: string | null
           height_km: number
           id?: number
           image_url?: string | null
           latitude: number
           longitude: number
+          owner_id?: string | null
           price: number
           published_at: string
           status?: Database["public"]["Enums"]["listing_status"]
@@ -44,13 +70,13 @@ export type Database = {
           width_km: number
         }
         Update: {
-          contact_email?: string
           description?: string | null
           height_km?: number
           id?: number
           image_url?: string | null
           latitude?: number
           longitude?: number
+          owner_id?: string | null
           price?: number
           published_at?: string
           status?: Database["public"]["Enums"]["listing_status"]

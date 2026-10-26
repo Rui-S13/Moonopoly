@@ -13,7 +13,7 @@ export interface Listing {
   heightKm: number;
   imageUrl?: string | null;
   publishedAt: string;
-  contactEmail: string;
+  ownerId: string;
 };
 
 export interface TerrainInfo {
