@@ -41,6 +41,9 @@
 
                 <button type="submit">Log in</button>
             </form>
+            @if (loginError()) {
+            <small>Incorrect email or password.</small>
+            }
         </div>
     </section>
 </main>

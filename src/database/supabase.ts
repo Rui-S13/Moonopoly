@@ -12,34 +12,53 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.18"
   }
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
-      [_ in never]: never
+      listings: {
+        Row: {
+          contact_email: string
+          description: string | null
+          height_km: number
+          id: number
+          image_url: string | null
+          latitude: number
+          longitude: number
+          price: number
+          published_at: string
+          status: Database["public"]["Enums"]["listing_status"]
+          type: Database["public"]["Enums"]["listing_type"]
+          width_km: number
+        }
+        Insert: {
+          contact_email: string
+          description?: string | null
+          height_km: number
+          id?: number
+          image_url?: string | null
+          latitude: number
+          longitude: number
+          price: number
+          published_at: string
+          status?: Database["public"]["Enums"]["listing_status"]
+          type?: Database["public"]["Enums"]["listing_type"]
+          width_km: number
+        }
+        Update: {
+          contact_email?: string
+          description?: string | null
+          height_km?: number
+          id?: number
+          image_url?: string | null
+          latitude?: number
+          longitude?: number
+          price?: number
+          published_at?: string
+          status?: Database["public"]["Enums"]["listing_status"]
+          type?: Database["public"]["Enums"]["listing_type"]
+          width_km?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -48,7 +67,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      listing_status: "available" | "reserved" | "sold"
+      listing_type: "sale" | "rent"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -174,10 +194,10 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
-    Enums: {},
+    Enums: {
+      listing_status: ["available", "reserved", "sold"],
+      listing_type: ["sale", "rent"],
+    },
   },
 } as const
