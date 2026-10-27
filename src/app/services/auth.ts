@@ -42,4 +42,9 @@ export class AuthService {
     const { data } = await this.supabase.auth.getSession();
     return data.session !== null;
   }
+
+  async getUserId(): Promise<string | null> {
+    const { data } = await this.supabase.auth.getSession();
+    return data.session?.user.id ?? null;
+  }
 }

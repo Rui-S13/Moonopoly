@@ -1,0 +1,34 @@
+<app-header />
+
+<main>
+    <h1>My listings</h1>
+
+    @if (loading()) {
+    <p>Loading your listings...</p>
+    } @else if (error()) {
+    <p>Could not load your listings. Please try again later.</p>
+    } @else {
+    @for (l of listings(); track l.id) {
+    <article class="my-listing">
+        <div>
+            <strong>{{ l.price | currency: 'USD' }}{{ l.type === 'rent' ? ' / month' : '' }}</strong>
+            <span>{{ l.widthKm * l.heightKm }} km²</span>
+        </div>
+
+        <select [attr.aria-label]="'Status'" (change)="onStatusChange(l, $event)">
+            <option value="available" [selected]="l.status === 'available'">Available</option>
+            <option value="reserved" [selected]="l.status === 'reserved'">Reserved</option>
+            <option value="sold" [selected]="l.status === 'sold'">Sold</option>
+        </select>
+
+        <a [routerLink]="['/listings', l.id]">View</a>
+        <a [routerLink]="['/listings', l.id, 'edit']">Edit</a>
+        <button type="button" (click)="onDelete(l)">Delete</button>
+    </article>
+    } @empty {
+    <p>You haven't published anything yet. <a routerLink="/publish">Publish your first listing.</a></p>
+    }
+    }
+</main>
+
+<app-footer />

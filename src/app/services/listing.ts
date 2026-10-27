@@ -68,4 +68,44 @@ export class ListingService {
       image_url: data.imageUrl ?? null,
     };
   }
+
+  getMyListings(ownerId: string): Observable<Listing[]> {
+    return from(this.supabase.from('listings').select('*').eq('owner_id', ownerId)).pipe(
+      map(({ data, error }) => {
+        if (error) throw error;
+        return (data ?? []).map((row) => this.toListing(row));
+      }),
+    );
+  }
+
+  updateListing(id: number, data: Omit<Listing, 'id' | 'ownerId'>): Observable<Listing> {
+    return from(
+      this.supabase.from('listings').update(this.toRow(data)).eq('id', id).select().single(),
+    ).pipe(
+      map(({ data: row, error }) => {
+        if (error) throw error;
+        return this.toListing(row);
+      }),
+    );
+  }
+
+  updateStatus(id: number, status: ListingStatus): Observable<Listing> {
+    return from(
+      this.supabase.from('listings').update({ status }).eq('id', id).select().single(),
+    ).pipe(
+      map(({ data: row, error }) => {
+        if (error) throw error;
+        return this.toListing(row);
+      }),
+    );
+  }
+
+  deleteListing(id: number): Observable<void> {
+    return from(this.supabase.from('listings').delete().eq('id', id).select()).pipe(
+      map(({ data, error }) => {
+        if (error) throw error;
+        if (!data?.length) throw new Error('Listing not found or not yours');
+      }),
+    );
+  }
 }

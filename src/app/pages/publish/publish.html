@@ -1,9 +1,19 @@
 <app-header />
 
 <main>
-    <h1>Publish a listing</h1>
+    <h1>{{ editing() ? 'Edit listing' : 'Publish a listing' }}</h1>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        @if (editing()) {
+        <label>Status
+            <select formControlName="status">
+                <option value="available">Available</option>
+                <option value="reserved">Reserved</option>
+                <option value="sold">Sold</option>
+            </select>
+        </label>
+        }
+
         <div class="form-field">
             <label for="type">Type</label>
             <select id="type" formControlName="type">
