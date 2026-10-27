@@ -9,6 +9,7 @@ import { MoonService } from '../../services/moon';
 import { TerrainInfo } from '../../models/listing.models';
 import { MoonMap } from '../../components/moon-map/moon-map';
 import { Footer } from '../../components/footer/footer';
+import { ProfileService, Profile } from '../../services/profile';
 
 @Component({
   imports: [Header, RouterLink, CurrencyPipe, DatePipe, MoonMap, Footer],
@@ -21,6 +22,7 @@ export class ListingDetail implements OnInit, OnDestroy {
   loading = signal(true);
   error = signal(false);
   private subscription?: Subscription;
+  owner = signal<Profile | undefined>(undefined);
 
   imageFailed: boolean = false;
 
@@ -28,6 +30,7 @@ export class ListingDetail implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private listingService: ListingService,
     private moon: MoonService,
+    private profiles: ProfileService,
   ) {}
 
   ngOnInit(): void {
@@ -43,6 +46,12 @@ export class ListingDetail implements OnInit, OnDestroy {
         next: (listing) => {
           this.listing.set(listing);
           this.loading.set(false);
+          if (listing) {
+            this.profiles.getProfile(listing.ownerId).subscribe({
+              next: (profile) => this.owner.set(profile),
+              error: () => this.owner.set(undefined),
+            });
+          }
         },
         error: () => {
           this.error.set(true);

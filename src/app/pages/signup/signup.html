@@ -53,6 +53,12 @@
                 </small>
                 }
 
+                <label for="displayName">Display name</label>
+                <input id="displayName" type="text" formControlName="displayName" autocomplete="name" placeholder="E.g. John Smith"/>
+                @if (form.controls.displayName.touched && form.controls.displayName.invalid) {
+                <small class="field-error">Enter a name between 2 and 40 characters.</small>
+                }
+
                 <label for="signup-password">Password <span>(must be at least 8 char.)</span></label>
                 <input type="password" id="signup-password" formControlName="password" autocomplete="new-password"
                     placeholder="Enter your password" />

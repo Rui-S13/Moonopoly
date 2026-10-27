@@ -22,10 +22,12 @@ export class AuthService {
     );
   }
 
-  signUp(email: string, password: string): Observable<void> {
-    return from(this.supabase.auth.signUp({ email, password })).pipe(
-      map(({ error }) => {
-        if (error) throw error;
+  signUp(email: string, password: string, displayName: string) {
+    return from(
+      this.supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { display_name: displayName } },
       }),
     );
   }
