@@ -35,6 +35,8 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
   @Input() propertyWidthKm = 0;
   @Input() propertyHeightKm = 0;
 
+  @Input() fitTo: Listing | null = null;
+
   private propertyRectangle?: Leaflet.Polygon;
 
   @Output() boundsChange = new EventEmitter<Bounds>();
@@ -83,7 +85,8 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
     this.markerLayer = L.layerGroup().addTo(this.map);
     this.map.on('moveend', () => this.emitBounds());
 
-    this.updateMarkers(); // listings may have arrived before the map existed
+    this.updateMarkers();
+    this.fitToPlot();
     this.emitBounds();
 
     this.map.on('click', () => {
@@ -100,6 +103,13 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     this.updatePropertyRectangle();
+  }
+
+  private fitToPlot(): void {
+    if (!this.map || !this.leaflet || !this.fitTo) return;
+
+    const bounds = this.leaflet.latLngBounds(plotCorners(this.fitTo));
+    this.map.fitBounds(bounds, { padding: [40, 40], maxZoom: 8 });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -241,6 +251,15 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
     });
 
     this.propertyRectangle.addTo(this.map);
+
+    const plotBounds = this.propertyRectangle.getBounds();
+    const view = this.map.getBounds();
+    const tooSmall =
+      plotBounds.getEast() - plotBounds.getWest() < (view.getEast() - view.getWest()) / 20;
+
+    if (!view.contains(plotBounds) || tooSmall) {
+      this.map.fitBounds(plotBounds, { padding: [40, 40], maxZoom: 8 });
+    }
   }
 
   private emitBounds(): void {
