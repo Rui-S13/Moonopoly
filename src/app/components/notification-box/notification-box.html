@@ -1,0 +1,9 @@
+<div class="notifications" aria-live="polite">
+  @for (n of service.notifications(); track n.id) {
+    <div class="notification" [class]="'notification ' + n.type"
+         [attr.role]="n.type === 'error' ? 'alert' : 'status'">
+      <span>{{ n.message }}</span>
+      <button type="button" aria-label="Dismiss" (click)="service.dismiss(n.id)">×</button>
+    </div>
+  }
+</div>

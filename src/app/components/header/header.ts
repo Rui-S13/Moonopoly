@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
 import { AuthService } from '../../services/auth';
+import { NotificationService } from '../../services/notification';
 
 @Component({
   selector: 'app-header',
@@ -16,6 +17,7 @@ export class Header {
   constructor(
     private router: Router,
     public auth: AuthService,
+    private notifications: NotificationService,
   ) {
     this.isHomePage = this.router.url === '/';
 
@@ -29,6 +31,7 @@ export class Header {
   logout(): void {
     this.auth.logout().subscribe(() => {
       this.router.navigate(['/']);
+      this.notifications.info('You have been logged out.');
     });
   }
 }

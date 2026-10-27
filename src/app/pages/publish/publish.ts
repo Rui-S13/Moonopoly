@@ -15,6 +15,7 @@ import { Listing } from '../../models/listing.models';
 import { Plot, plotsOverlap } from '../../utils/plot-geometry';
 import { MoonMap } from '../../components/moon-map/moon-map';
 import { Footer } from '../../components/footer/footer';
+import { NotificationService } from '../../services/notification';
 
 @Component({
   imports: [Header, ReactiveFormsModule, RouterLink, RouterLinkActive, MoonMap, Footer],
@@ -79,6 +80,7 @@ export class Publish {
   constructor(
     private listingService: ListingService,
     private router: Router,
+    private notifications: NotificationService
   ) {
     this.form.valueChanges.subscribe((value) => {
       this.previewCenter = [Number(value.latitude), Number(value.longitude)];
@@ -113,10 +115,11 @@ export class Publish {
           this.errorMessage = '';
           this.form.reset();
           this.router.navigate(['/listings']);
+          this.notifications.success("Listing published.");
         },
         error: () => {
           console.error('Error creating listing:');
-          this.errorMessage = 'Failed to publish listing. Please try again.';
+          this.notifications.error("Could not publish the listing. Please try again.");
         },
       });
   }
