@@ -18,13 +18,13 @@ export class Favorites implements OnInit {
   error = signal(false);
 
   favoriteListings = computed(() =>
-    this.listings().filter((l) => this.favorites.ids().includes(l.id))
+    this.listings().filter((l) => this.favorites.ids().includes(l.id)),
   );
 
   constructor(
     private listingService: ListingService,
-    public favorites: FavoritesService
-  ) {};
+    public favorites: FavoritesService,
+  ) {}
 
   ngOnInit(): void {
     this.listingService.getListings().subscribe({
@@ -37,9 +37,9 @@ export class Favorites implements OnInit {
         this.loading.set(false);
       },
     });
-  };
+  }
 
   onFavorite(listing: Listing): void {
     this.favorites.toggle(listing.id);
-  };
+  }
 }
