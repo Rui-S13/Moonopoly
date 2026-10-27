@@ -19,6 +19,10 @@ export class Signup {
         nonNullable: true,
         validators: [Validators.required, Validators.email],
       }),
+      displayName: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.minLength(2), Validators.maxLength(40)],
+      }),
       password: new FormControl('', {
         nonNullable: true,
         validators: [Validators.required, Validators.minLength(8)],
@@ -42,11 +46,11 @@ export class Signup {
       return;
     }
 
-    const { email, password } = this.form.getRawValue();
+    const { email, password, displayName } = this.form.getRawValue();
 
     this.signUpError.set(false);
 
-    this.auth.signUp(email, password).subscribe({
+    this.auth.signUp(email, password, displayName.trim()).subscribe({
       next: () => this.router.navigate(['/']),
       error: () => this.signUpError.set(true),
     });

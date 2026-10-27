@@ -43,6 +43,12 @@
         <p class="published-date">
           Published {{ l.publishedAt | date }}
         </p>
+        @if (owner(); as o) {
+        <p>Published by {{ o.displayName }}</p>
+        @if (o.contactEmail) {
+        <p>Contact: <a [href]="'mailto:' + o.contactEmail">{{ o.contactEmail }}</a></p>
+        }
+        }
       </div>
     </section>
 

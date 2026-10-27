@@ -85,12 +85,33 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          contact_email: string | null
+          created_at: string
+          display_name: string
+          id: string
+        }
+        Insert: {
+          contact_email?: string | null
+          created_at?: string
+          display_name: string
+          id: string
+        }
+        Update: {
+          contact_email?: string | null
+          created_at?: string
+          display_name?: string
+          id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      delete_my_account: { Args: never; Returns: undefined }
     }
     Enums: {
       listing_status: "available" | "reserved" | "sold"

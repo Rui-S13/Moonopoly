@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
 import { AuthService } from '../../services/auth';
 import { NotificationService } from '../../services/notification';
+import { Profile, ProfileService } from '../../services/profile';
 
 @Component({
   selector: 'app-header',
@@ -18,6 +19,7 @@ export class Header {
     private router: Router,
     public auth: AuthService,
     private notifications: NotificationService,
+    public profiles: ProfileService
   ) {
     this.isHomePage = this.router.url === '/';
 

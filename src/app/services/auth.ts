@@ -22,10 +22,12 @@ export class AuthService {
     );
   }
 
-  signUp(email: string, password: string): Observable<void> {
-    return from(this.supabase.auth.signUp({ email, password })).pipe(
-      map(({ error }) => {
-        if (error) throw error;
+  signUp(email: string, password: string, displayName: string) {
+    return from(
+      this.supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { display_name: displayName } },
       }),
     );
   }
@@ -46,5 +48,11 @@ export class AuthService {
   async getUserId(): Promise<string | null> {
     const { data } = await this.supabase.auth.getSession();
     return data.session?.user.id ?? null;
+  }
+
+  async deleteAccount(): Promise<void> {
+    const { error } = await this.supabase.rpc('delete_my_account');
+    if (error) throw error;
+    await this.supabase.auth.signOut({ scope: 'local' });
   }
 }

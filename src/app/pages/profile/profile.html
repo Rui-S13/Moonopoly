@@ -1,0 +1,58 @@
+<app-header />
+
+<main>
+    <h1>My profile</h1>
+
+    @if (loading()) {
+    <p>Loading your profile...</p>
+    } @else if (error()) {
+    <p>Could not load your profile. Please try again later.</p>
+    } @else {
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="profile-form">
+        <div class="field">
+            <label for="displayName">Display name</label>
+            <input id="displayName" type="text" formControlName="displayName" autocomplete="name" />
+            @if (form.controls.displayName.touched && form.controls.displayName.invalid) {
+            <small class="field-error">Enter a name between 2 and 40 characters.</small>
+            }
+        </div>
+
+        <div class="field">
+            <label for="contactEmail">Public contact email (optional)</label>
+            <input id="contactEmail" type="email" formControlName="contactEmail" autocomplete="email" />
+            <small class="hint">This address is shown publicly on your listings. Leave it empty to hide it.</small>
+            @if (form.controls.contactEmail.touched && form.controls.contactEmail.invalid) {
+            <small class="field-error">Enter a valid email address.</small>
+            }
+        </div>
+
+        <button type="submit" [disabled]="form.invalid || saving()">
+            {{ saving() ? 'Saving...' : 'Save profile' }}
+        </button>
+    </form>
+    }
+
+    <section class="danger-zone">
+        <h2>Delete account</h2>
+        <p>This permanently deletes your account, your profile, your favorites and all your listings. It cannot be
+            undone.</p>
+
+        @if (!confirming()) {
+        <button type="button" class="danger" (click)="confirming.set(true)">Delete my account</button>
+        } @else {
+        <label for="confirmDelete">Type DELETE to confirm</label>
+        <input id="confirmDelete" type="text" autocomplete="off" [value]="confirmText()"
+            (input)="onConfirmInput($event)" />
+
+        <div class="danger-actions">
+            <button type="button" class="danger" [disabled]="confirmText() !== 'DELETE' || deleting()"
+                (click)="onDeleteAccount()">
+                {{ deleting() ? 'Deleting...' : 'Permanently delete' }}
+            </button>
+            <button type="button" (click)="confirming.set(false); confirmText.set('')">Cancel</button>
+        </div>
+        }
+    </section>
+</main>
+
+<app-footer />

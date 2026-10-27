@@ -31,7 +31,7 @@
 
   @if (auth.currentUser(); as user) {
   <div class="header-user-info">
-    <span>{{ user.email }}</span>
+    <a routerLink="/profile">{{ profiles.myProfile()?.displayName ?? 'My account' }}</a>
     <button type="button" (click)="logout()">Log out</button>
   </div>
   } @else {
