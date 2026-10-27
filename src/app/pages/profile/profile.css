@@ -22,11 +22,7 @@ h1 {
     letter-spacing: -0.055em;
 }
 
-h1 + p {
-    color: var(--muted);
-}
-
-/* Form container */
+/* Profile form */
 .profile-form {
     display: flex;
     flex-direction: column;
@@ -39,20 +35,21 @@ h1 + p {
     box-shadow: var(--shadow);
 }
 
-/* Individual fields */
 .field {
     display: flex;
     flex-direction: column;
     gap: 9px;
 }
 
-.field label {
+.field label,
+.danger-zone label {
+    color: var(--text);
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--text);
 }
 
-.field input {
+.field input,
+.danger-zone input {
     width: 100%;
     min-height: 48px;
     padding: 12px 14px;
@@ -67,15 +64,13 @@ h1 + p {
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.field input::placeholder {
-    color: var(--muted);
-}
-
-.field input:hover {
+.field input:hover,
+.danger-zone input:hover {
     border-color: var(--muted);
 }
 
-.field input:focus {
+.field input:focus,
+.danger-zone input:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
 }
@@ -96,21 +91,29 @@ h1 + p {
     line-height: 1.4;
 }
 
-/* Save button */
-.profile-form button[type="submit"] {
-    align-self: flex-start;
-    min-height: 46px;
-    padding: 0 24px;
-    border: 1px solid var(--accent);
+/* Buttons */
+.profile-form button,
+.danger-zone button {
+    min-height: 44px;
+    padding: 0 22px;
+    border: 1px solid var(--border-strong);
     border-radius: var(--radius-control);
-    background: var(--accent);
-    color: var(--text-inverse);
+    background: var(--surface);
+    color: var(--text);
     font: inherit;
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s ease, border-color 0.2s ease,
-        transform 0.2s ease, opacity 0.2s ease;
+        color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+.profile-form button[type="submit"] {
+    align-self: flex-start;
+    min-height: 46px;
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--text-inverse);
 }
 
 .profile-form button[type="submit"]:hover:not(:disabled) {
@@ -119,9 +122,66 @@ h1 + p {
     transform: translateY(-1px);
 }
 
-.profile-form button[type="submit"]:disabled {
+.danger-zone button:hover:not(:disabled) {
+    background: var(--surface-muted);
+}
+
+.profile-form button:disabled,
+.danger-zone button:disabled {
     opacity: 0.55;
     cursor: not-allowed;
+}
+
+/* Delete account section */
+.danger-zone {
+    margin-top: 56px;
+    padding: 28px 32px;
+    border: 1px solid color-mix(in srgb, var(--error) 35%, var(--border));
+    border-radius: var(--radius);
+    background: var(--surface);
+}
+
+.danger-zone h2 {
+    margin: 0 0 10px;
+    font-size: 1.15rem;
+    font-weight: 650;
+    letter-spacing: -0.025em;
+}
+
+.danger-zone p {
+    max-width: 560px;
+    margin: 0 0 22px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.65;
+}
+
+/* Destructive actions */
+.danger-zone .danger {
+    border-color: var(--error);
+    background: var(--error);
+    color: #fff;
+}
+
+.danger-zone .danger:hover:not(:disabled) {
+    border-color: var(--error);
+    background: color-mix(in srgb, var(--error) 85%, black);
+    transform: translateY(-1px);
+}
+
+.danger-zone > label {
+    display: block;
+    margin-bottom: 9px;
+}
+
+.danger-zone input {
+    margin-bottom: 18px;
+}
+
+.danger-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 /* Loading and error messages */

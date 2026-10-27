@@ -49,4 +49,10 @@ export class AuthService {
     const { data } = await this.supabase.auth.getSession();
     return data.session?.user.id ?? null;
   }
+
+  async deleteAccount(): Promise<void> {
+    const { error } = await this.supabase.rpc('delete_my_account');
+    if (error) throw error;
+    await this.supabase.auth.signOut({ scope: 'local' });
+  }
 }

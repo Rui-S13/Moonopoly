@@ -31,6 +31,28 @@
         </button>
     </form>
     }
+
+    <section class="danger-zone">
+        <h2>Delete account</h2>
+        <p>This permanently deletes your account, your profile, your favorites and all your listings. It cannot be
+            undone.</p>
+
+        @if (!confirming()) {
+        <button type="button" class="danger" (click)="confirming.set(true)">Delete my account</button>
+        } @else {
+        <label for="confirmDelete">Type DELETE to confirm</label>
+        <input id="confirmDelete" type="text" autocomplete="off" [value]="confirmText()"
+            (input)="onConfirmInput($event)" />
+
+        <div class="danger-actions">
+            <button type="button" class="danger" [disabled]="confirmText() !== 'DELETE' || deleting()"
+                (click)="onDeleteAccount()">
+                {{ deleting() ? 'Deleting...' : 'Permanently delete' }}
+            </button>
+            <button type="button" (click)="confirming.set(false); confirmText.set('')">Cancel</button>
+        </div>
+        }
+    </section>
 </main>
 
 <app-footer />

@@ -5,6 +5,7 @@ import { ProfileService } from '../../services/profile';
 import { NotificationService } from '../../services/notification';
 import { Header } from '../../components/header/header';
 import { Footer } from '../../components/footer/footer';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -16,10 +17,15 @@ export class ProfilePage implements OnInit {
   private auth = inject(AuthService);
   private profiles = inject(ProfileService);
   private notifications = inject(NotificationService);
+  private router = inject(Router);
 
   loading = signal(true);
   error = signal(false);
   saving = signal(false);
+
+  confirming = signal(false);
+  confirmText = signal('');
+  deleting = signal(false);
 
   form = new FormGroup({
     displayName: new FormControl('', {
@@ -72,6 +78,24 @@ export class ProfilePage implements OnInit {
       this.notifications.error('Could not save your profile. Please try again.');
     } finally {
       this.saving.set(false);
+    }
+  }
+
+  onConfirmInput(event: Event): void {
+    this.confirmText.set((event.target as HTMLInputElement).value);
+  }
+
+  async onDeleteAccount(): Promise<void> {
+    if (this.confirmText() !== 'DELETE') return;
+    this.deleting.set(true);
+
+    try {
+      await this.auth.deleteAccount();
+      this.notifications.success('Your account has been deleted.');
+      this.router.navigate(['/']);
+    } catch {
+      this.notifications.error('Could not delete your account. Please try again.');
+      this.deleting.set(false);
     }
   }
 }
