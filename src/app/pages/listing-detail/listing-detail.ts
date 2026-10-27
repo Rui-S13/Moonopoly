@@ -8,9 +8,10 @@ import { ListingService } from '../../services/listing';
 import { MoonService } from '../../services/moon';
 import { TerrainInfo } from '../../models/listing.models';
 import { MoonMap } from '../../components/moon-map/moon-map';
+import { Footer } from '../../components/footer/footer';
 
 @Component({
-  imports: [Header, RouterLink, CurrencyPipe, DatePipe, MoonMap],
+  imports: [Header, RouterLink, CurrencyPipe, DatePipe, MoonMap, Footer],
   selector: 'app-listing-detail',
   styleUrl: './listing-detail.css',
   templateUrl: './listing-detail.html',

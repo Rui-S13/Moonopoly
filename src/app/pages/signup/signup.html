@@ -2,7 +2,29 @@
     <section class="signup-image">
         <img src="data/images/signup.jpg" alt="Half of the moon in detail" />
         <div class="image-caption">
-            <span>MOONOPOLY</span>
+            <span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 56" width="250" height="56" fill="currentColor"
+                    role="img" aria-labelledby="moonopoly-title">
+                    <title id="moonopoly-title">Moonopoly</title>
+
+                    <defs>
+                        <mask id="lunar-parcel-mask">
+                            <rect width="64" height="64" fill="white" />
+
+                            <path d="M19 24 L37 19 L45 30 L39 43 L22 41 Z" fill="black" />
+
+                            <circle cx="18" cy="16" r="2.5" fill="black" />
+                        </mask>
+                    </defs>
+
+                    <!-- Lunar parcel icon -->
+                    <circle cx="28" cy="28" r="25" mask="url(#lunar-parcel-mask)" />
+
+                    <!-- Wordmark -->
+                    <text x="65" y="37" font-family="Inter, Arial, sans-serif" font-size="29" font-weight="600"
+                        letter-spacing="-1.1">moonopoly</text>
+                </svg>
+            </span>
             <p>Your next property is out of this world.</p>
         </div>
     </section>

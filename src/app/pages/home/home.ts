@@ -6,9 +6,10 @@ import { ListingType } from '../../models/listing.models';
 import { priceRangeValidator } from '../../utils/validators';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MoonService } from '../../services/moon';
+import { Footer } from '../../components/footer/footer';
 
 @Component({
-  imports: [ReactiveFormsModule, Header],
+  imports: [ReactiveFormsModule, Header, Footer],
   selector: 'app-home',
   styleUrl: './home.css',
   templateUrl: './home.html',

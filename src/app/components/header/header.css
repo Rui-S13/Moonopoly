@@ -26,6 +26,8 @@ header {
 
 /* ===== Brand ===== */
 .header-logo {
+    display: flex;
+    align-items: center;
     flex-shrink: 0;
     color: var(--text);
     font-size: 1.3rem;

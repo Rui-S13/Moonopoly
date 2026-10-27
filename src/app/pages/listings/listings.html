@@ -59,6 +59,7 @@
     </aside>
 
     <section class="results">
+
       <div class="results-toolbar">
         <p class="results-count">{{ visibleListings().length }} of {{ filteredListings.length }} listings in this area
         </p>
@@ -73,18 +74,21 @@
           </select>
         </label>
       </div>
-      @if (sortedListings.length === 0) {
-      <p class="no-listings">No plots in this area. Move or zoom out the map, or adjust your filters.</p>
-      } @else {
-      <div class="results-grid">
-        @for (listing of sortedListings; track listing.id) {
-        <div [id]="'listing-' + listing.id" [class.selected-listing]="selectedListingId === listing.id">
-          <app-listing-card [listing]="listing" [isFavorite]="favorites.isFavorite(listing.id)"
-            (favorite)="onFavorite($event)" />
+      <div class="results-content">
+        @if (sortedListings.length === 0) {
+        <p class="no-listings">No plots in this area. Move or zoom out the map, or adjust your filters.</p>
+        } @else {
+        <div class="results-grid">
+          @for (listing of sortedListings; track listing.id) {
+          <div [id]="'listing-' + listing.id" [class.selected-listing]="selectedListingId === listing.id">
+            <app-listing-card [listing]="listing" [isFavorite]="favorites.isFavorite(listing.id)"
+              (favorite)="onFavorite($event)" />
+          </div>
+          }
         </div>
         }
       </div>
-      }
+      <app-footer />
     </section>
   </div>
 </main>

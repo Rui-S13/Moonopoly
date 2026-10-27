@@ -19,9 +19,10 @@ import { ActivatedRoute } from '@angular/router';
 import { MoonMap } from '../../components/moon-map/moon-map';
 import { Bounds } from '../../utils/plot-geometry';
 import { SortOption } from '../../utils/sort-option';
+import { Footer } from '../../components/footer/footer';
 
 @Component({
-  imports: [Header, MoonMap, CurrencyPipe, DatePipe, ListingCard, ReactiveFormsModule, FormsModule],
+  imports: [Header, MoonMap, CurrencyPipe, DatePipe, ListingCard, ReactiveFormsModule, FormsModule, Footer],
   selector: 'app-listings',
   styleUrl: './listings.css',
   templateUrl: './listings.html',
