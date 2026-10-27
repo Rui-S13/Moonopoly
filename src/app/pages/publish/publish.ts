@@ -14,9 +14,10 @@ import { Coordinates } from '../../models/listing.models';
 import { Listing } from '../../models/listing.models';
 import { Plot, plotsOverlap } from '../../utils/plot-geometry';
 import { MoonMap } from '../../components/moon-map/moon-map';
+import { Footer } from '../../components/footer/footer';
 
 @Component({
-  imports: [Header, ReactiveFormsModule, RouterLink, RouterLinkActive, MoonMap],
+  imports: [Header, ReactiveFormsModule, RouterLink, RouterLinkActive, MoonMap, Footer],
   selector: 'app-publish',
   styleUrl: './publish.css',
   templateUrl: './publish.html',

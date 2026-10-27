@@ -200,17 +200,22 @@ main {
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  border-left: var(--border-weight) solid var(--border);
+}
+
+.results-content {
   padding: 16px;
-  display: grid;
-  gap: 16px;
-  align-content: start;
-  border-left: 1px solid var(--border);
 }
 
 /* Results count and sorting */
 .results-toolbar {
   position: sticky;
-  top: -16px;
+  top: 0;
   z-index: 2;
 
   display: flex;
@@ -218,11 +223,12 @@ main {
   justify-content: space-between;
   gap: 16px;
 
-  margin: -16px -16px 0;
+  flex-shrink: 0;
+  margin: 0;
   padding: 10px 16px;
 
   background: var(--bg);
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border-weight) solid var(--border);
 }
 
 .results-count {
@@ -291,6 +297,16 @@ main {
   display: grid;
   grid-template-columns: auto auto;
   gap: 16px;
+}
+
+.results app-footer {
+  display: block;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.results app-footer .site-footer {
+  padding: 24px 16px 20px;
 }
 
 .selected-listing {

@@ -4,9 +4,10 @@ import { Listing } from '../../models/listing.models';
 import { ListingService } from '../../services/listing';
 import { FavoritesService } from '../../services/favorites';
 import { ListingCard } from '../../components/listing-card/listing-card';
+import { Footer } from '../../components/footer/footer';
 
 @Component({
-  imports: [Header, ListingCard],
+  imports: [Header, ListingCard, Footer],
   selector: 'app-favorites',
   styleUrl: './favorites.css',
   templateUrl: './favorites.html',
