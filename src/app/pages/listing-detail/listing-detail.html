@@ -15,7 +15,8 @@
         <img [src]="imageFailed ? images.placeholder : images.urlFor(l.imageUrl)"
           [alt]="'Moon surface near ' + terrain.region" (error)="imageFailed = true" />
 
-        <span class="status-badge" [class]=" 'status-badge ' + l.status">
+        <span class="status-badge" [class.available]="l.status === 'available'"
+          [class.reserved]="l.status === 'reserved'" [class.sold]="l.status === 'sold'">
           {{ l.status }}
         </span>
       </div>
