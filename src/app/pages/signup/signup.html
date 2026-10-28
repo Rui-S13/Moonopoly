@@ -31,7 +31,7 @@
 
     <section class="signup-panel">
         <div class="signup-content">
-            <a routerLink="/" class="back-link">← Back to home</a>
+            <a routerLink="/" (click)="goBack($event)" class="back-link">← Go back</a>
 
             <header>
                 <h1>Welcome</h1>
@@ -54,7 +54,8 @@
                 }
 
                 <label for="displayName">Display name</label>
-                <input id="displayName" type="text" formControlName="displayName" autocomplete="name" placeholder="E.g. John Smith"/>
+                <input id="displayName" type="text" formControlName="displayName" autocomplete="name"
+                    placeholder="E.g. John Smith" />
                 @if (form.controls.displayName.touched && form.controls.displayName.invalid) {
                 <small class="field-error">Enter a name between 2 and 40 characters.</small>
                 }
@@ -88,7 +89,8 @@
             }
 
             <div class="to-login-container">
-                <a routerLink="/login" queryParamsHandling="preserve" id="btn-to-login">Already have an account? Log in!→</a>
+                <a routerLink="/login" queryParamsHandling="preserve" id="btn-to-login">Already have an account? Log
+                    in!→</a>
             </div>
         </div>
     </section>

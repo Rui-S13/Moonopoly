@@ -4,6 +4,7 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { NotificationService } from '../../services/notification';
 import { safeReturnUrl } from '../../utils/navigation';
+import { NavigationHistory } from '../../services/navigation-history';
 
 @Component({
   selector: 'app-login',
@@ -30,6 +31,7 @@ export class Login {
     private router: Router,
     private notifications: NotificationService,
     private route: ActivatedRoute,
+    private navHistory: NavigationHistory,
   ) {}
 
   onSubmit(): void {
@@ -44,12 +46,18 @@ export class Login {
 
     this.auth.login(email, password).subscribe({
       next: () => {
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
         this.router.navigateByUrl(
-          safeReturnUrl(this.route.snapshot.queryParamMap.get('returnUrl')),
+          returnUrl ? safeReturnUrl(returnUrl) : (this.navHistory.lastContentUrl ?? '/'),
         );
         this.notifications.success('Welcome back!');
       },
       error: () => this.loginError.set(true),
     });
+  }
+
+  goBack(event: Event): void {
+    event.preventDefault();
+    this.navHistory.goBackFromAuth();
   }
 }

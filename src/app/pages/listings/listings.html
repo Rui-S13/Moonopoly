@@ -54,8 +54,9 @@
 
   <div class="listings-layout">
     <aside class="map-panel">
-      <app-moon-map [listings]="filteredListings" [highlightedId]="highlightedId()" [selectedId]="selectedId()"
-        (boundsChange)="onBoundsChange($event)" (listingSelected)="onPinSelected($event)"
+      <app-moon-map [listings]="filteredListings" [center]="initialCenter" [zoom]="initialZoom"
+        [highlightedId]="highlightedId()" [selectedId]="selectedId()" (boundsChange)="onBoundsChange($event)"
+        (viewChange)="onViewChange($event)" (listingSelected)="onPinSelected($event)"
         (listingOpened)="openListing($event)" (mapClicked)="clearSelection()" />
     </aside>
 

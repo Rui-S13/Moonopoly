@@ -1,6 +1,6 @@
 import { Header } from '../../components/header/header';
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Subscription, switchMap } from 'rxjs';
 import { Listing } from '../../models/listing.models';
@@ -11,6 +11,7 @@ import { MoonMap } from '../../components/moon-map/moon-map';
 import { Footer } from '../../components/footer/footer';
 import { ProfileService, Profile } from '../../services/profile';
 import { ImageService } from '../../services/image';
+import { NavigationHistory } from '../../services/navigation-history';
 
 @Component({
   imports: [Header, RouterLink, CurrencyPipe, DatePipe, MoonMap, Footer],
@@ -33,6 +34,8 @@ export class ListingDetail implements OnInit, OnDestroy {
     private moon: MoonService,
     private profiles: ProfileService,
     private images: ImageService,
+    private router: Router,
+    private navHistory: NavigationHistory,
   ) {}
 
   ngOnInit(): void {
@@ -64,6 +67,11 @@ export class ListingDetail implements OnInit, OnDestroy {
 
   get terrain(): TerrainInfo {
     return this.moon.getTerrainInfo(this.listing()!.center);
+  }
+
+  goBack(event: Event): void {
+    event.preventDefault();
+    this.navHistory.goBack('/listings');
   }
 
   ngOnDestroy(): void {

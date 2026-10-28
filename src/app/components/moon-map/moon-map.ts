@@ -47,6 +47,7 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
   @Output() mapClicked = new EventEmitter<void>();
   @Input() selectedId: number | null = null;
   @Output() listingOpened = new EventEmitter<Listing>();
+  @Output() viewChange = new EventEmitter<{ center: [number, number]; zoom: number }>();
 
   private map?: Leaflet.Map;
   private leaflet: typeof Leaflet | null = null;
@@ -94,7 +95,10 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
     ).addTo(this.map);
 
     this.markerLayer = L.layerGroup().addTo(this.map);
-    this.map.on('moveend', () => this.emitBounds());
+    this.map.on('moveend', () => {
+      this.emitBounds();
+      this.emitView();
+    });
 
     this.updateMarkers();
     this.fitToPlot();
@@ -341,6 +345,12 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
       west: b.getWest(),
       east: b.getEast(),
     });
+  }
+
+  private emitView(): void {
+    if (!this.map) return;
+    const c = this.map.getCenter();
+    this.viewChange.emit({ center: [c.lat, c.lng], zoom: this.map.getZoom() });
   }
 
   ngOnDestroy(): void {
