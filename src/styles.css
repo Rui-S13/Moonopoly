@@ -54,6 +54,10 @@
 
     /* Shadows */
     --shadow-lg: 0 10px 28px rgba(37, 38, 58, 0.18);
+
+    /* Text over the home page hero image */
+    --on-hero-muted: rgba(255, 255, 255, 0.8);
+    --on-hero-border: rgba(255, 255, 255, 0.7);
 }
 
 * {

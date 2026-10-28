@@ -1,0 +1,10 @@
+:host {
+  display: inline-block;
+}
+
+svg {
+  display: block;
+  height: var(--logo-height, 40px);
+  width: auto;
+  aspect-ratio: 250 / 56;
+}

@@ -7,7 +7,6 @@ header {
     width: 100%;
     height: 76px;
     padding: 0 5%;
-    box-sizing: border-box;
     z-index: 100;
 }
 
@@ -16,12 +15,19 @@ header {
     top: 0;
     left: 0;
     background: transparent;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.header-home.scrolled {
+    position: fixed;
+    background: var(--surface);
 }
 
 .header-default {
-    position: relative;
+    position: sticky;
+    top: 0;
     background: var(--surface);
-    border-bottom: 1px solid rgba(138, 143, 154, 0.18);
+    border-bottom: var(--border-weight) solid var(--border);
 }
 
 /* ===== Brand ===== */
@@ -30,14 +36,15 @@ header {
     align-items: center;
     flex-shrink: 0;
     color: var(--text);
-    font-size: 1.3rem;
-    font-weight: 750;
-    letter-spacing: -0.06em;
     text-decoration: none;
 }
 
 .header-home .header-logo {
-    color: var(--surface);
+    color: var(--text-inverse);
+}
+
+.header-home.scrolled .header-logo {
+    color: var(--text);
 }
 
 /* ===== Navigation ===== */
@@ -45,7 +52,6 @@ nav {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -75,7 +81,6 @@ nav a::after {
     background: var(--accent);
     border-radius: 2px;
     transform: scaleX(0);
-    transform-origin: center;
     transition: transform 0.2s ease;
 }
 
@@ -89,17 +94,25 @@ nav a.active::after {
     transform: scaleX(1);
 }
 
-/* Home navigation contrast */
 .header-home nav a {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--on-hero-muted);
 }
 
 .header-home nav a:hover,
 .header-home nav a.active {
-    color: #fff;
+    color: var(--text-inverse);
 }
 
-/* ===== Account Actions ===== */
+.header-home.scrolled nav a {
+    color: var(--muted);
+}
+
+.header-home.scrolled nav a:hover,
+.header-home.scrolled nav a.active {
+    color: var(--text);
+}
+
+/* ===== Account actions ===== */
 .login-button,
 .header-user-info button {
     display: inline-flex;
@@ -110,7 +123,7 @@ nav a.active::after {
     border: 1px solid var(--text);
     border-radius: 6px;
     background: var(--text);
-    color: var(--surface);
+    color: var(--text-inverse);
     font-family: inherit;
     font-size: 0.85rem;
     font-weight: 600;
@@ -124,33 +137,27 @@ nav a.active::after {
 }
 
 .login-button:hover,
+.login-button.active,
 .header-user-info button:hover {
     border-color: var(--accent);
     background: var(--accent);
-    color: var(--text);
+    color: var(--text-inverse);
 }
 
-.login-button.active {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: var(--text);
-}
-
-/* Home login button */
 .header-home .login-button {
-    border-color: rgba(255, 255, 255, 0.7);
+    border-color: var(--on-hero-border);
     background: transparent;
-    color: #fff;
+    color: var(--text-inverse);
 }
 
 .header-home .login-button:hover,
 .header-home .login-button.active {
-    border-color: #fff;
-    background: #fff;
+    border-color: var(--text-inverse);
+    background: var(--text-inverse);
     color: var(--text);
 }
 
-/* ===== Logged-in User ===== */
+/* ===== Logged-in user ===== */
 .header-user-info {
     display: flex;
     align-items: center;
@@ -159,19 +166,74 @@ nav a.active::after {
     min-width: 0;
 }
 
-.header-user-info span {
+.header-user-info a {
     overflow: hidden;
     max-width: 180px;
     color: var(--muted);
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.header-home .header-user-info span {
-    color: rgba(255, 255, 255, 0.8);
+.header-user-info a:hover {
+    color: var(--text);
+}
+
+.header-home .header-user-info a {
+    color: var(--on-hero-muted);
+}
+
+.header-home .header-user-info a:hover {
+    color: var(--text-inverse);
 }
 
 .header-user-info button {
     flex-shrink: 0;
+}
+
+.header-home.scrolled .header-user-info a {
+    color: var(--muted);
+}
+
+/* ===== Narrow screens: the navigation drops to its own row ===== */
+@media (max-width: 900px) {
+    header {
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 76px;
+        padding: 12px 16px;
+        row-gap: 12px;
+    }
+
+    nav {
+        position: static;
+        transform: none;
+        order: 3;
+        width: 100%;
+        height: auto;
+        gap: 1.25rem;
+        justify-content: flex-start;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    nav a {
+        height: 36px;
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    nav a::after {
+        bottom: 2px;
+    }
+
+    .header-home {
+        position: absolute;
+    }
 }
