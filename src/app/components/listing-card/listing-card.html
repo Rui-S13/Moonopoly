@@ -1,28 +1,22 @@
-<article class="listing-card">
+<article class="listing-card" [id]="'listing-' + listing.id" [class.highlighted]="highlighted"
+  (pointerenter)="onPointer($event, true)" (pointerleave)="onPointer($event, false)" (click)="selected.emit()">
   <div class="listing-image">
     @if (listing.imageUrl && !imageFailed) {
-      <img
-        [src]="listing.imageUrl"
-        [alt]="'Moon surface near ' + terrain.region"
-        (error)="imageFailed = true"
-      />
+    <img [src]="listing.imageUrl" [alt]="'Moon surface near ' + terrain.region" (error)="imageFailed = true" />
     } @else {
-      <img
-        src="data/images/no-photo.png"
-        alt="No image available"
-      />
+    <img src="data/images/no-photo.png" alt="No image available" />
     }
 
     @switch (listing.status) {
-      @case ('available') {
-        <span class="badge available">Available</span>
-      }
-      @case ('reserved') {
-        <span class="badge reserved">Reserved</span>
-      }
-      @case ('sold') {
-        <span class="badge sold">Sold</span>
-      }
+    @case ('available') {
+    <span class="badge available">Available</span>
+    }
+    @case ('reserved') {
+    <span class="badge reserved">Reserved</span>
+    }
+    @case ('sold') {
+    <span class="badge sold">Sold</span>
+    }
     }
   </div>
 
@@ -31,7 +25,7 @@
       <p class="listing-price">
         {{ listing.price | currency:'USD' }}
         @if (listing.type === 'rent') {
-          <span>/ month</span>
+        <span>/ month</span>
         }
       </p>
     </div>
@@ -46,10 +40,10 @@
 
     <div class="listing-features">
       @if (terrain.earthFacing) {
-        <span class="feature">Earth Facing</span>
+      <span class="feature">Earth Facing</span>
       }
       @if (terrain.likelyWaterIce) {
-        <span class="feature">Likely Water Ice</span>
+      <span class="feature">Likely Water Ice</span>
       }
     </div>
 
@@ -58,20 +52,12 @@
     </p>
 
     <div class="listing-actions">
-      <button
-        type="button"
-        class="favorite-button"
-        [class.is-favorite]="isFavorite"
-        [attr.aria-pressed]="isFavorite"
-        (click)="onFavorite()"
-      >
+      <button type="button" class="favorite-button" [class.is-favorite]="isFavorite" [attr.aria-pressed]="isFavorite"
+        (click)="onFavorite(); $event.stopPropagation()">
         {{ isFavorite ? '♥ Saved' : '♡ Favorite' }}
       </button>
 
-      <a
-        class="details-button"
-        [routerLink]="['/listings', listing.id]"
-      >
+      <a class="details-button" [routerLink]="['/listings', listing.id]">
         View details
         <span aria-hidden="true">→</span>
       </a>

@@ -35,6 +35,8 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
   @Input() propertyWidthKm = 0;
   @Input() propertyHeightKm = 0;
 
+  @Input() highlightedId: number | null = null;
+
   @Input() fitTo: Listing | null = null;
 
   private propertyRectangle?: Leaflet.Polygon;
@@ -42,10 +44,17 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
   @Output() boundsChange = new EventEmitter<Bounds>();
   @Output() listingSelected = new EventEmitter<Listing>();
   @Output() mapClicked = new EventEmitter<void>();
+  @Input() selectedId: number | null = null;
+  @Output() listingOpened = new EventEmitter<Listing>();
 
   private map?: Leaflet.Map;
   private leaflet: typeof Leaflet | null = null;
   private markerLayer: Leaflet.LayerGroup | null = null;
+  private popup?: Leaflet.Popup;
+  private shapes = new Map<
+    number,
+    { marker: Leaflet.Marker; outline: Leaflet.Polygon; listing: Listing }
+  >();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -105,6 +114,15 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
     this.updatePropertyRectangle();
   }
 
+  private outlineStyle(_listing: Listing, highlighted: boolean): Leaflet.PolylineOptions {
+    return {
+      color: highlighted ? '#d9480f' : '#12141a',
+      weight: highlighted ? 3 : 1.5,
+      fillColor: '#c9a86a',
+      fillOpacity: highlighted ? 0.5 : 0.3,
+    };
+  }
+
   private fitToPlot(): void {
     if (!this.map || !this.leaflet || !this.fitTo) return;
 
@@ -113,10 +131,6 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['listings'] && this.markerLayer) {
-      this.updateMarkers();
-    }
-
     if (changes['listings'] && this.markerLayer) {
       this.updateMarkers();
     }
@@ -131,84 +145,137 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
     ) {
       this.updatePropertyRectangle();
     }
+
+    if (changes['highlightedId'] && this.markerLayer) {
+      this.applyHighlight();
+    }
+
+    if (changes['selectedId'] && this.map) {
+      this.syncPopup();
+    }
   }
 
   private updateMarkers(): void {
     if (!this.leaflet || !this.markerLayer) return;
     this.markerLayer.clearLayers();
+    this.shapes.clear();
 
     for (const listing of this.listings) {
+      const highlighted = listing.id === this.highlightedId;
+
       const markerIcon = this.leaflet.divIcon({
         className: 'property-marker',
         html: `
-    <div class="property-marker-icon">
-      <svg viewBox="0 0 32 32" aria-hidden="true">
-        <rect
-          x="5" y="5" width="22" height="22"
-          rx="2"
-          fill="#c9a86a"
-          fill-opacity="0.2"
-          stroke="#c9a86a"
-          stroke-width="1.5"
-        />
+    <div class="property-marker-icon status-${listing.status}">
+      <svg viewBox="0 0 32 42" aria-hidden="true">
         <path
-          d="M5 5 L27 27 M27 5 L5 27"
-          stroke="#c9a86a"
-          stroke-width="0.8"
-          stroke-opacity="0.65"
+          d="M16 1C8.3 1 2 7.1 2 14.7 2 25 16 41 16 41s14-16 14-26.3C30 7.1 23.7 1 16 1z"
+          fill="#c9a86a" stroke="#12141a" stroke-width="2" stroke-linejoin="round"
         />
-        <circle cx="16" cy="16" r="2.5" fill="#c9a86a" />
+        <circle cx="16" cy="15" r="5.5" fill="#12141a" />
       </svg>
     </div>
   `,
-        iconSize: [32, 32],
-        iconAnchor: [16, 16],
+        iconSize: [32, 42],
+        iconAnchor: [16, 42],
+        popupAnchor: [0, -38],
       });
 
-      const marker = this.leaflet.marker(listing.center, {
-        icon: markerIcon,
-      });
+      const marker = this.leaflet.marker(listing.center, { icon: markerIcon });
 
-      marker.on('mouseover', () => {
-        const markerElement = marker.getElement();
-
-        markerElement?.classList.add('selected-marker');
-      });
-
+      marker.on('mouseover', () => marker.getElement()?.classList.add('selected-marker'));
       marker.on('mouseout', () => {
-        const markerElement = marker.getElement();
-
-        markerElement?.classList.remove('selected-marker');
+        if (listing.id !== this.highlightedId) {
+          marker.getElement()?.classList.remove('selected-marker');
+        }
       });
 
-      const price = `$${listing.price.toLocaleString('en-US')}`;
-      const priceLabel = listing.type === 'rent' ? `${price} / month` : price;
-
-      const terrain = this.moonService.getTerrainInfo(listing.center);
-
-      marker.bindPopup(`
-  <div class="listing-popup">
-    <strong>${listing.type === 'rent' ? 'For rent' : 'For sale'}</strong>
-    <p class="popup-price">${priceLabel}</p>
-    <p>${terrain.region}</p>
-  </div>
-`);
+      this.syncPopup();
 
       marker.on('click', () => this.listingSelected.emit(listing));
-
-      marker.on('click', () => this.listingSelected.emit(listing));
-
-      marker.addTo(this.markerLayer);
 
       const outline = this.leaflet.polygon(plotCorners(listing), {
-        color: '#c9a86a',
-        weight: 1,
-        fillColor: '#c9a86a',
-        fillOpacity: 0.25,
+        ...this.outlineStyle(listing, highlighted),
+        bubblingMouseEvents: false,
       });
       outline.on('click', () => this.listingSelected.emit(listing));
+
       outline.addTo(this.markerLayer);
+      marker.addTo(this.markerLayer);
+
+      this.shapes.set(listing.id, { marker, outline, listing });
+      if (highlighted) {
+        marker.getElement()?.classList.add('selected-marker');
+        marker.setZIndexOffset(1000);
+      }
     }
+  }
+
+  private applyHighlight(): void {
+    for (const [id, shape] of this.shapes) {
+      const on = id === this.highlightedId;
+      shape.marker.getElement()?.classList.toggle('selected-marker', on);
+      shape.marker.setZIndexOffset(on ? 1000 : 0);
+      shape.outline.setStyle(this.outlineStyle(shape.listing, on));
+      if (on) shape.outline.bringToFront();
+    }
+  }
+
+  private syncPopup(): void {
+    if (!this.map || !this.leaflet) return;
+
+    this.popup?.remove();
+    this.popup = undefined;
+
+    const shape = this.selectedId !== null ? this.shapes.get(this.selectedId) : undefined;
+    if (!shape) return;
+
+    this.popup = this.leaflet
+      .popup({
+        offset: [0, -38],
+        closeButton: false,
+        maxWidth: 240,
+        className: 'listing-popup-wrap',
+        autoPanPadding: [40, 40],
+      })
+      .setLatLng(shape.listing.center)
+      .setContent(this.popupContent(shape.listing))
+      .openOn(this.map);
+  }
+
+  private popupContent(listing: Listing): HTMLElement {
+    const price = `$${listing.price.toLocaleString('en-US')}`;
+    const terrain = this.moonService.getTerrainInfo(listing.center);
+
+    const card = document.createElement('div');
+    card.className = 'listing-popup';
+    card.addEventListener('click', () => this.listingOpened.emit(listing));
+
+    if (listing.imageUrl) {
+      const img = document.createElement('img');
+      img.src = listing.imageUrl;
+      img.alt = '';
+      card.appendChild(img);
+    }
+
+    const priceEl = document.createElement('p');
+    priceEl.className = 'popup-price';
+    priceEl.textContent = listing.type === 'rent' ? `${price} / month` : price;
+
+    const meta = document.createElement('p');
+    meta.className = 'popup-meta';
+    meta.textContent = `${listing.widthKm * listing.heightKm} km² · ${terrain.region}`;
+
+    const status = document.createElement('p');
+    status.className = 'popup-status';
+    status.textContent = `${listing.type === 'rent' ? 'For rent' : 'For sale'} · ${listing.status}`;
+
+    const link = document.createElement('p');
+    link.className = 'popup-link';
+    link.textContent = 'View details →';
+
+    card.append(priceEl, meta, status, link);
+    return card;
   }
 
   private updatePropertyRectangle(): void {
