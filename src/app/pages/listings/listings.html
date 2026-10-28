@@ -82,7 +82,8 @@
         } @else {
         <div class="results-grid">
           @for (listing of sortedListings; track listing.id) {
-          <div [id]="'listing-' + listing.id" [class.selected-listing]="selectedListingId === listing.id">
+          <div class="result-item" [id]="'listing-' + listing.id"
+            [class.selected-listing]="selectedListingId === listing.id">
             <app-listing-card [listing]="listing" [isFavorite]="favorites.isFavorite(listing.id)"
               [highlighted]="highlightedId() === listing.id" (favorite)="onFavorite($event)"
               (highlight)="hoveredId.set($event ? listing.id : null)" (selected)="onCardSelect(listing.id)" />

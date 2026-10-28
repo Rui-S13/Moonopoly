@@ -1,5 +1,5 @@
-<article class="listing-card" [id]="'listing-' + listing.id" [class.highlighted]="highlighted"
-  (pointerenter)="onPointer($event, true)" (pointerleave)="onPointer($event, false)" (click)="selected.emit()">
+<article class="listing-card" [class.highlighted]="highlighted" (pointerenter)="onPointer($event, true)"
+  (pointerleave)="onPointer($event, false)" (click)="selected.emit()">
   <div class="listing-image">
     <img [src]="imageFailed ? images.placeholder : images.urlFor(listing.imageUrl)"
       [alt]="'Moon surface near ' + terrain.region" (error)="imageFailed = true" />

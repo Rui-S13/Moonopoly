@@ -25,8 +25,8 @@ main {
   border-bottom: var(--border-weight) solid var(--border);
 }
 
-.filters-form > input,
-.filters-form > select {
+.filters-form>input,
+.filters-form>select {
   width: 100%;
   min-width: 0;
   height: 40px;
@@ -39,24 +39,24 @@ main {
   transition: border-color 0.2s ease;
 }
 
-.filters-form > select {
+.filters-form>select {
   cursor: pointer;
 }
 
-.filters-form > select option {
+.filters-form>select option {
   background: var(--surface);
   color: var(--text);
 }
 
-.filters-form > input::placeholder {
+.filters-form>input::placeholder {
   color: var(--muted);
   opacity: 1;
 }
 
-.filters-form > input:hover,
-.filters-form > select:hover,
-.filters-form > input:focus-visible,
-.filters-form > select:focus-visible {
+.filters-form>input:hover,
+.filters-form>select:hover,
+.filters-form>input:focus-visible,
+.filters-form>select:focus-visible {
   border-color: var(--accent);
 }
 
@@ -126,7 +126,7 @@ main {
   outline-offset: 2px;
 }
 
-.filters-form > .filter-error {
+.filters-form>.filter-error {
   grid-column: 1 / -1;
   margin: 0;
   color: var(--error);
@@ -225,14 +225,21 @@ main {
 /* Cards share the width evenly: one column when narrow, two when wide */
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 20px;
 }
 
 /* Wrapper of each card: leaves room for the sticky toolbar when scrolling to it */
 .result-item {
+  display: flex;
   min-width: 0;
-  scroll-margin-block: 64px 16px;
+}
+
+.result-item app-listing-card {
+  display: flex;
+  flex: 1;
+  min-width: 0;
 }
 
 .empty-state {

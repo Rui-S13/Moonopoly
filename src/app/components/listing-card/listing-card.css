@@ -1,37 +1,47 @@
 :host {
-    display: block;
+    display: flex;
     min-width: 0;
 }
 
 .listing-card {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
     height: 100%;
     overflow: hidden;
     background: var(--surface);
-    border: 1px solid rgba(138, 143, 154, 0.2);
+    border: var(--border-weight) solid var(--border);
     border-radius: var(--radius);
+    cursor: pointer;
     transition:
         border-color 0.2s ease,
         transform 0.2s ease,
         box-shadow 0.2s ease;
 }
 
-.listing-card:hover,
+/* Hover effects only where a mouse exists: on touch screens :hover sticks after a tap */
+@media (hover: hover) {
+    .listing-card:hover {
+        transform: translateY(-3px);
+        border-color: var(--accent);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .listing-card:hover .listing-image img {
+        transform: scale(1.025);
+    }
+}
+
 .listing-card.highlighted {
     transform: translateY(-3px);
     border-color: var(--accent);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+    box-shadow:
+        0 0 0 2px var(--accent),
+        var(--shadow-lg);
 }
 
-.listing-card.highlighted {
-    box-shadow: 0 0 0 2px var(--accent);
-}
-
-.listing-card:hover .listing-image img {
-    transform: scale(1.025);
-}
-
-/* Image */
-
+/* ---------- Image ---------- */
 .listing-image {
     position: relative;
     width: 100%;
@@ -48,69 +58,58 @@
     transition: transform 0.4s ease;
 }
 
-.listing-card:hover .listing-image img {
-    transform: scale(1.025);
-}
-
-/* Status badge */
-
+/* ---------- Status badge ---------- */
 .badge {
     position: absolute;
     top: 12px;
     left: 12px;
-    padding: 6px 10px;
-    border-radius: 5px;
+    padding: 5px 10px;
+    border-radius: 6px;
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow);
 }
 
 .badge.available {
-    color: #D2E8BF;
-    background: rgba(36, 66, 42, 0.9);
+    color: var(--status-available-text);
+    background: var(--status-available-bg);
 }
 
 .badge.reserved {
-    color: #F1D39B;
-    background: rgba(86, 65, 30, 0.92);
+    color: var(--status-reserved-text);
+    background: var(--status-reserved-bg);
 }
 
 .badge.sold {
-    color: #E5B9B9;
-    background: rgba(91, 42, 42, 0.92);
+    color: var(--status-sold-text);
+    background: var(--status-sold-bg);
 }
 
-/* Card content */
-
+/* ---------- Content ---------- */
 .listing-content {
     display: flex;
+    flex: 1;
     flex-direction: column;
     gap: 10px;
     padding: 18px;
 }
 
-.listing-heading h2 {
-    margin: 0;
-    color: var(--text);
-    font-size: 1.2rem;
-    font-weight: 500;
-    line-height: 1.35;
-    overflow-wrap: anywhere;
-}
-
 .listing-price {
+    margin: 0;
     color: var(--accent);
     font-size: 1.45rem;
-    font-weight: 650;
-    margin: 0;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
 }
 
 .listing-price span {
     color: var(--muted);
     font-size: 0.8rem;
     font-weight: 400;
+    letter-spacing: 0;
 }
 
 .listing-area,
@@ -129,6 +128,11 @@
     color: var(--muted);
 }
 
+.listing-date {
+    margin-top: auto;
+    margin-bottom: 0;
+}
+
 .listing-features {
     display: flex;
     flex-wrap: wrap;
@@ -138,20 +142,20 @@
 
 .feature {
     padding: 5px 8px;
-    border: 1px solid rgba(138, 143, 154, 0.25);
-    border-radius: 5px;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    background: var(--surface-muted);
     color: var(--muted);
     font-size: 0.72rem;
 }
 
-/* Actions */
-
+/* ---------- Actions ---------- */
 .listing-actions {
     display: flex;
     gap: 10px;
     margin-top: 8px;
     padding-top: 14px;
-    border-top: 1px solid rgba(138, 143, 154, 0.2);
+    border-top: 1px solid var(--border-color);
 }
 
 .favorite-button,
@@ -161,8 +165,8 @@
     justify-content: center;
     gap: 8px;
     min-height: 42px;
-    padding: 10px 12px;
-    border-radius: 6px;
+    padding: 10px 14px;
+    border-radius: 8px;
     font: inherit;
     font-size: 0.82rem;
     font-weight: 600;
@@ -177,14 +181,19 @@
 
 .favorite-button {
     flex: 0 0 auto;
-    border: 1px solid rgba(138, 143, 154, 0.35);
+    border: 1px solid var(--border-strong);
     background: transparent;
     color: var(--text);
 }
 
-.favorite-button:hover,
+.favorite-button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
 .favorite-button.is-favorite {
     border-color: var(--accent);
+    background: var(--accent-soft);
     color: var(--accent);
 }
 
@@ -192,10 +201,10 @@
     flex: 1;
     border: 1px solid var(--accent);
     background: var(--accent);
-    color: #12141A;
+    color: var(--text-inverse);
 }
 
 .details-button:hover {
-    background: #DFC18A;
-    border-color: #DFC18A;
+    border-color: var(--accent-hover);
+    background: var(--accent-hover);
 }
