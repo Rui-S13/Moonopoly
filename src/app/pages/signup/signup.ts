@@ -5,15 +5,17 @@ import { AuthService } from '../../services/auth';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { NavigationHistory } from '../../services/navigation-history';
 import { safeReturnUrl } from '../../utils/navigation';
+import { Logo } from '../../components/logo/logo';
 
 @Component({
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, Logo],
   selector: 'app-signup',
   styleUrl: './signup.css',
   templateUrl: './signup.html',
 })
 export class Signup {
   signUpError = signal(false);
+  loading = signal(false);
 
   form = new FormGroup(
     {
@@ -50,18 +52,27 @@ export class Signup {
       return;
     }
 
-    const { email, password, displayName } = this.form.getRawValue();
+    if (this.loading()) {
+      return;
+    }
 
     this.signUpError.set(false);
+    this.loading.set(true);
+
+    const { email, password, displayName } = this.form.getRawValue();
 
     this.auth.signUp(email, password, displayName.trim()).subscribe({
       next: () => {
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        this.loading.set(false);
         this.router.navigateByUrl(
           returnUrl ? safeReturnUrl(returnUrl) : (this.navHistory.lastContentUrl ?? '/'),
         );
       },
-      error: () => this.signUpError.set(true),
+      error: () => {
+        this.signUpError.set(true),
+        this.loading.set(false);
+      },
     });
   }
 

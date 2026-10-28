@@ -14,19 +14,19 @@
 /* Left half: image */
 
 .login-image {
-    position: relative;
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100vh;
     min-height: 100vh;
-    overflow: hidden;
-    background: #17191c;
 }
 
 .login-image img {
-    width: 100%;
-    height: 100%;
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    object-position: center;
 }
 
 .login-image::after {
@@ -171,11 +171,32 @@
     outline-offset: 4px;
 }
 
-.to-signup-container{
+.to-signup-container {
     margin-top: 20px;
 }
 
 #btn-to-signup {
     text-decoration: underline;
     cursor: pointer;
+}
+
+/* Stack the pages on smaller screens */
+@media (max-width: 800px) {
+    .login-page {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .login-image {
+        position: relative;
+        height: 32vh;
+        min-height: 240px;
+    }
+
+    .login-panel {
+        padding: 36px 24px 48px;
+    }
+
+    .back-link {
+        margin-bottom: 32px;
+    }
 }
