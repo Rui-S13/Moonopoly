@@ -10,6 +10,7 @@ import { TerrainInfo } from '../../models/listing.models';
 import { MoonMap } from '../../components/moon-map/moon-map';
 import { Footer } from '../../components/footer/footer';
 import { ProfileService, Profile } from '../../services/profile';
+import { ImageService } from '../../services/image';
 
 @Component({
   imports: [Header, RouterLink, CurrencyPipe, DatePipe, MoonMap, Footer],
@@ -31,6 +32,7 @@ export class ListingDetail implements OnInit, OnDestroy {
     private listingService: ListingService,
     private moon: MoonService,
     private profiles: ProfileService,
+    private images: ImageService,
   ) {}
 
   ngOnInit(): void {

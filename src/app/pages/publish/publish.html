@@ -76,6 +76,24 @@
             }
         </div>
 
+        <div class="form-field full-width">
+            <label for="photo">Photo (optional)</label>
+            <input id="photo" type="file" accept="image/jpeg,image/png,image/webp" (change)="onFileChange($event)" />
+            <small class="hint">JPEG, PNG or WebP, up to 5 MB. Without a photo, a placeholder is shown.</small>
+
+            @if (fileError()) {
+            <small class="field-error">{{ fileError() }}</small>
+            }
+
+            @if (previewUrl(); as preview) {
+            <img class="photo-preview" [src]="preview" alt="Preview of the selected photo" />
+            <button type="button" (click)="clearFile()">Remove selected photo</button>
+            } @else if (editing()?.imageUrl && !removeImage()) {
+            <img class="photo-preview" [src]="images.urlFor(editing()!.imageUrl)" alt="Current photo" />
+            <button type="button" (click)="removeImage.set(true)">Remove current photo</button>
+            }
+        </div>
+
         @if (form.errors?.['overlap']) {
         <small>
             This area overlaps with
@@ -84,7 +102,7 @@
         </small>
         }
 
-        <button type="submit" [disabled]="form.invalid">
+        <button type="submit" [disabled]="form.invalid || saving()">
             Publish
         </button>
 

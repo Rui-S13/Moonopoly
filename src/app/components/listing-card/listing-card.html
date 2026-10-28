@@ -1,11 +1,8 @@
 <article class="listing-card" [id]="'listing-' + listing.id" [class.highlighted]="highlighted"
   (pointerenter)="onPointer($event, true)" (pointerleave)="onPointer($event, false)" (click)="selected.emit()">
   <div class="listing-image">
-    @if (listing.imageUrl && !imageFailed) {
-    <img [src]="listing.imageUrl" [alt]="'Moon surface near ' + terrain.region" (error)="imageFailed = true" />
-    } @else {
-    <img src="data/images/no-photo.png" alt="No image available" />
-    }
+    <img [src]="imageFailed ? images.placeholder : images.urlFor(listing.imageUrl)"
+      [alt]="'Moon surface near ' + terrain.region" (error)="imageFailed = true" />
 
     @switch (listing.status) {
     @case ('available') {
