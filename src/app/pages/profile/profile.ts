@@ -6,6 +6,7 @@ import { NotificationService } from '../../services/notification';
 import { Header } from '../../components/header/header';
 import { Footer } from '../../components/footer/footer';
 import { Router } from '@angular/router';
+import { ImageService } from '../../services/image';
 
 @Component({
   selector: 'app-profile',
@@ -14,10 +15,13 @@ import { Router } from '@angular/router';
   styleUrl: './profile.css',
 })
 export class ProfilePage implements OnInit {
-  private auth = inject(AuthService);
-  private profiles = inject(ProfileService);
-  private notifications = inject(NotificationService);
-  private router = inject(Router);
+  constructor(
+    private auth: AuthService,
+    private profiles: ProfileService,
+    private notifications: NotificationService,
+    private router: Router,
+    private images: ImageService,
+  ) {}
 
   loading = signal(true);
   error = signal(false);
@@ -90,6 +94,7 @@ export class ProfilePage implements OnInit {
     this.deleting.set(true);
 
     try {
+      await this.images.removeAllMine();
       await this.auth.deleteAccount();
       this.notifications.success('Your account has been deleted.');
       this.router.navigate(['/']);

@@ -17,6 +17,7 @@ import type * as Leaflet from 'leaflet';
 import { Listing } from '../../models/listing.models';
 import { Bounds, plotCorners } from '../../utils/plot-geometry';
 import { MoonService } from '../../services/moon';
+import { ImageService } from '../../services/image';
 
 @Component({
   selector: 'app-moon-map',
@@ -59,6 +60,7 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private moonService: MoonService,
+    private images: ImageService,
   ) {}
 
   async ngAfterViewInit(): Promise<void> {
@@ -251,12 +253,13 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
     card.className = 'listing-popup';
     card.addEventListener('click', () => this.listingOpened.emit(listing));
 
-    if (listing.imageUrl) {
-      const img = document.createElement('img');
-      img.src = listing.imageUrl;
-      img.alt = '';
-      card.appendChild(img);
-    }
+    const img = document.createElement('img');
+    img.src = this.images.urlFor(listing.imageUrl);
+    img.alt = '';
+    img.onerror = () => {
+      img.src = this.images.placeholder;
+    };
+    card.appendChild(img);
 
     const priceEl = document.createElement('p');
     priceEl.className = 'popup-price';

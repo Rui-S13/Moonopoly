@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth';
 import { NotificationService } from '../../services/notification';
 import { Header } from '../../components/header/header';
 import { Footer } from '../../components/footer/footer';
+import { ImageService } from '../../services/image';
 
 @Component({
   selector: 'app-my-listings',
@@ -15,9 +16,12 @@ import { Footer } from '../../components/footer/footer';
   styleUrl: './my-listings.css',
 })
 export class MyListings implements OnInit {
-  private listingService = inject(ListingService);
-  private auth = inject(AuthService);
-  private notifications = inject(NotificationService);
+  constructor (
+    private listingService: ListingService,
+    private auth: AuthService,
+    private notifications: NotificationService,
+    private images: ImageService
+  ) {}
 
   listings = signal<Listing[]>([]);
   loading = signal(true);
@@ -58,6 +62,7 @@ export class MyListings implements OnInit {
       next: () => {
         this.listings.update((list) => list.filter((l) => l.id !== listing.id));
         this.notifications.success('Listing deleted.');
+        void this.images.remove(listing.imageUrl);
       },
       error: () => this.notifications.error('Could not delete the listing.'),
     });

@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { Listing } from '../../models/listing.models';
 import { MoonService } from '../../services/moon';
 import { TerrainInfo } from '../../models/listing.models';
+import { ImageService } from '../../services/image';
 
 @Component({
   selector: 'app-listing-card',
@@ -22,7 +23,10 @@ export class ListingCard {
 
   imageFailed: boolean = false;
 
-  constructor(private moon: MoonService) {}
+  constructor(
+    private moon: MoonService,
+    private images: ImageService,
+  ) {}
 
   onPointer(event: PointerEvent, inside: boolean): void {
     if (event.pointerType === 'mouse') {
