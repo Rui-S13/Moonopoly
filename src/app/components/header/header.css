@@ -14,8 +14,8 @@ header {
     position: absolute;
     top: 0;
     left: 0;
-    background: transparent;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    z-index: 10;
 }
 
 .header-home.scrolled {
@@ -233,7 +233,47 @@ nav a.active::after {
         bottom: 2px;
     }
 
-    .header-home {
-        position: absolute;
+    .header-home,
+    .header-home.scrolled {
+        position: sticky;
+        top: 0;
+        background: var(--surface);
+        color: var(--text);
+        border-bottom: 1px solid var(--border);
+        box-shadow: var(--shadow);
+    }
+
+    .header-home .header-logo,
+    .header-home.scrolled .header-logo {
+        color: var(--text);
+    }
+
+    .header-home nav a,
+    .header-home nav a:hover,
+    .header-home nav a.active,
+    .header-home.scrolled nav a,
+    .header-home.scrolled nav a:hover,
+    .header-home.scrolled nav a.active {
+        color: var(--text);
+    }
+
+    .header-home .header-user-info a,
+    .header-home .header-user-info a:hover,
+    .header-home.scrolled .header-user-info a {
+        color: var(--muted);
+    }
+
+    .header-home .login-button,
+    .header-home.scrolled .login-button {
+        border-color: var(--text);
+        background: var(--text);
+        color: var(--text-inverse);
+    }
+
+    .header-home .login-button:hover,
+    .header-home .login-button.active {
+        border-color: var(--accent);
+        background: var(--accent);
+        color: var(--text-inverse);
     }
 }
