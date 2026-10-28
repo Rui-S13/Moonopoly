@@ -120,11 +120,15 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
     this.updatePropertyRectangle();
   }
 
+  private cssVar(name: string): string {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
   private outlineStyle(_listing: Listing, highlighted: boolean): Leaflet.PolylineOptions {
     return {
-      color: highlighted ? '#d9480f' : '#12141a',
+      color: highlighted ? this.cssVar('--marker-highlight') : this.cssVar('--marker-outline'),
       weight: highlighted ? 3 : 1.5,
-      fillColor: '#c9a86a',
+      fillColor: highlighted ? this.cssVar('--marker-highlight') : this.cssVar('--marker'),
       fillOpacity: highlighted ? 0.5 : 0.3,
     };
   }
@@ -172,16 +176,14 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
       const markerIcon = this.leaflet.divIcon({
         className: 'property-marker',
         html: `
-    <div class="property-marker-icon status-${listing.status}">
-      <svg viewBox="0 0 32 42" aria-hidden="true">
-        <path
-          d="M16 1C8.3 1 2 7.1 2 14.7 2 25 16 41 16 41s14-16 14-26.3C30 7.1 23.7 1 16 1z"
-          fill="#c9a86a" stroke="#12141a" stroke-width="2" stroke-linejoin="round"
-        />
-        <circle cx="16" cy="15" r="5.5" fill="#12141a" />
-      </svg>
-    </div>
-  `,
+  <div class="property-marker-icon status-${listing.status}">
+    <svg viewBox="0 0 32 42" aria-hidden="true">
+      <path class="pin-body"
+        d="M16 1C8.3 1 2 7.1 2 14.7 2 25 16 41 16 41s14-16 14-26.3C30 7.1 23.7 1 16 1z" />
+      <circle class="pin-dot" cx="16" cy="15" r="5.5" />
+    </svg>
+  </div>
+`,
         iconSize: [32, 42],
         iconAnchor: [16, 42],
         popupAnchor: [0, -38],
@@ -317,9 +319,9 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
     });
 
     this.propertyRectangle = this.leaflet.polygon(corners, {
-      color: '#c9a86a',
+      color: this.cssVar('--marker'),
       weight: 2,
-      fillColor: '#c9a86a',
+      fillColor: this.cssVar('--marker'),
       fillOpacity: 0.25,
       interactive: false,
     });

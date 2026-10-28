@@ -38,6 +38,22 @@
     --radius: 10px;
     --radius-control: 15px;
     --border-weight: 1px;
+
+    /* Accent */
+    --accent-soft: #EFECFD;
+
+    /* Map */
+    --marker: var(--accent);
+    --marker-outline: #25263A;
+    --marker-highlight: #d8b26b;
+    --marker-sold: #9A9CB0;
+    --pin-shadow-color: rgba(37, 38, 58, 0.45);
+
+    /* Feedback */
+    --success: #2F8F5B;
+
+    /* Shadows */
+    --shadow-lg: 0 10px 28px rgba(37, 38, 58, 0.18);
 }
 
 * {
@@ -96,13 +112,14 @@ textarea:focus-visible {
     outline-offset: 3px;
 }
 
+/* ---------- Map popup ---------- */
 .listing-popup-wrap .leaflet-popup-content-wrapper {
     padding: 0;
     overflow: hidden;
-    background: var(--surface, #1c1f27);
-    color: var(--text, #ece8df);
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgb(0 0 0 / 0.4);
+    background: var(--surface);
+    color: var(--text);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
 }
 
 .listing-popup-wrap .leaflet-popup-content {
@@ -111,7 +128,7 @@ textarea:focus-visible {
 }
 
 .listing-popup-wrap .leaflet-popup-tip {
-    background: var(--surface, #1c1f27);
+    background: var(--surface);
 }
 
 .listing-popup {
@@ -134,13 +151,13 @@ textarea:focus-visible {
     padding-top: 10px !important;
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--accent, #c9a86a);
+    color: var(--accent);
 }
 
 .popup-meta,
 .popup-status {
     font-size: 0.85rem;
-    color: var(--muted, #9a9eaa);
+    color: var(--muted);
     text-transform: capitalize;
 }
 
@@ -148,4 +165,47 @@ textarea:focus-visible {
     padding: 8px 12px 12px !important;
     font-size: 0.85rem;
     font-weight: 600;
+    color: var(--accent);
+}
+
+/* ---------- Map pins ---------- */
+.property-marker-icon {
+    width: 32px;
+    height: 42px;
+    transform-origin: 50% 100%;
+    filter: drop-shadow(0 2px 3px var(--pin-shadow-color));
+    transition: transform 0.15s ease;
+}
+
+.property-marker-icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.property-marker-icon .pin-body {
+    fill: var(--marker);
+    stroke: var(--marker-outline);
+    stroke-width: 2;
+    stroke-linejoin: round;
+}
+
+.property-marker-icon .pin-dot {
+    fill: var(--text-inverse);
+}
+
+.property-marker-icon.status-sold {
+    opacity: 0.6;
+}
+
+.property-marker-icon.status-sold .pin-body {
+    fill: var(--marker-sold);
+}
+
+.property-marker.selected-marker .property-marker-icon {
+    transform: scale(1.35);
+}
+
+.property-marker.selected-marker .pin-body {
+    fill: var(--marker-highlight);
 }
