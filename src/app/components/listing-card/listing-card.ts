@@ -16,9 +16,19 @@ export class ListingCard {
   @Input() isFavorite = false;
   @Output() favorite = new EventEmitter<Listing>();
 
-  imageFailed: boolean= false;
+  @Input() highlighted = false;
+  @Output() highlight = new EventEmitter<boolean>();
+  @Output() selected = new EventEmitter<void>();
+
+  imageFailed: boolean = false;
 
   constructor(private moon: MoonService) {}
+
+  onPointer(event: PointerEvent, inside: boolean): void {
+    if (event.pointerType === 'mouse') {
+      this.highlight.emit(inside);
+    }
+  }
 
   onFavorite(): void {
     this.favorite.emit(this.listing);

@@ -95,3 +95,57 @@ textarea:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
 }
+
+.listing-popup-wrap .leaflet-popup-content-wrapper {
+    padding: 0;
+    overflow: hidden;
+    background: var(--surface, #1c1f27);
+    color: var(--text, #ece8df);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.4);
+}
+
+.listing-popup-wrap .leaflet-popup-content {
+    width: 220px !important;
+    margin: 0;
+}
+
+.listing-popup-wrap .leaflet-popup-tip {
+    background: var(--surface, #1c1f27);
+}
+
+.listing-popup {
+    cursor: pointer;
+}
+
+.listing-popup img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+.listing-popup p {
+    margin: 0;
+    padding: 0 12px;
+}
+
+.popup-price {
+    padding-top: 10px !important;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent, #c9a86a);
+}
+
+.popup-meta,
+.popup-status {
+    font-size: 0.85rem;
+    color: var(--muted, #9a9eaa);
+    text-transform: capitalize;
+}
+
+.popup-link {
+    padding: 8px 12px 12px !important;
+    font-size: 0.85rem;
+    font-weight: 600;
+}

@@ -1,5 +1,5 @@
 import { Header } from '../../components/header/header';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, HostListener, computed } from '@angular/core';
 import { Listing } from '../../models/listing.models';
 import { ListingType } from '../../models/listing.models';
 import { ListingService } from '../../services/listing';
@@ -15,14 +15,23 @@ import {
 } from '@angular/forms';
 import { MoonService } from '../../services/moon';
 import { priceRangeValidator } from '../../utils/validators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MoonMap } from '../../components/moon-map/moon-map';
 import { Bounds } from '../../utils/plot-geometry';
 import { SortOption } from '../../utils/sort-option';
 import { Footer } from '../../components/footer/footer';
 
 @Component({
-  imports: [Header, MoonMap, CurrencyPipe, DatePipe, ListingCard, ReactiveFormsModule, FormsModule, Footer],
+  imports: [
+    Header,
+    MoonMap,
+    CurrencyPipe,
+    DatePipe,
+    ListingCard,
+    ReactiveFormsModule,
+    FormsModule,
+    Footer,
+  ],
   selector: 'app-listings',
   styleUrl: './listings.css',
   templateUrl: './listings.html',
@@ -39,6 +48,10 @@ export class Listings implements OnInit {
   private bounds: Bounds | null = null;
 
   selectedListingId: number | null = null;
+
+  hoveredId = signal<number | null>(null);
+  selectedId = signal<number | null>(null);
+  highlightedId = computed(() => this.hoveredId() ?? this.selectedId());
 
   readonly sortOptions = SortOption;
   sortBy: SortOption = SortOption.Newest;
@@ -61,6 +74,7 @@ export class Listings implements OnInit {
     public favorites: FavoritesService,
     private moon: MoonService,
     private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.regions = this.moon.getRegionNames();
   }
@@ -99,7 +113,6 @@ export class Listings implements OnInit {
       this.applyFilters();
     });
   }
-  
 
   applyFilters() {
     if (this.search.invalid) {
@@ -126,9 +139,9 @@ export class Listings implements OnInit {
         return false;
       }
 
-      if(s.favoritesOnly && !this.favorites.isFavorite(l.id)) {
+      if (s.favoritesOnly && !this.favorites.isFavorite(l.id)) {
         return false;
-      };
+      }
 
       return true;
     });
@@ -187,20 +200,39 @@ export class Listings implements OnInit {
     }
   }
 
-  onListingSelected(listing: Listing): void {
-    this.selectedListingId = listing.id;
+  onCardSelect(id: number): void {
+    this.selectedId.update((current) => (current === id ? null : id));
+  }
 
-    setTimeout(() => {
-      document.getElementById(`listing-${listing.id}`)?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
-    });
+  onPinSelected(listing: Listing): void {
+    const deselecting = this.selectedId() === listing.id;
+    this.selectedId.set(deselecting ? null : listing.id);
+
+    if (!deselecting) {
+      document
+        .getElementById('listing-' + listing.id)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  openListing(listing: Listing): void {
+    this.router.navigate(['/listings', listing.id]);
+  }
+
+  clearSelection(): void {
+    this.selectedId.set(null);
+    this.hoveredId.set(null);
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    this.clearSelection();
   }
 
   onFavorite(listing: Listing): void {
-    console.log('Favorite clicked:', listing.id);
     this.favorites.toggle(listing.id);
-    this.applyFilters();
+    if (this.search.controls.favoritesOnly.value) {
+      this.applyFilters();
+    }
   }
 }

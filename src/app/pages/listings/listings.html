@@ -54,8 +54,9 @@
 
   <div class="listings-layout">
     <aside class="map-panel">
-      <app-moon-map [listings]="filteredListings" (boundsChange)="onBoundsChange($event)"
-        (listingSelected)="onListingSelected($event)" (mapClicked)="selectedListingId = null" />
+      <app-moon-map [listings]="filteredListings" [highlightedId]="highlightedId()" [selectedId]="selectedId()"
+        (boundsChange)="onBoundsChange($event)" (listingSelected)="onPinSelected($event)"
+        (listingOpened)="openListing($event)" (mapClicked)="clearSelection()" />
     </aside>
 
     <section class="results">
@@ -82,7 +83,8 @@
           @for (listing of sortedListings; track listing.id) {
           <div [id]="'listing-' + listing.id" [class.selected-listing]="selectedListingId === listing.id">
             <app-listing-card [listing]="listing" [isFavorite]="favorites.isFavorite(listing.id)"
-              (favorite)="onFavorite($event)" />
+              [highlighted]="highlightedId() === listing.id" (favorite)="onFavorite($event)"
+              (highlight)="hoveredId.set($event ? listing.id : null)" (selected)="onCardSelect(listing.id)" />
           </div>
           }
         </div>

@@ -10,78 +10,35 @@
     background: #111;
 }
 
-/* Moonopoly listing popup */
-:host ::ng-deep .leaflet-popup-content-wrapper {
-    padding: 8px;
-    border: 1px solid #e8e5df;
-    border-radius: 12px;
-    background: #ffffff;
-    box-shadow: 0 6px 24px rgb(0 0 0 / 14%);
-}
-
-:host ::ng-deep .leaflet-popup-content {
-    min-width: 190px;
-    margin: 12px;
-    color: #242424;
-    font-family: inherit;
-}
-
-:host ::ng-deep .listing-popup strong {
-    display: block;
-    margin-bottom: 8px;
-    color: #8b713e;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-
-:host ::ng-deep .listing-popup .popup-price {
-    margin: 0;
-    color: #242424;
-    font-size: 1.4rem;
-    font-weight: 700;
-    line-height: 1.3;
-}
-
-:host ::ng-deep .listing-popup p:last-child {
-    margin: 10px 0 0;
-    padding-top: 8px;
-    border-top: 1px solid #e8e5df;
-    color: #77736b;
-    font-size: 0.8rem;
-}
-
-:host ::ng-deep .leaflet-popup-tip {
-    background: #ffffff;
-}
-
-:host ::ng-deep .leaflet-popup-close-button {
-    color: #77736b !important;
-}
-
-/* Leaflet popup container */
-
-.leaflet-popup-content-wrapper {
-    padding: 8px;
-    border-radius: 12px;
-    background: #ffffff;
-    box-shadow: 0 6px 24px rgb(0 0 0 / 14%);
-}
-
-.leaflet-popup-content {
-    margin: 8px;
-}
-
-.leaflet-popup-tip {
-    background: #ffffff;
-}
-
-.leaflet-popup-close-button {
-    color: #77736b !important;
-}
-
 :host ::ng-deep .property-marker.selected-marker .property-marker-icon {
     transform: scale(1.2);
     filter: brightness(1.25);
+}
+
+.property-marker-icon {
+  width: 32px;
+  height: 42px;
+  transform-origin: 50% 100%;               /* grows upward from the tip */
+  filter: drop-shadow(0 2px 3px rgb(0 0 0 / 0.55));
+  transition: transform 0.15s ease;
+}
+
+.property-marker-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.property-marker-icon.status-sold {
+  opacity: 0.55;
+}
+.property-marker-icon.status-sold svg path {
+  fill: #8a8f9a;
+}
+
+.property-marker.selected-marker .property-marker-icon {
+  transform: scale(1.35);
+}
+.property-marker.selected-marker .property-marker-icon svg path {
+  fill: #e8590c;
 }
