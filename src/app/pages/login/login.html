@@ -31,7 +31,7 @@
 
     <section class="login-panel">
         <div class="login-content">
-            <a routerLink="/" class="back-link">← Back to home</a>
+            <a routerLink="/" (click)="goBack($event)" class="back-link">← Go back</a>
 
             <header>
                 <h1>Welcome back</h1>
@@ -68,7 +68,7 @@
             }
 
             <div class="to-signup-container">
-                <a routerLink="/signup" class="btn-to-signup">Don't have an account? Sign Up!→</a>
+                <a routerLink="/signup" queryParamsHandling="preserve" class="btn-to-signup">Don't have an account? Sign Up!→</a>
             </div>
         </div>
     </section>

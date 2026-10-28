@@ -2,7 +2,9 @@ import { Component, signal } from '@angular/core';
 import { passwordsMatchValidator } from '../../utils/validators';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { NavigationHistory } from '../../services/navigation-history';
+import { safeReturnUrl } from '../../utils/navigation';
 
 @Component({
   imports: [ReactiveFormsModule, RouterLink],
@@ -38,6 +40,8 @@ export class Signup {
   constructor(
     private auth: AuthService,
     private router: Router,
+    private navHistory: NavigationHistory,
+    private route: ActivatedRoute,
   ) {}
 
   onSubmit(): void {
@@ -51,8 +55,18 @@ export class Signup {
     this.signUpError.set(false);
 
     this.auth.signUp(email, password, displayName.trim()).subscribe({
-      next: () => this.router.navigate(['/']),
+      next: () => {
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        this.router.navigateByUrl(
+          returnUrl ? safeReturnUrl(returnUrl) : (this.navHistory.lastContentUrl ?? '/'),
+        );
+      },
       error: () => this.signUpError.set(true),
     });
+  }
+
+  goBack(event: Event): void {
+    event.preventDefault();
+    this.navHistory.goBackFromAuth();
   }
 }

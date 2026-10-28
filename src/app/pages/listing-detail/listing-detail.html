@@ -1,7 +1,7 @@
 <app-header />
 
 <main class="listing-details">
-  <a class="back-link" routerLink="/listings">← Back to listings</a>
+  <a class="back-link" routerLink="/listings" (click)="goBack($event)">← Back to listings</a>
 
   @if (loading()) {
   <p>Loading listing...</p>

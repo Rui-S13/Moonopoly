@@ -15,7 +15,7 @@ import {
 } from '@angular/forms';
 import { MoonService } from '../../services/moon';
 import { priceRangeValidator } from '../../utils/validators';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { MoonMap } from '../../components/moon-map/moon-map';
 import { Bounds } from '../../utils/plot-geometry';
 import { SortOption } from '../../utils/sort-option';
@@ -56,6 +56,10 @@ export class Listings implements OnInit {
   readonly sortOptions = SortOption;
   sortBy: SortOption = SortOption.Newest;
 
+  initialCenter: [number, number] = [0, 0];
+  initialZoom = 1;
+  private lastFilterKey = '';
+
   search = new FormGroup(
     {
       type: new FormControl<ListingType | null>(null),
@@ -77,10 +81,15 @@ export class Listings implements OnInit {
     private router: Router,
   ) {
     this.regions = this.moon.getRegionNames();
+    this.readInitialView();
   }
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
+      const key = this.keyFromParams(params);
+      if (key === this.lastFilterKey) return;
+      this.lastFilterKey = key;
+
       const minPrice = params.get('minPrice');
       const maxPrice = params.get('maxPrice');
 
@@ -90,6 +99,7 @@ export class Listings implements OnInit {
           type: (params.get('type') as ListingType | null) ?? null,
           minPrice: minPrice !== null ? Number(minPrice) : null,
           maxPrice: maxPrice !== null ? Number(maxPrice) : null,
+          favoritesOnly: params.get('fav') === '1',
         },
         { emitEvent: false },
       );
@@ -111,6 +121,83 @@ export class Listings implements OnInit {
 
     this.search.valueChanges.subscribe(() => {
       this.applyFilters();
+      this.syncFiltersToUrl();
+    });
+  }
+
+  private readInitialView(): void {
+    const p = this.route.snapshot.queryParamMap;
+    const lat = Number(p.get('lat'));
+    const lng = Number(p.get('lng'));
+    const z = Number(p.get('z'));
+
+    if (
+      p.has('lat') &&
+      p.has('lng') &&
+      p.has('z') &&
+      Number.isFinite(lat) &&
+      Number.isFinite(lng) &&
+      Number.isFinite(z) &&
+      Math.abs(lat) <= 90 &&
+      Math.abs(lng) <= 180 &&
+      z >= 0 &&
+      z <= 8
+    ) {
+      this.initialCenter = [lat, lng];
+      this.initialZoom = z;
+    }
+  }
+
+  private keyFromParams(params: ParamMap): string {
+    return [
+      params.get('type') ?? '',
+      params.get('minPrice') ?? '',
+      params.get('maxPrice') ?? '',
+      params.get('region') ?? '',
+      params.get('fav') === '1' ? '1' : '',
+    ].join('|');
+  }
+
+  private keyFromForm(): string {
+    const s = this.search.getRawValue();
+    return [
+      s.type ?? '',
+      s.minPrice ?? '',
+      s.maxPrice ?? '',
+      s.region,
+      s.favoritesOnly ? '1' : '',
+    ].join('|');
+  }
+
+  private syncFiltersToUrl(): void {
+    if (this.search.invalid) return;
+    const s = this.search.getRawValue();
+
+    this.lastFilterKey = this.keyFromForm(); // so our own change isn't processed twice
+    this.router.navigate([], {
+      relativeTo: this.route,
+      replaceUrl: true,
+      queryParamsHandling: 'merge',
+      queryParams: {
+        type: s.type,
+        minPrice: s.minPrice,
+        maxPrice: s.maxPrice,
+        region: s.region || null,
+        fav: s.favoritesOnly ? 1 : null,
+      },
+    });
+  }
+
+  onViewChange(view: { center: [number, number]; zoom: number }): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      replaceUrl: true,
+      queryParamsHandling: 'merge',
+      queryParams: {
+        lat: view.center[0].toFixed(3),
+        lng: view.center[1].toFixed(3),
+        z: view.zoom,
+      },
     });
   }
 

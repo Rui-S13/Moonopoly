@@ -3,7 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth';
 import { NotificationService } from '../services/notification';
 
-export const authGuard: CanActivateFn = async () => {
+export const authGuard: CanActivateFn = async (route, state) => {
   const auth = inject(AuthService);
   const router = inject(Router);
   const notifications = inject(NotificationService);
@@ -13,5 +13,5 @@ export const authGuard: CanActivateFn = async () => {
   }
 
   notifications.info('Log in to access this page.');
-  return router.createUrlTree(['/login']);
+  return router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });
 };
