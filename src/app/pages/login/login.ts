@@ -1,8 +1,9 @@
 import { Component, signal } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { NotificationService } from '../../services/notification';
+import { safeReturnUrl } from '../../utils/navigation';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +28,8 @@ export class Login {
   constructor(
     private auth: AuthService,
     private router: Router,
-    private notifications: NotificationService
+    private notifications: NotificationService,
+    private route: ActivatedRoute,
   ) {}
 
   onSubmit(): void {
@@ -42,8 +44,10 @@ export class Login {
 
     this.auth.login(email, password).subscribe({
       next: () => {
-        this.router.navigate(['/']);
-        this.notifications.success("Welcome back!");
+        this.router.navigateByUrl(
+          safeReturnUrl(this.route.snapshot.queryParamMap.get('returnUrl')),
+        );
+        this.notifications.success('Welcome back!');
       },
       error: () => this.loginError.set(true),
     });

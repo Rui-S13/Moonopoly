@@ -30,7 +30,7 @@ export class FavoritesService {
   async toggle(listingId: number): Promise<void> {
     const user = this.auth.currentUser();
     if (!user) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
       this.notifications.info('Log in to save favorites.');
       return;
     }
