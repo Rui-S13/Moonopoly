@@ -1,134 +1,141 @@
+
 <app-header />
 
 <main>
     <h1>{{ editing() ? 'Edit listing' : 'Publish a listing' }}</h1>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        @if (editing()) {
-        <label>Status
-            <select formControlName="status">
-                <option value="available">Available</option>
-                <option value="reserved">Reserved</option>
-                <option value="sold">Sold</option>
-            </select>
-        </label>
-        }
-
-        <div class="form-field">
-            <label for="type">Type</label>
-            <select id="type" formControlName="type">
-                <option value="sale">For sale</option>
-                <option value="rent">For rent</option>
-            </select>
-        </div>
-
-        <div class="form-field">
-            <label for="price">Price (USD)</label>
-            <input id="price" type="number" formControlName="price" />
-
-            @if (form.controls.price.touched && form.controls.price.invalid) {
-            <small>Enter a price greater than 0.</small>
-            }
-        </div>
-
-        <div class="form-field">
-            <label for="latitude">Latitude</label>
-            <input id="latitude" type="number" formControlName="latitude" />
-
-            @if (form.controls.latitude.touched && form.controls.latitude.invalid) {
-            <small>Latitude must be between -90 and 90.</small>
-            }
-        </div>
-
-        <div class="form-field">
-            <label for="longitude">Longitude</label>
-            <input id="longitude" type="number" formControlName="longitude" />
-
-            @if (form.controls.longitude.touched && form.controls.longitude.invalid) {
-            <small>Longitude must be between -180 and 180.</small>
-            }
-        </div>
-
-        <div class="form-field">
-            <label for="widthKm">Width (km)</label>
-            <input id="widthKm" type="number" formControlName="widthKm" />
-
-            @if (form.controls.widthKm.touched && form.controls.widthKm.invalid) {
-            <small>Width must be at least 0.1 km.</small>
-            }
-        </div>
-
-        <div class="form-field">
-            <label for="heightKm">Height (km)</label>
-            <input id="heightKm" type="number" formControlName="heightKm" />
-
-            @if (form.controls.heightKm.touched && form.controls.heightKm.invalid) {
-            <small>Height must be at least 0.1 km.</small>
-            }
-        </div>
-
-        <div class="form-field full-width">
-            <label for="description">Description</label>
-            <textarea id="description" formControlName="description"></textarea>
-
-            @if (form.controls.description.touched && form.controls.description.invalid) {
-            <small>At least 10 characters.</small>
-            }
-        </div>
-
-        <div class="form-field full-width">
-            <label for="photo">Photo (optional)</label>
-            <input id="photo" type="file" accept="image/jpeg,image/png,image/webp" (change)="onFileChange($event)" />
-            <small class="hint">JPEG, PNG or WebP, up to 5 MB. Without a photo, a placeholder is shown.</small>
-
-            @if (fileError()) {
-            <small class="field-error">{{ fileError() }}</small>
+    <div class="publish-layout">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            @if (editing()) {
+                <div class="form-field">
+                    <label for="status">Status</label>
+                    <select id="status" formControlName="status">
+                        <option value="available">Available</option>
+                        <option value="reserved">Reserved</option>
+                        <option value="sold">Sold</option>
+                    </select>
+                </div>
             }
 
-            @if (previewUrl(); as preview) {
-            <img class="photo-preview" [src]="preview" alt="Preview of the selected photo" />
-            <button type="button" (click)="clearFile()">Remove selected photo</button>
-            } @else if (editing()?.imageUrl && !removeImage()) {
-            <img class="photo-preview" [src]="images.urlFor(editing()!.imageUrl)" alt="Current photo" />
-            <button type="button" (click)="removeImage.set(true)">Remove current photo</button>
-            }
-        </div>
-
-        @if (form.errors?.['overlap']) {
-        <small>
-            This area overlaps with
-            <a [routerLink]="['/listings', form.errors?.['overlap']]">listing #{{ form.errors?.['overlap'] }}</a>.
-            Choose a different location or size.
-        </small>
-        }
-
-        <button type="submit" [disabled]="form.invalid || saving()">
-            Publish
-        </button>
-
-    </form>
-
-    <section class="map-preview">
-        <div class="map-preview-header">
-            <div>
-                <h2>Property location</h2>
-                <p>Preview the position and size of your lunar property.</p>
+            <div class="form-field">
+                <label for="type">Type</label>
+                <select id="type" formControlName="type">
+                    <option value="sale">For sale</option>
+                    <option value="rent">For rent</option>
+                </select>
             </div>
 
-            <span class="map-preview-label">Live preview</span>
-        </div>
+            <div class="form-field">
+                <label for="price">Price (USD)</label>
+                <input id="price" type="number" formControlName="price" />
+                @if (form.controls.price.touched && form.controls.price.invalid) {
+                    <small>Enter a price greater than 0.</small>
+                }
+            </div>
 
-        <div class="map-preview-frame">
-            <app-moon-map [previewMode]="true" [center]="previewCenter" [propertyWidthKm]="previewWidth"
-                [propertyHeightKm]="previewHeight" />
-        </div>
-    </section>
+            <div class="form-field">
+                <label for="latitude">Latitude</label>
+                <input id="latitude" type="number" formControlName="latitude" />
+                @if (form.controls.latitude.touched && form.controls.latitude.invalid) {
+                    <small>Latitude must be between -90 and 90.</small>
+                }
+            </div>
 
-    @if (errorMessage) {
-    <p class="error-message" role="alert">
-        {{ errorMessage }}
-    </p>
-    }
+            <div class="form-field">
+                <label for="longitude">Longitude</label>
+                <input id="longitude" type="number" formControlName="longitude" />
+                @if (form.controls.longitude.touched && form.controls.longitude.invalid) {
+                    <small>Longitude must be between -180 and 180.</small>
+                }
+            </div>
+
+            <div class="form-field">
+                <label for="widthKm">Width (km)</label>
+                <input id="widthKm" type="number" formControlName="widthKm" />
+                @if (form.controls.widthKm.touched && form.controls.widthKm.invalid) {
+                    <small>Width must be at least 0.1 km.</small>
+                }
+            </div>
+
+            <div class="form-field">
+                <label for="heightKm">Height (km)</label>
+                <input id="heightKm" type="number" formControlName="heightKm" />
+                @if (form.controls.heightKm.touched && form.controls.heightKm.invalid) {
+                    <small>Height must be at least 0.1 km.</small>
+                }
+            </div>
+
+            <div class="form-field full-width">
+                <label for="description">Description</label>
+                <textarea id="description" formControlName="description"></textarea>
+                @if (form.controls.description.touched && form.controls.description.invalid) {
+                    <small>At least 10 characters.</small>
+                }
+            </div>
+
+            <div class="form-field full-width">
+                <label for="photo">Photo (optional)</label>
+                <input
+                    id="photo"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    (change)="onFileChange($event)"
+                />
+                <small class="hint">
+                    JPEG, PNG or WebP, up to 5 MB. Without a photo, a placeholder is shown.
+                </small>
+
+                @if (fileError()) {
+                    <small class="field-error">{{ fileError() }}</small>
+                }
+
+                @if (previewUrl(); as preview) {
+                    <img class="photo-preview" [src]="preview" alt="Preview of the selected photo" />
+                    <button type="button" (click)="clearFile()">Remove selected photo</button>
+                } @else if (editing()?.imageUrl && !removeImage()) {
+                    <img class="photo-preview" [src]="images.urlFor(editing()!.imageUrl)" alt="Current photo" />
+                    <button type="button" (click)="removeImage.set(true)">Remove current photo</button>
+                }
+            </div>
+
+            @if (form.errors?.['overlap']) {
+                <small class="form-error">
+                    This area overlaps with
+                    <a [routerLink]="['/listings', form.errors?.['overlap']]">
+                        listing #{{ form.errors?.['overlap'] }}
+                    </a>.
+                    Choose a different location or size.
+                </small>
+            }
+
+            <button type="submit" [disabled]="form.invalid || saving()">
+                {{ editing() ? 'Save changes' : 'Publish listing' }}
+            </button>
+
+            @if (errorMessage) {
+                <p class="error-message" role="alert">{{ errorMessage }}</p>
+            }
+        </form>
+
+        <aside class="map-preview">
+            <div class="map-preview-header">
+                <div>
+                    <h2>Property location</h2>
+                    <p>Changes as you adjust the coordinates and dimensions.</p>
+                </div>
+                <span class="map-preview-label">Live preview</span>
+            </div>
+
+            <div class="map-preview-frame">
+                <app-moon-map
+                    [previewMode]="true"
+                    [center]="previewCenter"
+                    [propertyWidthKm]="previewWidth"
+                    [propertyHeightKm]="previewHeight"
+                />
+            </div>
+        </aside>
+    </div>
 </main>
 
 <app-footer />

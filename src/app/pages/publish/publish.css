@@ -1,40 +1,56 @@
+
 :host {
     display: block;
     min-width: 0;
 }
 
 main {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-
     width: 100%;
-    max-width: 1000px;
+    max-width: 1500px;
     margin-inline: auto;
     padding: 40px 5% 64px;
 }
 
 h1 {
+    margin: 0 0 30px;
+    color: var(--text);
     font-size: clamp(2rem, 4vw, 2.75rem);
-    margin: 0px;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.04em;
 }
 
-/* Form layout */
+/* Main layout */
+
+.publish-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: start;
+    gap: 28px;
+}
+
+/* Form */
 
 form {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
     gap: 22px 24px;
-    padding: 32px;
+    min-width: 0;
+    padding: 28px;
     background: var(--surface);
     border: 1px solid rgba(138, 143, 154, 0.2);
     border-radius: var(--radius);
 }
 
-/* Fields */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+}
 
 .form-field label {
-    display: block;
     color: var(--muted);
     font-size: 0.8rem;
     font-weight: 600;
@@ -42,11 +58,10 @@ form {
     text-transform: uppercase;
 }
 
-/* Inputs */
-
 form input,
 form select,
 form textarea {
+    box-sizing: border-box;
     width: 100%;
     min-width: 0;
     padding: 12px 14px;
@@ -57,9 +72,7 @@ form textarea {
     color: var(--text);
     font: inherit;
     font-size: 0.95rem;
-    letter-spacing: normal;
-    text-transform: none;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 form input,
@@ -77,6 +90,7 @@ form input:focus,
 form select:focus,
 form textarea:focus {
     border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 form input::placeholder,
@@ -85,20 +99,11 @@ form textarea::placeholder {
     opacity: 0.7;
 }
 
-/* Title and description span both columns */
-
-.form-field {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-    min-width: 0;
-}
-
 .full-width {
     grid-column: 1 / -1;
 }
 
-/* Validation messages */
+/* Validation */
 
 .form-field small,
 .form-error {
@@ -107,11 +112,41 @@ form textarea::placeholder {
     line-height: 1.5;
 }
 
-.form-error {
+.form-error,
+.error-message {
+    grid-column: 1 / -1;
     margin: 0;
 }
 
-/* Publish button */
+.form-error a {
+    color: var(--accent);
+}
+
+.hint {
+    color: var(--muted) !important;
+}
+
+.photo-preview {
+    display: block;
+    width: 100%;
+    max-height: 260px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: var(--bg);
+}
+
+form button[type="button"] {
+    justify-self: start;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    cursor: pointer;
+}
+
+/* Submit */
 
 form button[type="submit"] {
     grid-column: 1 / -1;
@@ -128,10 +163,7 @@ form button[type="submit"] {
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        opacity 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
 }
 
 form button[type="submit"]:hover:not(:disabled) {
@@ -144,22 +176,26 @@ form button[type="submit"]:disabled {
     cursor: not-allowed;
 }
 
-/* Property map preview */
+/* Sticky map */
 
 .map-preview {
-    grid-column: 1 / -1;
+    position: sticky;
+    top: 100px;
     display: flex;
     flex-direction: column;
     gap: 12px;
     min-width: 0;
-    margin-top: 4px;
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid rgba(138, 143, 154, 0.2);
+    border-radius: var(--radius);
 }
 
 .map-preview-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: 16px;
+    gap: 12px;
 }
 
 .map-preview-header h2 {
@@ -170,7 +206,7 @@ form button[type="submit"]:disabled {
 }
 
 .map-preview-header p {
-    margin: 4px 0 0;
+    margin: 5px 0 0;
     color: var(--muted);
     font-size: 0.85rem;
     line-height: 1.5;
@@ -179,17 +215,16 @@ form button[type="submit"]:disabled {
 .map-preview-label {
     flex-shrink: 0;
     color: var(--muted);
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
 }
 
-/* Map frame */
-
 .map-preview-frame {
+    height: min(55vh, 520px);
+    min-height: 320px;
     overflow: hidden;
-    height: 360px;
     border: 1px solid var(--border-strong);
     border-radius: var(--radius);
     background: #17191d;
@@ -199,19 +234,88 @@ form button[type="submit"]:disabled {
     display: block;
     width: 100%;
     height: 100%;
-}
-
-/* Map component's actual Leaflet container */
-
-app-moon-map {
-    display: block;
-    width: 100%;
-    height: 100%;
     min-width: 0;
 }
 
 .error-message {
     color: #dc2626;
     font-size: 0.875rem;
-    margin-top: 0.75rem;
+}
+
+/* Tablet */
+
+@media (max-width: 1000px) {
+    .publish-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+        gap: 18px;
+    }
+
+    form {
+        gap: 20px 16px;
+        padding: 20px;
+    }
+
+    .map-preview {
+        padding: 14px;
+    }
+
+    .map-preview-frame {
+        min-height: 280px;
+    }
+
+    .map-preview-label {
+        display: none;
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 700px) {
+    main {
+        padding: 28px 16px 40px;
+    }
+
+    h1 {
+        margin-bottom: 24px;
+    }
+
+    .publish-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+    }
+
+    form {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .full-width,
+    form button[type="submit"],
+    .form-error {
+        grid-column: 1;
+    }
+
+    form button[type="submit"] {
+        width: 100%;
+    }
+
+    .map-preview {
+        position: static;
+        grid-row: 2;
+        padding: 14px;
+    }
+
+    .map-preview-frame {
+        height: 300px;
+        min-height: 0;
+    }
+
+    .map-preview-header {
+        flex-wrap: wrap;
+    }
+
+    .map-preview-label {
+        display: inline;
+    }
 }
