@@ -1,26 +1,11 @@
-/* Page layout */
 :host {
     display: flex;
     flex-direction: column;
-    min-height: 100dvh;
-    background: var(--bg);
+    min-height: 100vh;
 }
 
 main {
     flex: 1;
-    width: min(1100px, 100% - 48px);
-    margin: 0 auto;
-    padding: 48px 0 64px;
-    box-sizing: border-box;
-}
-
-/* Page title */
-h1 {
-    margin: 0 0 32px;
-    color: var(--text);
-    font-size: clamp(1.8rem, 3vw, 2.4rem);
-    font-weight: 700;
-    letter-spacing: -0.04em;
 }
 
 /* Listings container */
@@ -46,7 +31,7 @@ h1 {
 }
 
 /* Price and property area */
-.my-listing > div {
+.my-listing>div {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -161,8 +146,90 @@ p a:hover {
 }
 
 /* Empty state and feedback */
-:host > p {
+:host>p {
     width: min(1100px, 100% - 48px);
     margin: 0 auto;
     box-sizing: border-box;
+}
+
+@media (max-width: 800px) {
+    main {
+        width: calc(100% - 32px);
+        padding: 32px 0 48px;
+    }
+
+    .my-listing {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 16px;
+        padding: 18px 16px;
+    }
+
+    .my-listing>div {
+        grid-column: 1;
+    }
+
+    .my-listing select {
+        grid-column: 1;
+        width: 100%;
+        max-width: 220px;
+    }
+
+    .my-listing a,
+    .my-listing button {
+        justify-self: end;
+    }
+
+    .my-listing a {
+        grid-column: 2;
+    }
+
+    .my-listing button {
+        grid-column: 2;
+    }
+
+    :host>p {
+        width: calc(100% - 32px);
+    }
+}
+
+@media (max-width: 480px) {
+    main {
+        width: calc(100% - 24px);
+        padding: 24px 0 40px;
+    }
+
+    .my-listing {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px;
+        padding: 16px 12px;
+    }
+
+    .my-listing strong {
+        font-size: 0.95rem;
+        overflow-wrap: anywhere;
+    }
+
+    .my-listing span {
+        font-size: 0.8rem;
+    }
+
+    .my-listing select {
+        min-width: 0;
+        max-width: 100%;
+        padding: 9px 24px 9px 8px;
+        font-size: 0.8rem;
+    }
+
+    .my-listing a,
+    .my-listing button {
+        font-size: 0.8rem;
+    }
+
+    .my-listing button {
+        padding: 8px 10px;
+    }
+
+    :host>p {
+        width: calc(100% - 24px);
+    }
 }

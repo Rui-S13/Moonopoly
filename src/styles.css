@@ -65,6 +65,7 @@
 }
 
 body {
+    min-height: 100%;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -72,6 +73,31 @@ body {
     color: var(--text);
     font-family: Inter, system-ui, sans-serif;
     line-height: 1.5;
+}
+
+app-root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+app-root > router-outlet + * {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 100vh;
+}
+
+app-root > router-outlet + * > main.page-container {
+    flex: 1;
+}
+
+/* Shared page layout */
+.page-container {
+    width: min(1200px, calc(100% - 48px));
+    margin-inline: auto;
+    padding-block: 40px 64px;
+    box-sizing: border-box;
 }
 
 h1,
@@ -82,8 +108,14 @@ h3,
     letter-spacing: -0.03em;
 }
 
+/* Shared page headings */
 h1 {
+    margin: 0 0 30px;
+    color: var(--text);
+    font-size: clamp(2rem, 4vw, 2.75rem);
     font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.04em;
 }
 
 h2,
@@ -114,6 +146,17 @@ select:focus-visible,
 textarea:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+    .page-container {
+        width: calc(100% - 32px);
+        padding-block: 28px 40px;
+    }
+
+    h1 {
+        margin-bottom: 24px;
+    }
 }
 
 /* ---------- Map popup ---------- */
