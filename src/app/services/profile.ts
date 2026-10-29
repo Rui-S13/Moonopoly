@@ -1,4 +1,4 @@
-import { Injectable, effect, inject, signal } from '@angular/core';
+import { Injectable, effect, inject, signal, computed } from '@angular/core';
 import { Observable, from, map } from 'rxjs';
 import { SupabaseService } from './supabase-service';
 import { AuthService } from './auth';
@@ -14,18 +14,29 @@ export class ProfileService {
   private readonly supabase = inject(SupabaseService).supabaseClient;
   private readonly auth = inject(AuthService);
 
+  readonly profileReady = signal(false);
+  readonly hasContactEmail = computed(() => !!this.myProfile()?.contactEmail?.trim());
+
   readonly myProfile = signal<Profile | undefined>(undefined);
 
   constructor() {
     effect(() => {
       const user = this.auth.currentUser();
       if (user) {
+        this.profileReady.set(false);
         this.getProfile(user.id).subscribe({
-          next: (profile) => this.myProfile.set(profile),
-          error: () => this.myProfile.set(undefined),
+          next: (profile) => {
+            this.myProfile.set(profile);
+            this.profileReady.set(true);
+          },
+          error: () => {
+            this.myProfile.set(undefined);
+            this.profileReady.set(true);
+          },
         });
       } else {
         this.myProfile.set(undefined);
+        this.profileReady.set(false);
       }
     });
   }
@@ -44,6 +55,16 @@ export class ProfileService {
   async updateMyProfile(displayName: string, contactEmail: string): Promise<void> {
     const userId = await this.auth.getUserId();
     if (!userId) throw new Error('Not logged in');
+
+    if (!contactEmail.trim()) {
+      const { count, error: countError } = await this.supabase
+        .from('listings')
+        .select('id', { count: 'exact', head: true })
+        .eq('owner_id', userId)
+        .neq('status', 'sold');
+      if (countError) throw countError;
+      if ((count ?? 0) > 0) throw new Error('CONTACT_REQUIRED');
+    }
 
     const { error } = await this.supabase
       .from('profiles')

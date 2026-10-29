@@ -20,7 +20,8 @@
         <div class="field">
             <label for="contactEmail">Public contact email (optional)</label>
             <input id="contactEmail" type="email" formControlName="contactEmail" autocomplete="email" />
-            <small class="hint">This address is shown publicly on your listings. Leave it empty to hide it.</small>
+            <small class="hint">Public. Required to publish listings, and it can't be removed while you have active
+                ones.</small>
             @if (form.controls.contactEmail.touched && form.controls.contactEmail.invalid) {
             <small class="field-error">Enter a valid email address.</small>
             }

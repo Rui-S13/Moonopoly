@@ -230,6 +230,17 @@ form button[type="submit"]:disabled {
     font-size: 0.875rem;
 }
 
+.notice {
+    padding: 12px 14px;
+    background: var(--status-reserved-bg);
+    color: var(--status-reserved-text);
+    border-radius: var(--radius);
+}
+
+.notice a {
+    font-weight: 600;
+}
+
 /* Tablet */
 
 @media (max-width: 1000px) {
