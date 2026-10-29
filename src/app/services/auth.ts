@@ -50,6 +50,25 @@ export class AuthService {
     return data.session?.user.id ?? null;
   }
 
+  async changePassword(currentPassword: string, newPassword: string): Promise<void> {
+    const email = this.currentUser()?.email;
+    if (!email) throw new Error('Not logged in');
+
+    const { error: verifyError } = await this.supabase.auth.signInWithPassword({
+      email,
+      password: currentPassword,
+    });
+    if (verifyError) throw new Error('WRONG_PASSWORD');
+
+    const { error } = await this.supabase.auth.updateUser({ password: newPassword });
+    if (error) throw error;
+  }
+
+  async changeEmail(newEmail: string): Promise<void> {
+    const { error } = await this.supabase.auth.updateUser({ email: newEmail });
+    if (error) throw error;
+  }
+
   async deleteAccount(): Promise<void> {
     const { error } = await this.supabase.rpc('delete_my_account');
     if (error) throw error;
