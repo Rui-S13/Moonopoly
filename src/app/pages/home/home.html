@@ -9,7 +9,7 @@
         <div class="hero-content">
             <h1>Find your place on the <span>Moon</span></h1>
 
-            <form [formGroup]="search" class="search-form">
+            <form [formGroup]="search" class="search-form" (ngSubmit)="searchListings()">
                 <label>
                     Type
                     <select formControlName="type">
@@ -47,6 +47,107 @@
             }
         </div>
     </section>
+
+    @if (loading()) {
+    <p class="state-message">Loading listings...</p>
+    } @else if (error()) {
+    <p class="state-message">Could not load the listings. Please try again later.</p>
+    } @else {
+    @let s = stats();
+
+    <section class="container" aria-label="Marketplace statistics">
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-value">{{ s.count }}</span>
+                <span class="stat-label">Listings available</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">{{ s.regions }}</span>
+                <span class="stat-label">Regions with listings</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">{{ s.totalArea | number: '1.0-0' }} km²</span>
+                <span class="stat-label">Total area on offer</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">
+                    @if (s.averageSalePrice !== null) {
+                    {{ s.averageSalePrice | currency: 'USD' : 'symbol' : '1.0-0' }}
+                    } @else {
+                    —
+                    }
+                </span>
+                <span class="stat-label">Average sale price</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="section-heading">
+            <h2>Featured listings</h2>
+            @if (featured().length > 0) {
+            <a class="text-link" routerLink="/listings">View all listings →</a>
+            }
+        </div>
+
+        @if (featured().length > 0) {
+        <div class="featured-grid">
+            @for (listing of featured(); track listing.id) {
+            <app-listing-card [listing]="listing" [isFavorite]="favorites.isFavorite(listing.id)"
+                (favorite)="onFavorite($event)" />
+            }
+        </div>
+        } @else {
+        <div class="empty-state">
+            <strong>No plots on the market yet</strong>
+            Be the first to <a routerLink="/publish">publish a listing</a>.
+        </div>
+        }
+    </section>
+
+    @if (regionTiles().length > 0) {
+    <section class="container">
+        <div class="section-heading">
+            <h2>Browse by region</h2>
+        </div>
+
+        <div class="region-grid">
+            @for (region of regionTiles(); track region.name) {
+            <a class="region-tile" routerLink="/listings" [queryParams]="{ region: region.name }">
+                <span class="region-name">{{ region.name }}</span>
+                <span class="region-count">
+                    {{ region.count }} {{ region.count === 1 ? 'listing' : 'listings' }}
+                </span>
+            </a>
+            }
+        </div>
+    </section>
+    }
+
+    <section class="container">
+        <div class="section-heading">
+            <h2>How it works</h2>
+        </div>
+
+        <div class="steps">
+            @for (step of steps; track step.title) {
+            <article class="step">
+                <span class="step-number">{{ $index + 1 }}</span>
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.text }}</p>
+            </article>
+            }
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="cta">
+            <h2>Got a crater to spare?</h2>
+            <p>List your plot and let buyers find it on the map.</p>
+            <a class="button button-accent" routerLink="/publish">Publish your listing</a>
+        </div>
+    </section>
+    }
 </main>
 
 <app-footer />
