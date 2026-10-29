@@ -18,7 +18,7 @@ main {
 /* ---------- Filter bar ---------- */
 .filters-form {
   display: grid;
-  grid-template-columns: 1.1fr 1fr 1fr 1.2fr auto auto;
+  grid-template-columns: 1.1fr 1fr 1fr 1.2fr 1.1fr auto auto;
   align-items: center;
   gap: 10px;
   padding: 10px 16px;

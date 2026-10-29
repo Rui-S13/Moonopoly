@@ -20,6 +20,9 @@ import { MoonMap } from '../../components/moon-map/moon-map';
 import { Bounds } from '../../utils/plot-geometry';
 import { SortOption } from '../../utils/sort-option';
 import { Footer } from '../../components/footer/footer';
+import { ListingStatus } from '../../models/listing.models';
+
+type StatusFilter = ListingStatus | 'active' | 'all';
 
 @Component({
   imports: [
@@ -63,6 +66,7 @@ export class Listings implements OnInit {
   search = new FormGroup(
     {
       type: new FormControl<ListingType | null>(null),
+      status: new FormControl<StatusFilter>('active', { nonNullable: true }),
       minPrice: new FormControl<number | null>(null, Validators.min(1)),
       maxPrice: new FormControl<number | null>(null, Validators.min(1)),
       region: new FormControl<string>('', { nonNullable: true }),
@@ -97,6 +101,7 @@ export class Listings implements OnInit {
         {
           region: params.get('region') ?? '',
           type: (params.get('type') as ListingType | null) ?? null,
+          status: this.parseStatus(params.get('status')),
           minPrice: minPrice !== null ? Number(minPrice) : null,
           maxPrice: maxPrice !== null ? Number(maxPrice) : null,
           favoritesOnly: params.get('fav') === '1',
@@ -151,6 +156,7 @@ export class Listings implements OnInit {
   private keyFromParams(params: ParamMap): string {
     return [
       params.get('type') ?? '',
+      params.get('status') ?? '',
       params.get('minPrice') ?? '',
       params.get('maxPrice') ?? '',
       params.get('region') ?? '',
@@ -162,6 +168,7 @@ export class Listings implements OnInit {
     const s = this.search.getRawValue();
     return [
       s.type ?? '',
+      s.status === 'active' ? '' : s.status,
       s.minPrice ?? '',
       s.maxPrice ?? '',
       s.region,
@@ -180,6 +187,7 @@ export class Listings implements OnInit {
       queryParamsHandling: 'merge',
       queryParams: {
         type: s.type,
+        status: s.status === 'active' ? null : s.status,
         minPrice: s.minPrice,
         maxPrice: s.maxPrice,
         region: s.region || null,
@@ -213,6 +221,12 @@ export class Listings implements OnInit {
         return false;
       }
 
+      if (s.status === 'active') {
+        if (l.status === 'sold') return false;
+      } else if (s.status !== 'all' && l.status !== s.status) {
+        return false;
+      }
+
       if (s.minPrice !== null && l.price < s.minPrice) {
         return false;
       }
@@ -234,6 +248,12 @@ export class Listings implements OnInit {
     });
 
     this.updateVisible();
+  }
+
+  private parseStatus(value: string | null): StatusFilter {
+    return value === 'available' || value === 'reserved' || value === 'sold' || value === 'all'
+      ? value
+      : 'active';
   }
 
   clearFilters(): void {
