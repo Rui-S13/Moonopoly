@@ -1,8 +1,8 @@
-/* The page never scrolls: header on top, main takes the rest */
 :host {
   display: flex;
   flex-direction: column;
   height: 100dvh;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -15,51 +15,29 @@ main {
   overflow: hidden;
 }
 
-/* Filters */
+/* ---------- Filter bar ---------- */
 .filters-form {
   display: grid;
   grid-template-columns: 1.1fr 1fr 1fr 1.2fr auto auto;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding: 10px 16px;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--border);
-  border-radius: 0;
+  background: var(--surface);
+  border-bottom: var(--border-weight) solid var(--border);
 }
-
-.filters-form .clear-filters {
-  white-space: nowrap;
-  padding: 10px 14px;
-}
-
-/* Filter fields */
 
 .filters-form>input,
 .filters-form>select {
   width: 100%;
   min-width: 0;
-  height: 46px;
-  box-sizing: border-box;
-  padding: 0 12px;
+  height: 40px;
+  padding: 0 14px;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-control);
-  outline: none;
   background: var(--input-bg);
   color: var(--text);
-  font: inherit;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   transition: border-color 0.2s ease;
-}
-
-.filters-form>input:focus,
-.filters-form>select:focus {
-  border-color: var(--accent);
-}
-
-.filters-form>input::placeholder {
-  color: var(--muted);
-  opacity: 1;
 }
 
 .filters-form>select {
@@ -71,70 +49,51 @@ main {
   color: var(--text);
 }
 
-/* Validation messages */
-
-.filters-form>.filter-error {
-  grid-column: 1 / -1;
-  margin: 0;
-  color: var(--error);
-  font-size: 0.75rem;
-  line-height: 1.4;
+.filters-form>input::placeholder {
+  color: var(--muted);
+  opacity: 1;
 }
 
-/* Clear filters */
-
-.filters-form>button {
-  align-self: start;
-  min-height: 46px;
-  box-sizing: border-box;
-  padding: 0 18px;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-control);
-  background: transparent;
-  color: var(--text);
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
-  white-space: nowrap;
-  cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.filters-form>button:hover {
-  background: var(--surface-muted);
+.filters-form>input:hover,
+.filters-form>select:hover,
+.filters-form>input:focus-visible,
+.filters-form>select:focus-visible {
   border-color: var(--accent);
 }
 
-/* Favorites filter */
+/* Chip-style controls: favorites toggle and clear button */
+.filters-form .clear-filters,
 .favorites-filter {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-
-  min-height: 46px;
-  box-sizing: border-box;
-  padding: 0 14px;
-
+  height: 40px;
+  padding: 0 16px;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-control);
-
-  background: transparent;
+  background: var(--surface);
   color: var(--text);
-
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
-
   cursor: pointer;
   user-select: none;
-
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease,
     color 0.2s ease;
+}
+
+.filters-form .clear-filters {
+  color: var(--muted);
+}
+
+.filters-form .clear-filters:hover,
+.favorites-filter:hover {
+  border-color: var(--accent);
+  background: var(--surface-muted);
+  color: var(--text);
 }
 
 .favorites-filter input {
@@ -152,17 +111,10 @@ main {
   transition: color 0.2s ease;
 }
 
-/* Hover */
-.favorites-filter:hover {
-  border-color: var(--accent);
-  background: var(--surface-muted);
-}
-
-/* Active state */
 .favorites-filter:has(input:checked) {
   border-color: var(--accent);
-  background: var(--surface-muted);
-  color: var(--text);
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
 .favorites-filter:has(input:checked) svg {
@@ -170,16 +122,23 @@ main {
   fill: var(--accent);
 }
 
-/* Keyboard accessibility */
 .favorites-filter:has(input:focus-visible) {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
-/* Map on the left, results on the right */
+.filters-form>.filter-error {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--error);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+/* ---------- Map and results ---------- */
 .listings-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.15fr) minmax(360px, 1fr);
   min-height: 0;
 }
 
@@ -197,53 +156,41 @@ main {
 /* Only this panel scrolls */
 .results {
   min-height: 0;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
-  padding: 0;
-
-  display: flex;
-  flex-direction: column;
-
+  background: var(--bg);
   border-left: var(--border-weight) solid var(--border);
 }
 
-.results-content {
-  padding: 16px;
-}
-
-/* Results count and sorting */
 .results-toolbar {
   position: sticky;
   top: 0;
   z-index: 2;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-
   flex-shrink: 0;
-  margin: 0;
   padding: 10px 16px;
-
-  background: var(--bg);
+  background: var(--surface);
   border-bottom: var(--border-weight) solid var(--border);
 }
 
 .results-count {
+  flex: 1;
+  min-width: 0;
   margin: 0;
   color: var(--muted);
   font-size: 0.85rem;
-  white-space: nowrap;
 }
 
-/* Sort control */
 .sort-control {
   display: flex;
   align-items: center;
   gap: 8px;
-
   color: var(--muted);
   font-size: 0.8rem;
   white-space: nowrap;
@@ -253,32 +200,18 @@ main {
   max-width: 190px;
   min-width: 0;
   height: 36px;
-  padding: 0 28px 0 10px;
-
-  border: 1px solid var(--border);
+  padding: 0 10px;
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-control);
-
   background: var(--input-bg);
   color: var(--text);
-
-  font: inherit;
   font-size: 0.85rem;
   cursor: pointer;
-  outline: none;
-
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 .sort-control select:hover {
-  border-color: var(--border-strong);
-}
-
-.sort-control select:focus-visible {
   border-color: var(--accent);
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
 }
 
 .sort-control select option {
@@ -286,17 +219,45 @@ main {
   color: var(--text);
 }
 
-.no-listings {
-  color: var(--muted);
-  text-align: center;
-  font-size: 1.5rem;
-  padding: 20px;
+.results-content {
+  padding: 16px;
 }
 
+/* Cards share the width evenly: one column when narrow, two when wide */
 .results-grid {
   display: grid;
-  grid-template-columns: auto auto;
-  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 20px;
+}
+
+/* Wrapper of each card: leaves room for the sticky toolbar when scrolling to it */
+.result-item {
+  display: flex;
+  min-width: 0;
+}
+
+.result-item app-listing-card {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.empty-state {
+  margin: 24px 0;
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+}
+
+.empty-state strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--text);
+  font-size: 1.05rem;
 }
 
 .results app-footer {
@@ -305,13 +266,33 @@ main {
   flex-shrink: 0;
 }
 
-.results app-footer .site-footer {
-  padding: 24px 16px 20px;
+/* ---------- Smaller screens ---------- */
+@media (max-width: 1100px) {
+  .filters-form {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
-.selected-listing {
-  outline: 2px solid var(--accent);
-  outline-offset: 4px;
-  border-radius: var(--radius-control);
-  scroll-margin-block: 24px;
+@media (max-width: 900px) {
+  .listings-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 38%) minmax(0, 62%);
+  }
+
+  .results {
+    border-left: 0;
+    border-top: var(--border-weight) solid var(--border);
+  }
+}
+
+@media (max-width: 700px) {
+  .filters-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  .sort-control span {
+    display: none;
+  }
 }

@@ -38,6 +38,26 @@
     --radius: 10px;
     --radius-control: 15px;
     --border-weight: 1px;
+
+    /* Accent */
+    --accent-soft: #EFECFD;
+
+    /* Map */
+    --marker: var(--accent);
+    --marker-outline: #25263A;
+    --marker-highlight: #d8b26b;
+    --marker-sold: #9A9CB0;
+    --pin-shadow-color: rgba(37, 38, 58, 0.45);
+
+    /* Feedback */
+    --success: #2F8F5B;
+
+    /* Shadows */
+    --shadow-lg: 0 10px 28px rgba(37, 38, 58, 0.18);
+
+    /* Text over the home page hero image */
+    --on-hero-muted: rgba(255, 255, 255, 0.8);
+    --on-hero-border: rgba(255, 255, 255, 0.7);
 }
 
 * {
@@ -45,6 +65,7 @@
 }
 
 body {
+    min-height: 100%;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -52,6 +73,31 @@ body {
     color: var(--text);
     font-family: Inter, system-ui, sans-serif;
     line-height: 1.5;
+}
+
+app-root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+app-root > router-outlet + * {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 100vh;
+}
+
+app-root > router-outlet + * > main.page-container {
+    flex: 1;
+}
+
+/* Shared page layout */
+.page-container {
+    width: min(1200px, calc(100% - 48px));
+    margin-inline: auto;
+    padding-block: 40px 64px;
+    box-sizing: border-box;
 }
 
 h1,
@@ -62,8 +108,14 @@ h3,
     letter-spacing: -0.03em;
 }
 
+/* Shared page headings */
 h1 {
+    margin: 0 0 30px;
+    color: var(--text);
+    font-size: clamp(2rem, 4vw, 2.75rem);
     font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.04em;
 }
 
 h2,
@@ -96,13 +148,25 @@ textarea:focus-visible {
     outline-offset: 3px;
 }
 
+@media (max-width: 600px) {
+    .page-container {
+        width: calc(100% - 32px);
+        padding-block: 28px 40px;
+    }
+
+    h1 {
+        margin-bottom: 24px;
+    }
+}
+
+/* ---------- Map popup ---------- */
 .listing-popup-wrap .leaflet-popup-content-wrapper {
     padding: 0;
     overflow: hidden;
-    background: var(--surface, #1c1f27);
-    color: var(--text, #ece8df);
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgb(0 0 0 / 0.4);
+    background: var(--surface);
+    color: var(--text);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
 }
 
 .listing-popup-wrap .leaflet-popup-content {
@@ -111,7 +175,7 @@ textarea:focus-visible {
 }
 
 .listing-popup-wrap .leaflet-popup-tip {
-    background: var(--surface, #1c1f27);
+    background: var(--surface);
 }
 
 .listing-popup {
@@ -134,13 +198,13 @@ textarea:focus-visible {
     padding-top: 10px !important;
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--accent, #c9a86a);
+    color: var(--accent);
 }
 
 .popup-meta,
 .popup-status {
     font-size: 0.85rem;
-    color: var(--muted, #9a9eaa);
+    color: var(--muted);
     text-transform: capitalize;
 }
 
@@ -148,4 +212,47 @@ textarea:focus-visible {
     padding: 8px 12px 12px !important;
     font-size: 0.85rem;
     font-weight: 600;
+    color: var(--accent);
+}
+
+/* ---------- Map pins ---------- */
+.property-marker-icon {
+    width: 32px;
+    height: 42px;
+    transform-origin: 50% 100%;
+    filter: drop-shadow(0 2px 3px var(--pin-shadow-color));
+    transition: transform 0.15s ease;
+}
+
+.property-marker-icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.property-marker-icon .pin-body {
+    fill: var(--marker);
+    stroke: var(--marker-outline);
+    stroke-width: 2;
+    stroke-linejoin: round;
+}
+
+.property-marker-icon .pin-dot {
+    fill: var(--text-inverse);
+}
+
+.property-marker-icon.status-sold {
+    opacity: 0.6;
+}
+
+.property-marker-icon.status-sold .pin-body {
+    fill: var(--marker-sold);
+}
+
+.property-marker.selected-marker .property-marker-icon {
+    transform: scale(1.35);
+}
+
+.property-marker.selected-marker .pin-body {
+    fill: var(--marker-highlight);
 }

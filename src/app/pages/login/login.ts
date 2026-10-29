@@ -5,15 +5,17 @@ import { AuthService } from '../../services/auth';
 import { NotificationService } from '../../services/notification';
 import { safeReturnUrl } from '../../utils/navigation';
 import { NavigationHistory } from '../../services/navigation-history';
+import { Logo } from '../../components/logo/logo';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, Logo],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
   loginError = signal(false);
+  loading = signal(false);
 
   form = new FormGroup({
     email: new FormControl('', {
@@ -40,9 +42,14 @@ export class Login {
       return;
     }
 
-    const { email, password } = this.form.getRawValue();
+    if (this.loading()) {
+      return;
+    }
 
+    this.loading.set(true);
     this.loginError.set(false);
+
+    const { email, password } = this.form.getRawValue();
 
     this.auth.login(email, password).subscribe({
       next: () => {
@@ -50,9 +57,13 @@ export class Login {
         this.router.navigateByUrl(
           returnUrl ? safeReturnUrl(returnUrl) : (this.navHistory.lastContentUrl ?? '/'),
         );
+        this.loading.set(false);
         this.notifications.success('Welcome back!');
       },
-      error: () => this.loginError.set(true),
+      error: () => {
+        this.loginError.set(true),
+        this.loading.set(false);
+      },
     });
   }
 

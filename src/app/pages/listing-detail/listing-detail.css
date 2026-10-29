@@ -1,14 +1,11 @@
-main {
-    padding: 40px 5% 64px;
-}
-
 :host {
-    display: block;
-    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.listing-details {
-    width: 100%;
+main {
+    flex: 1;
 }
 
 .back-link {
@@ -22,6 +19,8 @@ main {
 .back-link:hover {
     color: var(--accent);
 }
+
+/* Listing card */
 
 .listing-detail-card {
     overflow: hidden;
@@ -82,7 +81,7 @@ main {
     color: #e59b9b;
 }
 
-/* Summary */
+/* Listing summary */
 
 .listing-detail-summary {
     display: flex;
@@ -101,19 +100,13 @@ main {
     text-transform: uppercase;
 }
 
-.listing-detail-summary h1 {
-    margin: 0 0 16px;
-    font-size: clamp(2rem, 3vw, 3rem);
-    line-height: 1.1;
-    overflow-wrap: anywhere;
-}
-
 .listing-price {
     margin: 0 0 22px;
     color: var(--accent);
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 2rem;
     font-weight: 600;
+    overflow-wrap: anywhere;
 }
 
 .listing-price span {
@@ -129,6 +122,7 @@ main {
     font-size: 0.95rem;
     line-height: 1.8;
     overflow-wrap: anywhere;
+    white-space: pre-line;
 }
 
 .listing-summary-meta {
@@ -152,37 +146,35 @@ main {
     font-size: 0.8rem;
 }
 
-.contact-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 46px;
-    padding: 0 22px;
-    border: 1px solid var(--accent);
-    border-radius: 6px;
-    background: var(--accent);
-    color: var(--bg);
-    font-weight: 600;
-    text-align: center;
-    text-decoration: none;
-    transition: background 0.2s ease, color 0.2s ease;
+.listing-owner {
+    max-width: 100%;
+    color: var(--muted);
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
 }
 
-.contact-button:hover {
-    background: transparent;
+.listing-owner p {
+    margin: 0 0 8px;
+}
+
+.listing-owner a {
     color: var(--accent);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+}
+
+.listing-owner a:hover {
+    text-decoration: underline;
 }
 
 /* Property details */
 
-.listing-detail-information,
-.listing-contact-information {
+.listing-detail-information {
     padding: 28px;
     border-top: 1px solid rgba(138, 143, 154, 0.2);
 }
 
-.listing-detail-information h2,
-.listing-contact-information h2 {
+.listing-detail-information h2 {
     margin: 0 0 24px;
     font-size: 1.7rem;
 }
@@ -217,33 +209,16 @@ main {
     overflow-wrap: anywhere;
 }
 
-.listing-contact-information p {
-    margin: 0;
-    color: var(--muted);
-    overflow-wrap: anywhere;
-}
-
-.listing-contact-information a {
-    color: var(--accent);
-    text-decoration: none;
-}
-
-.listing-contact-information a:hover {
-    text-decoration: underline;
-}
-
-/* Property map preview */
+/* Map preview */
 
 .map-preview {
     padding: 20px;
     border-top: 1px solid rgba(138, 143, 154, 0.2);
 }
 
-/* Map frame */
-
 .map-preview-frame {
-    overflow: hidden;
     height: 360px;
+    overflow: hidden;
     border: 1px solid var(--border-strong);
     border-radius: var(--radius);
     background: #17191d;
@@ -253,20 +228,16 @@ main {
     display: block;
     width: 100%;
     height: 100%;
-}
-
-/* Map component's actual Leaflet container */
-
-app-moon-map {
-    display: block;
-    width: 100%;
-    height: 100%;
     min-width: 0;
 }
 
-/* Responsive layout */
+/* Tablet */
 
 @media (max-width: 900px) {
+    main {
+        padding: 32px 4% 48px;
+    }
+
     .listing-detail-hero {
         grid-template-columns: minmax(0, 1fr);
         gap: 24px;
@@ -286,26 +257,40 @@ app-moon-map {
 
     .detail-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
     }
 }
 
+/* Mobile */
+
 @media (max-width: 520px) {
+    main {
+        padding: 24px 16px 40px;
+    }
+
     .back-link {
         margin-bottom: 20px;
     }
 
     .listing-detail-hero,
-    .listing-detail-information,
-    .listing-contact-information {
+    .listing-detail-information {
         padding: 18px;
     }
 
-    .listing-detail-summary h1 {
-        font-size: 2rem;
+    .listing-detail-hero {
+        gap: 20px;
+    }
+
+    .listing-detail-summary {
+        padding: 0;
     }
 
     .listing-price {
         font-size: 1.75rem;
+    }
+
+    .listing-description {
+        line-height: 1.7;
     }
 
     .detail-grid {
@@ -313,7 +298,15 @@ app-moon-map {
         gap: 12px;
     }
 
-    .contact-button {
-        width: 100%;
+    .listing-detail-information h2 {
+        font-size: 1.4rem;
+    }
+
+    .map-preview {
+        padding: 12px;
+    }
+
+    .map-preview-frame {
+        height: 280px;
     }
 }

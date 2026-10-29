@@ -1,144 +1,230 @@
+
 .hero {
-    min-height: 720px;
-    height: calc(100vh - 76px);
     position: relative;
+    min-height: 620px;
+    height: calc(100svh - 76px);
     overflow: hidden;
+    isolation: isolate;
 }
 
-.hero>img {
+.hero > img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center 25%;
-    position: absolute;
     filter: grayscale(1) contrast(1.08);
+    z-index: -2;
 }
 
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, rgba(8, 10, 8, .87) 0%, rgba(8, 10, 8, .45) 47%, rgba(8, 10, 8, .12) 78%), linear-gradient(0deg, rgba(0, 0, 0, .45), transparent 48%);
+    z-index: -1;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(15, 15, 28, 0.78) 0%,
+            rgba(15, 15, 28, 0.48) 55%,
+            rgba(15, 15, 28, 0.2) 100%
+        ),
+        linear-gradient(
+            0deg,
+            rgba(15, 15, 28, 0.35),
+            transparent 55%
+        );
 }
 
 .hero-content {
     position: relative;
-    z-index: 1;
-
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    text-align: center;
-
+    justify-content: center;
     width: 100%;
-    max-width: 1200px;
-    min-height: 100vh;
+    min-height: 100%;
+    max-width: 1240px;
     margin-inline: auto;
-    padding: 0 32px;
-
-    color: white;
+    padding: 64px 32px;
+    color: var(--text-inverse);
+    text-align: center;
 }
 
 .hero-content h1 {
-    max-width: 700px;
-    margin: 0 0 32px;
-    font-size: clamp(3rem, 6vw, 5.5rem);
+    max-width: 780px;
+    margin: 0 0 40px;
+    color: var(--text-inverse);
+    font-size: clamp(2.8rem, 6vw, 5.2rem);
     font-weight: 600;
-    line-height: 1.05;
-    letter-spacing: -0.045em;
-    color: #fff;
+    line-height: 1.04;
+    letter-spacing: -0.05em;
     text-wrap: balance;
-    transform: translateY(-60px);
 }
 
-.hero-content h1 span{
-    color: var(--accent);
+.hero-content h1 span {
+    color: #A99DFF;
 }
 
-form {
-    display: flex;
-    align-items: stretch;
-    gap: 0;
+/* Search panel */
 
+.search-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1.2fr auto;
+    align-items: end;
+    gap: 12px;
     width: 100%;
-    max-width: 1100px;
+    max-width: 1120px;
     min-width: 0;
-    padding: 8px;
-
-    background-color: var(--surface);
+    padding: 16px;
     color: var(--text);
-    border: 1px solid rgba(236, 232, 223, 0.12);
-    border-radius: var(--radius);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(12, 12, 30, 0.22);
 }
 
-label {
-    flex: 1 1 0;
-    min-width: 0;
-    padding: 12px 16px;
-
+.search-form label {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 9px;
+    min-width: 0;
+    padding: 4px;
+    color: var(--muted);
+    text-align: left;
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.015em;
 }
 
-label+label {
-    border-left: var(--border-weight) solid rgba(138, 143, 154, 0.3);
-}
-
-select,
-input {
+.search-form select,
+.search-form input {
     width: 100%;
     min-width: 0;
-    padding: 0;
-    border: none;
+    height: 46px;
+    padding: 0 12px;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-control);
     outline: none;
-    background: transparent;
-    color: var(--text);
     font: inherit;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     font-weight: 500;
+    letter-spacing: normal;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-select {
+.search-form select {
     cursor: pointer;
 }
 
-select option {
-    background-color: var(--surface);
+.search-form select option {
     color: var(--text);
+    background: var(--surface);
 }
 
-input::placeholder {
+.search-form input::placeholder {
     color: var(--muted);
+    opacity: 0.85;
 }
 
-form button {
-    flex: 0 0 auto;
-    align-self: stretch;
-    margin-left: 8px;
-    padding: 0 24px;
-    white-space: nowrap;
+.search-form select:focus-visible,
+.search-form input:focus-visible {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
 
-    align-self: stretch;
-    margin-left: 8px;
+.search-form button {
+    align-self: end;
+    min-height: 46px;
     padding: 0 26px;
-    border: none;
-    border-radius: calc(var(--radius) - 4px);
-    background-color: var(--accent);
-    color: #12141a;
+    border: 1px solid transparent;
+    border-radius: var(--radius-control);
+    background: var(--accent);
+    color: var(--text-inverse);
+    font: inherit;
     font-size: 0.9rem;
-    font-weight: 700;
+    font-weight: 650;
+    white-space: nowrap;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-form button {
-    background-color: var(--accent);
+.search-form button:hover {
+    background: var(--accent-hover);
+}
+
+.search-form button:active {
+    transform: scale(0.98);
 }
 
 .search-error {
-    color: #e99a9a;
-    font-size: 0.75rem;
-    font-weight: 400;
+    margin-top: 12px;
+    color: #FFD0D4;
+    font-size: 0.82rem;
+    text-align: center;
+}
+
+/* Tablet */
+
+@media (max-width: 900px) {
+    .hero {
+        height: auto;
+        min-height: 680px;
+    }
+
+    .hero-content {
+        padding: 80px 24px;
+    }
+
+    .search-form {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        max-width: 680px;
+    }
+
+    .search-form button {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 520px) {
+    .hero {
+        min-height: 0;
+    }
+
+    .hero-content {
+        padding: 76px 18px 56px;
+    }
+
+    .hero-content h1 {
+        margin-bottom: 28px;
+        font-size: clamp(2.5rem, 11vw, 3.5rem);
+    }
+
+    .search-form {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+        padding: 14px;
+        border-radius: 16px;
+    }
+
+    .search-form label {
+        gap: 7px;
+    }
+
+    .search-form select,
+    .search-form input {
+        height: 44px;
+    }
+
+    .search-form button {
+        grid-column: auto;
+        min-height: 48px;
+        margin-top: 4px;
+    }
 }
