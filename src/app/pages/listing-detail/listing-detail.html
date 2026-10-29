@@ -45,6 +45,8 @@
         <p>Published by {{ o.displayName }}</p>
         @if (o.contactEmail) {
         <p>Contact: <a [href]="'mailto:' + o.contactEmail">{{ o.contactEmail }}</a></p>
+        } @else {
+        <p class="muted">The seller hasn't shared a contact email yet.</p>
         }
         }
       </div>

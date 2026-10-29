@@ -19,6 +19,7 @@ import { NotificationService } from '../../services/notification';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { ImageService } from '../../services/image';
+import { ProfileService } from '../../services/profile';
 
 @Component({
   imports: [Header, ReactiveFormsModule, RouterLink, RouterLinkActive, MoonMap, Footer],
@@ -100,7 +101,7 @@ export class Publish implements OnDestroy {
 
   private overlapValidator(group: AbstractControl): ValidationErrors | null {
     const v = group.value;
-    if (v.status === 'sold') return null; // a sold plot no longer blocks anything
+    if (v.status === 'sold') return null;
     if ([v.latitude, v.longitude, v.widthKm, v.heightKm].some((x) => x == null)) {
       return null;
     }
@@ -122,6 +123,7 @@ export class Publish implements OnDestroy {
     private route: ActivatedRoute,
     private auth: AuthService,
     private images: ImageService,
+    private profiles: ProfileService,
   ) {
     this.form.valueChanges.subscribe((value) => {
       this.previewCenter = [Number(value.latitude), Number(value.longitude)];
@@ -181,7 +183,6 @@ export class Publish implements OnDestroy {
         this.router.navigate([current ? '/my-listings' : '/listings']);
       },
       error: () => {
-        // Don't leave an orphaned file behind if the listing wasn't saved
         if (uploadedPath) void this.images.remove(uploadedPath);
         this.notifications.error(
           current ? 'Could not update the listing.' : 'Could not publish the listing.',

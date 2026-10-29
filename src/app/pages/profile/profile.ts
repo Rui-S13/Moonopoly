@@ -78,8 +78,14 @@ export class ProfilePage implements OnInit {
     try {
       await this.profiles.updateMyProfile(displayName.trim(), contactEmail.trim());
       this.notifications.success('Profile saved.');
-    } catch {
-      this.notifications.error('Could not save your profile. Please try again.');
+    } catch (e) {
+      if (e instanceof Error && e.message === 'CONTACT_REQUIRED') {
+        this.notifications.error(
+          'You have active listings, so a contact email is required. Mark them as sold or delete them first.',
+        );
+      } else {
+        this.notifications.error('Could not save your profile. Please try again.');
+      }
     } finally {
       this.saving.set(false);
     }
