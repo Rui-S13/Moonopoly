@@ -58,6 +58,8 @@
     /* Text over the home page hero image */
     --on-hero-muted: rgba(255, 255, 255, 0.8);
     --on-hero-border: rgba(255, 255, 255, 0.7);
+    --accent-on-dark: #A99DFF;
+    --error-on-dark: #FFD0D4;
 }
 
 * {
