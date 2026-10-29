@@ -39,7 +39,6 @@ export function plotsOverlap(a: Plot, b: Plot): boolean {
   return Math.abs(x) < (a.widthKm + b.widthKm) / 2 && Math.abs(y) < (a.heightKm + b.heightKm) / 2;
 }
 
-/** The point reached by moving xKm east and yKm north from `from`. */
 export function destination(from: Coordinates, xKm: number, yKm: number): Coordinates {
   const angularDistance = Math.hypot(xKm, yKm) / MOON_RADIUS_KM;
   const bearing = Math.atan2(xKm, yKm);

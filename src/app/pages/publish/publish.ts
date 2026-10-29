@@ -100,6 +100,7 @@ export class Publish implements OnDestroy {
 
   private overlapValidator(group: AbstractControl): ValidationErrors | null {
     const v = group.value;
+    if (v.status === 'sold') return null; // a sold plot no longer blocks anything
     if ([v.latitude, v.longitude, v.widthKm, v.heightKm].some((x) => x == null)) {
       return null;
     }
@@ -108,7 +109,9 @@ export class Publish implements OnDestroy {
       widthKm: v.widthKm,
       heightKm: v.heightKm,
     };
-    const clash = this.existing.find((l) => l.id !== this.editing()?.id && plotsOverlap(mine, l));
+    const clash = this.existing.find(
+      (l) => l.status !== 'sold' && l.id !== this.editing()?.id && plotsOverlap(mine, l),
+    );
     return clash ? { overlap: clash.id } : null;
   }
 
