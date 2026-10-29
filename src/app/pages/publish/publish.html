@@ -3,15 +3,15 @@
 <main class="page-container">
     <h1>{{ editing() ? 'Edit listing' : 'Publish a listing' }}</h1>
 
+    @if (!editing() && profiles.profileReady() && !profiles.hasContactEmail()) {
+    <div class="notice" role="alert">
+        Add a public contact email to your profile before publishing, so buyers can reach you.
+        <a routerLink="/profile">Go to your profile</a>
+    </div>
+    }
+
     <div class="publish-layout">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            @if (!editing() && profiles.profileReady() && !profiles.hasContactEmail()) {
-            <div class="notice" role="alert">
-                Add a public contact email to your profile before publishing, so buyers can reach you.
-                <a routerLink="/profile">Go to your profile</a>
-            </div>
-            }
-
             @if (editing()) {
             <div class="form-field">
                 <label for="status">Status</label>

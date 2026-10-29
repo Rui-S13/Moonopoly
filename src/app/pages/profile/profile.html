@@ -18,7 +18,7 @@
         </div>
 
         <div class="field">
-            <label for="contactEmail">Public contact email (optional)</label>
+            <label for="contactEmail">Public contact email</label>
             <input id="contactEmail" type="email" formControlName="contactEmail" autocomplete="email" />
             <small class="hint">Public. Required to publish listings, and it can't be removed while you have active
                 ones.</small>
@@ -32,6 +32,75 @@
         </button>
     </form>
     }
+
+    <section class="account-section">
+        <h2>Login details</h2>
+        <p class="muted">
+            Private. These control how you log in, and changing them doesn't change your public name
+            or contact email above.
+        </p>
+
+        <h3>Email</h3>
+        <p class="muted">Current: <strong>{{ currentEmail() }}</strong></p>
+
+        @if (pendingEmail()) {
+        <p class="notice" role="status">
+            We sent a confirmation link for <strong>{{ pendingEmail() }}</strong>. Until you confirm it,
+            you keep logging in with your current email.
+        </p>
+        }
+
+        <form [formGroup]="emailForm" (ngSubmit)="onChangeEmail()" class="profile-form">
+            <div class="field">
+                <label for="newEmail">New email</label>
+                <input id="newEmail" type="email" formControlName="newEmail" autocomplete="email" />
+                @if (emailForm.controls.newEmail.touched && emailForm.controls.newEmail.invalid) {
+                <small class="field-error">Enter a valid email address.</small>
+                }
+            </div>
+            <button type="submit" [disabled]="emailForm.invalid || savingEmail()">
+                {{ savingEmail() ? 'Sending...' : 'Change email' }}
+            </button>
+        </form>
+
+        <h3>Password</h3>
+
+        <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="profile-form">
+            <div class="field">
+                <label for="currentPassword">Current password</label>
+                <input id="currentPassword" type="password" formControlName="currentPassword"
+                    autocomplete="current-password" />
+                @if (passwordForm.controls.currentPassword.touched && passwordForm.controls.currentPassword.invalid) {
+                <small class="field-error">Enter your current password.</small>
+                }
+            </div>
+
+            <div class="field">
+                <label for="newPassword">New password</label>
+                <input id="newPassword" type="password" formControlName="newPassword" autocomplete="new-password" />
+                @if (passwordForm.controls.newPassword.touched && passwordForm.controls.newPassword.invalid) {
+                <small class="field-error">Use at least 8 characters.</small>
+                }
+            </div>
+
+            <div class="field">
+                <label for="confirmPassword">Confirm new password</label>
+                <input id="confirmPassword" type="password" formControlName="confirmPassword"
+                    autocomplete="new-password" />
+                @if (passwordForm.controls.confirmPassword.touched && passwordForm.hasError('passwordMismatch')) {
+                <small class="field-error">The passwords don't match.</small>
+                }
+            </div>
+
+            @if (passwordForm.hasError('samePassword')) {
+            <small class="field-error">The new password must be different from the current one.</small>
+            }
+
+            <button type="submit" [disabled]="passwordForm.invalid || savingPassword()">
+                {{ savingPassword() ? 'Saving...' : 'Change password' }}
+            </button>
+        </form>
+    </section>
 
     <section class="danger-zone">
         <h2>Delete account</h2>

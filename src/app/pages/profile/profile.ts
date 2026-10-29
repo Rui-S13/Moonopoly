@@ -1,5 +1,12 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { AuthService } from '../../services/auth';
 import { ProfileService } from '../../services/profile';
 import { NotificationService } from '../../services/notification';
@@ -30,6 +37,11 @@ export class ProfilePage implements OnInit {
   confirming = signal(false);
   confirmText = signal('');
   deleting = signal(false);
+
+  currentEmail = computed(() => this.auth.currentUser()?.email ?? '');
+  savingEmail = signal(false);
+  savingPassword = signal(false);
+  pendingEmail = signal('');
 
   form = new FormGroup({
     displayName: new FormControl('', {
@@ -95,6 +107,79 @@ export class ProfilePage implements OnInit {
     this.confirmText.set((event.target as HTMLInputElement).value);
   }
 
+  emailForm = new FormGroup({
+    newEmail: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
+  });
+
+  passwordForm = new FormGroup(
+    {
+      currentPassword: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      newPassword: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.minLength(8)],
+      }),
+      confirmPassword: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+    },
+    { validators: [passwordRules] },
+  );
+
+  async onChangeEmail(): Promise<void> {
+    if (this.emailForm.invalid) {
+      this.emailForm.markAllAsTouched();
+      return;
+    }
+
+    const newEmail = this.emailForm.getRawValue().newEmail.trim();
+    if (newEmail.toLowerCase() === this.currentEmail().toLowerCase()) {
+      this.notifications.info('That is already your account email.');
+      return;
+    }
+
+    this.savingEmail.set(true);
+    try {
+      await this.auth.changeEmail(newEmail);
+      this.pendingEmail.set(newEmail);
+      this.emailForm.reset();
+      this.notifications.success('Check your inbox to confirm the change.');
+    } catch {
+      this.notifications.error('Could not change your email. It may already be in use.');
+    } finally {
+      this.savingEmail.set(false);
+    }
+  }
+
+  async onChangePassword(): Promise<void> {
+    if (this.passwordForm.invalid) {
+      this.passwordForm.markAllAsTouched();
+      return;
+    }
+
+    const { currentPassword, newPassword } = this.passwordForm.getRawValue();
+    this.savingPassword.set(true);
+    try {
+      await this.auth.changePassword(currentPassword, newPassword);
+      this.passwordForm.reset();
+      this.notifications.success('Your password has been changed.');
+    } catch (e) {
+      this.notifications.error(
+        e instanceof Error && e.message === 'WRONG_PASSWORD'
+          ? 'Your current password is incorrect.'
+          : 'Could not change your password. Please try again.',
+      );
+    } finally {
+      this.savingPassword.set(false);
+    }
+  }
+
   async onDeleteAccount(): Promise<void> {
     if (this.confirmText() !== 'DELETE') return;
     this.deleting.set(true);
@@ -109,4 +194,15 @@ export class ProfilePage implements OnInit {
       this.deleting.set(false);
     }
   }
+}
+
+function passwordRules(group: AbstractControl): ValidationErrors | null {
+  const current = group.get('currentPassword')?.value;
+  const next = group.get('newPassword')?.value;
+  const confirm = group.get('confirmPassword')?.value;
+
+  const errors: ValidationErrors = {};
+  if (next && confirm && next !== confirm) errors['passwordMismatch'] = true;
+  if (current && next && current === next) errors['samePassword'] = true;
+  return Object.keys(errors).length ? errors : null;
 }
