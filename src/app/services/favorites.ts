@@ -7,13 +7,14 @@ import { NotificationService } from './notification';
 @Injectable({ providedIn: 'root' })
 export class FavoritesService {
   private readonly supabase = inject(SupabaseService).supabaseClient;
-  private readonly auth = inject(AuthService);
-  private readonly router = inject(Router);
-  private readonly notifications = inject(NotificationService);
 
   readonly ids = signal<number[]>([]);
 
-  constructor() {
+  constructor(
+    private readonly auth: AuthService,
+    private readonly router: Router,
+    private readonly notifications: NotificationService,
+  ) {
     effect(() => {
       if (this.auth.currentUser()) {
         this.load();

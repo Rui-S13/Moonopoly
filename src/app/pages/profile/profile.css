@@ -146,7 +146,7 @@ main {
 .danger-zone .danger {
     border-color: var(--error);
     background: var(--error);
-    color: #fff;
+    color: var(--surface);
 }
 
 .danger-zone .danger:hover:not(:disabled) {

@@ -21,16 +21,14 @@ main {
 }
 
 /* Listing card */
-
 .listing-detail-card {
     overflow: hidden;
     background: var(--surface);
-    border: 1px solid rgba(138, 143, 154, 0.2);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
 }
 
 /* Hero section */
-
 .listing-detail-hero {
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
@@ -59,9 +57,8 @@ main {
     top: 16px;
     left: 16px;
     padding: 7px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 4px;
-    background: rgba(18, 20, 26, 0.88);
+    background: var(--badge-bg);
     color: var(--text);
     font-size: 0.75rem;
     font-weight: 600;
@@ -134,7 +131,7 @@ main {
 
 .listing-summary-meta span {
     padding: 8px 12px;
-    border: 1px solid rgba(138, 143, 154, 0.25);
+    border: 1px solid var(--border);
     border-radius: 6px;
     color: var(--text);
     font-size: 0.85rem;
@@ -171,7 +168,7 @@ main {
 
 .listing-detail-information {
     padding: 28px;
-    border-top: 1px solid rgba(138, 143, 154, 0.2);
+    border-top: 1px solid var(--border);
 }
 
 .listing-detail-information h2 {
@@ -191,7 +188,7 @@ main {
     gap: 8px;
     min-width: 0;
     padding: 16px;
-    border: 1px solid rgba(138, 143, 154, 0.18);
+    border: 1px solid var(--border);
     border-radius: 8px;
     background: var(--bg);
 }
@@ -213,7 +210,7 @@ main {
 
 .map-preview {
     padding: 20px;
-    border-top: 1px solid rgba(138, 143, 154, 0.2);
+    border-top: 1px solid var(--border);
 }
 
 .map-preview-frame {

@@ -7,8 +7,8 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     min-height: 100vh;
-    background: #ffffff;
-    color: #202020;
+    background: var(--surface);
+    color: var(--text);
 }
 
 /* Left half: image */
@@ -44,7 +44,7 @@
     bottom: 48px;
     left: 48px;
     right: 32px;
-    color: #ffffff;
+    color: var(--surface);
 }
 
 .image-caption span {
@@ -77,14 +77,14 @@
 .back-link {
     display: inline-block;
     margin-bottom: 56px;
-    color: #666666;
+    color: var(--muted);
     font-size: 0.9rem;
     text-decoration: none;
     cursor: pointer;
 }
 
 .back-link:hover {
-    color: #111111;
+    color: var(--text);
 }
 
 .login-content header {
@@ -100,7 +100,7 @@
 
 .login-content header p {
     margin: 0;
-    color: #737373;
+    color: var(--muted);
     line-height: 1.6;
 }
 
@@ -120,30 +120,30 @@
     width: 100%;
     box-sizing: border-box;
     padding: 14px 15px;
-    border: 1px solid #dedede;
+    border: 1px solid var(--border);
     border-radius: 7px;
-    background: #ffffff;
-    color: #202020;
+    background: var(--surface);
+    color: var(--text);
     font: inherit;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .login-content input::placeholder {
-    color: #a0a0a0;
+    color: var(--muted);
 }
 
 .login-content input:focus {
-    border-color: #555555;
+    border-color: var(--border);
     box-shadow: 0 0 0 3px rgb(0 0 0 / 5%);
 }
 
 .login-content input.ng-invalid.ng-touched {
-    border-color: #c62828;
+    border-color: var(--error);
 }
 
 .error-message {
-    color: #c62828;
+    color: var(--error);
     font-size: 0.82rem;
     line-height: 1.4;
 }
@@ -153,8 +153,8 @@
     padding: 15px;
     border: none;
     border-radius: 7px;
-    background: #202020;
-    color: #ffffff;
+    background: var(--text);
+    color: var(--surface);
     font: inherit;
     font-weight: 600;
     cursor: pointer;
@@ -162,12 +162,12 @@
 }
 
 .login-content button:hover {
-    background: #414141;
+    background: var(--accent);
 }
 
 .login-content button:focus-visible,
 .back-link:focus-visible {
-    outline: 2px solid #555555;
+    outline: 2px solid var(--muted);
     outline-offset: 4px;
 }
 

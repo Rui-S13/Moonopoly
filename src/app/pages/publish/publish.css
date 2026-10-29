@@ -95,7 +95,7 @@ form textarea::placeholder {
 
 .form-field small,
 .form-error {
-    color: #e59b9b;
+    color: var(--error);
     font-size: 0.8rem;
     line-height: 1.5;
 }
@@ -226,7 +226,7 @@ form button[type="submit"]:disabled {
 }
 
 .error-message {
-    color: #dc2626;
+    color: var(--error);
     font-size: 0.875rem;
 }
 

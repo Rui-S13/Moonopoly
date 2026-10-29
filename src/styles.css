@@ -60,6 +60,9 @@
     --on-hero-border: rgba(255, 255, 255, 0.7);
     --accent-on-dark: #A99DFF;
     --error-on-dark: #FFD0D4;
+
+    /* Status-Badge */
+    --badge-bg: rgba(18, 20, 26, 0.88)
 }
 
 * {

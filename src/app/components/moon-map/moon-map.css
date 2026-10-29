@@ -33,12 +33,12 @@
   opacity: 0.55;
 }
 .property-marker-icon.status-sold svg path {
-  fill: #8a8f9a;
+  fill: var(--marker-sold);
 }
 
 .property-marker.selected-marker .property-marker-icon {
   transform: scale(1.35);
 }
 .property-marker.selected-marker .property-marker-icon svg path {
-  fill: #e8590c;
+  fill: var(--marker-highlight);
 }
