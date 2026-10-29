@@ -8,6 +8,7 @@ import { NotificationService } from '../../services/notification';
 import { Header } from '../../components/header/header';
 import { Footer } from '../../components/footer/footer';
 import { ImageService } from '../../services/image';
+import { plotsOverlap } from '../../utils/plot-geometry';
 
 @Component({
   selector: 'app-my-listings',
@@ -16,11 +17,11 @@ import { ImageService } from '../../services/image';
   styleUrl: './my-listings.css',
 })
 export class MyListings implements OnInit {
-  constructor (
+  constructor(
     private listingService: ListingService,
     private auth: AuthService,
     private notifications: NotificationService,
-    private images: ImageService
+    private images: ImageService,
   ) {}
 
   listings = signal<Listing[]>([]);
@@ -46,13 +47,45 @@ export class MyListings implements OnInit {
   }
 
   onStatusChange(listing: Listing, event: Event): void {
-    const status = (event.target as HTMLSelectElement).value as ListingStatus;
+    const select = event.target as HTMLSelectElement;
+    const status = select.value as ListingStatus;
+
+    if (listing.status === 'sold' && status !== 'sold') {
+      this.listingService.getListings().subscribe({
+        next: (all) => {
+          const clash = all.some(
+            (l) => l.id !== listing.id && l.status !== 'sold' && plotsOverlap(listing, l),
+          );
+          if (clash) {
+            select.value = listing.status;
+            this.notifications.error(
+              'Another active listing already covers this area, so this one cannot be reactivated.',
+            );
+            return;
+          }
+          this.saveStatus(listing, status, select);
+        },
+        error: () => {
+          select.value = listing.status;
+          this.notifications.error('Could not check the area. Please try again.');
+        },
+      });
+      return;
+    }
+
+    this.saveStatus(listing, status, select);
+  }
+
+  private saveStatus(listing: Listing, status: ListingStatus, select: HTMLSelectElement): void {
     this.listingService.updateStatus(listing.id, status).subscribe({
       next: (updated) => {
         this.listings.update((list) => list.map((l) => (l.id === updated.id ? updated : l)));
         this.notifications.success('Status updated.');
       },
-      error: () => this.notifications.error('Could not update the status.'),
+      error: () => {
+        select.value = listing.status;
+        this.notifications.error('Could not update the status.');
+      },
     });
   }
 

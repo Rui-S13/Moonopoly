@@ -21,6 +21,14 @@
       }
     </select>
 
+    <select formControlName="status" aria-label="Listing status">
+      <option value="active">Available &amp; reserved</option>
+      <option value="available">Available only</option>
+      <option value="reserved">Reserved only</option>
+      <option value="sold">Sold</option>
+      <option value="all">All listings</option>
+    </select>
+
     <label class="favorites-filter">
       <input type="checkbox" formControlName="favoritesOnly" />
 
