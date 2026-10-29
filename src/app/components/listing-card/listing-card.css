@@ -151,26 +151,30 @@
 
 /* ---------- Actions ---------- */
 .listing-actions {
-  display: flex;
-  gap: 10px;
-  padding-top: 14px;
-  border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
 }
 
 .favorite-button,
 .details-button {
     display: inline-flex;
+    flex: 1 1 130px;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    min-width: 0;
     min-height: 42px;
-    padding: 10px 14px;
+    padding: 10px 12px;
     border-radius: 8px;
     font: inherit;
     font-size: 0.82rem;
     font-weight: 600;
     text-align: center;
     text-decoration: none;
+    white-space: nowrap;
     cursor: pointer;
     transition:
         background-color 0.2s ease,
@@ -179,7 +183,9 @@
 }
 
 .favorite-button {
-    flex: 0 0 auto;
+    flex: 0 0 46px;
+    padding: 0;
+    font-size: 1.1rem;
     border: 1px solid var(--border-strong);
     background: transparent;
     color: var(--text);

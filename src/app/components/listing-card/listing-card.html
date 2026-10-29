@@ -50,8 +50,9 @@
 
     <div class="listing-actions">
       <button type="button" class="favorite-button" [class.is-favorite]="isFavorite" [attr.aria-pressed]="isFavorite"
+        [attr.aria-label]="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
         (click)="onFavorite(); $event.stopPropagation()">
-        {{ isFavorite ? '♥ Saved' : '♡ Favorite' }}
+        {{ isFavorite ? '♥' : '♡' }}
       </button>
 
       <a class="details-button" [routerLink]="['/listings', listing.id]">

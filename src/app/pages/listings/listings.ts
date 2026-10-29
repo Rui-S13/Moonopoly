@@ -1,5 +1,13 @@
 import { Header } from '../../components/header/header';
-import { Component, OnInit, signal, HostListener, computed } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  signal,
+  HostListener,
+  computed,
+  afterNextRender,
+  OnDestroy,
+} from '@angular/core';
 import { Listing } from '../../models/listing.models';
 import { ListingType } from '../../models/listing.models';
 import { ListingService } from '../../services/listing';
@@ -63,6 +71,12 @@ export class Listings implements OnInit {
   initialZoom = 1;
   private lastFilterKey = '';
 
+  showMap = signal(false);
+  filtersOpen = signal(false);
+
+  private mq?: MediaQueryList;
+  private mqHandler = (e: MediaQueryListEvent) => this.onBreakpoint(e.matches);
+
   search = new FormGroup(
     {
       type: new FormControl<ListingType | null>(null),
@@ -86,6 +100,11 @@ export class Listings implements OnInit {
   ) {
     this.regions = this.moon.getRegionNames();
     this.readInitialView();
+    afterNextRender(() => {
+      this.mq = window.matchMedia('(min-width: 901px)');
+      this.onBreakpoint(this.mq.matches);
+      this.mq.addEventListener('change', this.mqHandler);
+    });
   }
 
   ngOnInit(): void {
@@ -151,6 +170,19 @@ export class Listings implements OnInit {
       this.initialCenter = [lat, lng];
       this.initialZoom = z;
     }
+  }
+
+  private onBreakpoint(wide: boolean): void {
+    this.showMap.set(wide);
+    if (!wide) {
+      this.bounds = null;
+      this.clearSelection();
+      this.updateVisible();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.mq?.removeEventListener('change', this.mqHandler);
   }
 
   private keyFromParams(params: ParamMap): string {
