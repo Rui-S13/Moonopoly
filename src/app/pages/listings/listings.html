@@ -1,7 +1,11 @@
 <app-header />
 
 <main>
-  <form [formGroup]="search" class="filters-form">
+  <button type="button" class="filters-toggle" [attr.aria-expanded]="filtersOpen()"
+    (click)="filtersOpen.set(!filtersOpen())">
+    {{ filtersOpen() ? 'Hide filters' : 'Filters' }}
+  </button>
+  <form [formGroup]="search" class="filters-form" [class.collapsed]="!filtersOpen()">
     <select id="type" formControlName="type" aria-label="Property type">
       <option [ngValue]="null">All property types</option>
       <option value="sale">For sale</option>
@@ -60,18 +64,25 @@
     }
   </form>
 
-  <div class="listings-layout">
+  <div class="listings-layout" [class.no-map]="!showMap()">
+    @if (showMap()) {
     <aside class="map-panel">
       <app-moon-map [listings]="filteredListings" [center]="initialCenter" [zoom]="initialZoom"
         [highlightedId]="highlightedId()" [selectedId]="selectedId()" (boundsChange)="onBoundsChange($event)"
         (viewChange)="onViewChange($event)" (listingSelected)="onPinSelected($event)"
         (listingOpened)="openListing($event)" (mapClicked)="clearSelection()" />
     </aside>
+    }
 
     <section class="results">
 
       <div class="results-toolbar">
-        <p class="results-count">{{ visibleListings().length }} of {{ filteredListings.length }} listings in this area
+        <p class="results-count">
+          @if (showMap()) {
+          {{ visibleListings().length }} of {{ filteredListings.length }} listings in this area
+          } @else {
+          {{ filteredListings.length }} listings
+          }
         </p>
 
         <label class="sort-control" for="sortBy">
@@ -86,7 +97,14 @@
       </div>
       <div class="results-content">
         @if (sortedListings.length === 0) {
-        <p class="no-listings">No plots in this area. Move or zoom out the map, or adjust your filters.</p>
+        <div class="empty-state">
+          <strong>No plots found</strong>
+          @if (showMap()) {
+          Move or zoom out the map, or adjust your filters.
+          } @else {
+          Try adjusting your filters.
+          }
+        </div>
         } @else {
         <div class="results-grid">
           @for (listing of sortedListings; track listing.id) {
