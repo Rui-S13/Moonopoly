@@ -3,8 +3,9 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/ro
 import { filter } from 'rxjs';
 import { AuthService } from '../../services/auth';
 import { NotificationService } from '../../services/notification';
-import { Profile, ProfileService } from '../../services/profile';
+import { ProfileService } from '../../services/profile';
 import { Logo } from '../logo/logo';
+import { NavigationHistory } from '../../services/navigation-history';
 
 @Component({
   selector: 'app-header',
@@ -22,9 +23,9 @@ export class Header {
     public auth: AuthService,
     private notifications: NotificationService,
     public profiles: ProfileService,
+    private navHistory: NavigationHistory,
   ) {
     this.isHomePage = this.router.url === '/';
-
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event) => {
@@ -35,6 +36,16 @@ export class Header {
   @HostListener('window:scroll')
   onWindowScroll(): void {
     this.isScrolled = window.scrollY > 20;
+  }
+
+  openListings(event: MouseEvent): void {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.button !== 0) return;
+
+    const last = this.navHistory.lastListingsUrl();
+    if (!last) return;
+
+    event.preventDefault();
+    this.router.navigateByUrl(last);
   }
 
   logout(): void {
