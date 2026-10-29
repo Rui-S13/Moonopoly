@@ -232,6 +232,7 @@ form button[type="submit"]:disabled {
 
 .notice {
     padding: 12px 14px;
+    margin-bottom: 15px;
     background: var(--status-reserved-bg);
     color: var(--status-reserved-text);
     border-radius: var(--radius);
