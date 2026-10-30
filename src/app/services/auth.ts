@@ -7,6 +7,7 @@ import { SupabaseService } from './supabase-service';
 export class AuthService {
   private readonly supabase = inject(SupabaseService).supabaseClient;
   readonly currentUser = signal<User | null>(null);
+  readonly recoveryMode = signal(false);
 
   constructor() {
     this.supabase.auth.onAuthStateChange((_event, session) => {
@@ -48,6 +49,18 @@ export class AuthService {
   async getUserId(): Promise<string | null> {
     const { data } = await this.supabase.auth.getSession();
     return data.session?.user.id ?? null;
+  }
+
+  async sendPasswordReset(email: string): Promise<void> {
+    const redirectTo = new URL('reset-password', document.baseURI).href;
+    const { error } = await this.supabase.auth.resetPasswordForEmail(email, { redirectTo });
+    if (error) throw error;
+  }
+
+  async setNewPassword(newPassword: string): Promise<void> {
+    const { error } = await this.supabase.auth.updateUser({ password: newPassword });
+    if (error) throw error;
+    this.recoveryMode.set(false);
   }
 
   async changePassword(currentPassword: string, newPassword: string): Promise<void> {

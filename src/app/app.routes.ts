@@ -9,6 +9,8 @@ import { Login } from './pages/login/login';
 import { Signup } from './pages/signup/signup';
 import { MyListings } from './pages/my-listings/my-listings';
 import { ProfilePage } from './pages/profile/profile';
+import { ForgotPasswordPage } from './pages/forgot-password/forgot-password';
+import { ResetPasswordPage } from './pages/reset-password/reset-password';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -20,6 +22,8 @@ export const routes: Routes = [
   { path: 'signup', component: Signup },
   { path: 'listings/:id/edit', component: Publish, canActivate: [authGuard] },
   { path: 'my-listings', component: MyListings, canActivate: [authGuard] },
-  { path: 'profile', component: ProfilePage, canActivate: [authGuard]},
+  { path: 'profile', component: ProfilePage, canActivate: [authGuard] },
+  { path: 'forgot-password', component: ForgotPasswordPage },
+  { path: 'reset-password', component: ResetPasswordPage },
   { path: '**', redirectTo: '' },
 ];

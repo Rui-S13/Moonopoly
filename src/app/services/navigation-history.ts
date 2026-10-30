@@ -50,6 +50,6 @@ export class NavigationHistory {
   }
 
   private isAuthPage(url: string): boolean {
-    return /^\/(login|signup)(\?|\/|$)/.test(url);
+    return /^\/(login|signup|forgot-password|reset-password)(\?|\/|$)/.test(url);
   }
 }
