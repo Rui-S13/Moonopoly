@@ -36,6 +36,7 @@
                 <label for="login-password">Password</label>
                 <input type="password" id="login-password" formControlName="password" autocomplete="current-password"
                     placeholder="Enter your password" />
+                <a routerLink="/forgot-password">Forgot your password?</a>
 
                 @if (form.controls.password.touched && form.controls.password.hasError('required')) {
                 <small class="error-message">Password is required.</small>
