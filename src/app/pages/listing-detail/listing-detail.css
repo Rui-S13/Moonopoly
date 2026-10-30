@@ -228,6 +228,63 @@ main {
     min-width: 0;
 }
 
+/* Listing actions */
+
+.listing-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 28px;
+    border-top: 1px solid var(--border);
+}
+
+.listing-actions a,
+.listing-actions button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 42px;
+    padding: 10px 20px;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+/* Edit */
+
+.listing-actions a {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.listing-actions a:hover {
+    background: var(--surface);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* Delete */
+
+.listing-actions button {
+    background: transparent;
+    border-color: var(--error);
+    color: var(--error);
+}
+
+.listing-actions button:hover {
+    background: var(--error);
+    color: var(--surface);
+}
+
 /* Tablet */
 
 @media (max-width: 900px) {
