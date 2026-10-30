@@ -67,7 +67,7 @@
                 </button>
             </form>
             @if (signUpError()) {
-            <small>Incorrect email or password.</small>
+            <small class="field-error" role="alert">{{ signUpError() }}</small>
             }
 
             <div class="to-login-container">

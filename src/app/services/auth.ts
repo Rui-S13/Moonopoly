@@ -10,7 +10,8 @@ export class AuthService {
   readonly recoveryMode = signal(false);
 
   constructor() {
-    this.supabase.auth.onAuthStateChange((_event, session) => {
+    this.supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'PASSWORD_RECOVERY') this.recoveryMode.set(true);
       this.currentUser.set(session?.user ?? null);
     });
   }
@@ -28,7 +29,15 @@ export class AuthService {
       this.supabase.auth.signUp({
         email,
         password,
-        options: { data: { display_name: displayName } },
+        options: {
+          data: { display_name: displayName },
+        },
+      }),
+    ).pipe(
+      map(({ data, error }) => {
+        if (error) throw error;
+
+        return data;
       }),
     );
   }

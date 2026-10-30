@@ -212,7 +212,7 @@ export class Listings implements OnInit {
     if (this.search.invalid) return;
     const s = this.search.getRawValue();
 
-    this.lastFilterKey = this.keyFromForm(); // so our own change isn't processed twice
+    this.lastFilterKey = this.keyFromForm();
     this.router.navigate([], {
       relativeTo: this.route,
       replaceUrl: true,

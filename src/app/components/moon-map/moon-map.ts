@@ -110,6 +110,7 @@ export class MoonMap implements AfterViewInit, OnDestroy, OnChanges {
 
     if (this.previewMode) {
       this.map.dragging.disable();
+      this.map.zoomControl.remove();
       this.map.scrollWheelZoom.disable();
       this.map.doubleClickZoom.disable();
       this.map.touchZoom.disable();

@@ -36,7 +36,7 @@ export class ForgotPasswordPage implements OnDestroy {
     try {
       await this.auth.sendPasswordReset(this.form.getRawValue().email.trim());
       this.sent.set(true);
-      this.startCooldown(60); // matches Supabase's one-per-minute window per address
+      this.startCooldown(60);
     } catch (e) {
       const err = e as { status?: number; code?: string };
       if (err.status === 429) {

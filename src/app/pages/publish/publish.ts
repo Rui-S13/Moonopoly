@@ -172,7 +172,6 @@ export class Publish implements OnDestroy {
 
     request.subscribe({
       next: () => {
-        // The old photo is no longer used if it was replaced or removed
         if (current?.imageUrl && current.imageUrl !== imageUrl) {
           void this.images.remove(current.imageUrl);
         }
