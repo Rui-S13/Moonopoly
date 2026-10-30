@@ -104,6 +104,18 @@
           [propertyHeightKm]="l.heightKm" [fitTo]="l" />
       </div>
     </section>
+
+    @if (isOwner()) {
+    <section class="listing-actions">
+      <a [routerLink]="['/listings', l.id, 'edit']">
+        Edit listing
+      </a>
+
+      <button type="button" (click)="onDelete(l)">
+        Delete listing
+      </button>
+    </section>
+    }
   </article>
   } @else {
   <p>Listing not found.</p>

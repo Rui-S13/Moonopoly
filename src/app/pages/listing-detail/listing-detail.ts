@@ -12,6 +12,7 @@ import { Footer } from '../../components/footer/footer';
 import { ProfileService, Profile } from '../../services/profile';
 import { ImageService } from '../../services/image';
 import { NavigationHistory } from '../../services/navigation-history';
+import { AuthService } from '../../services/auth';
 
 @Component({
   imports: [Header, RouterLink, CurrencyPipe, DatePipe, MoonMap, Footer],
@@ -25,6 +26,7 @@ export class ListingDetail implements OnInit, OnDestroy {
   error = signal(false);
   private subscription?: Subscription;
   owner = signal<Profile | undefined>(undefined);
+  isOwner = signal(false);
 
   imageFailed: boolean = false;
 
@@ -36,6 +38,7 @@ export class ListingDetail implements OnInit, OnDestroy {
     private images: ImageService,
     private router: Router,
     private navHistory: NavigationHistory,
+    private auth: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -44,14 +47,21 @@ export class ListingDetail implements OnInit, OnDestroy {
         switchMap((params) => {
           this.loading.set(true);
           this.error.set(false);
+          this.isOwner.set(false);
+
           return this.listingService.getListing(Number(params.get('id')));
         }),
       )
       .subscribe({
-        next: (listing) => {
+        next: async (listing) => {
           this.listing.set(listing);
           this.loading.set(false);
+
           if (listing) {
+            const currentUserId = await this.auth.getUserId();
+
+            this.isOwner.set(currentUserId === listing.ownerId);
+
             this.profiles.getProfile(listing.ownerId).subscribe({
               next: (profile) => this.owner.set(profile),
               error: () => this.owner.set(undefined),
@@ -72,6 +82,22 @@ export class ListingDetail implements OnInit, OnDestroy {
   goBack(event: Event): void {
     event.preventDefault();
     this.navHistory.goBack('/listings');
+  }
+
+  onDelete(listing: Listing): void {
+    if (!confirm('Delete this listing? This cannot be undone.')) return;
+
+    this.listingService.deleteListing(listing.id).subscribe({
+      next: () => {
+        console.log('Delete request completed for listing:', listing.id);
+        void this.images.remove(listing.imageUrl);
+        this.navHistory.goBack('/listings');
+      },
+      error: (error) => {
+        console.error('Delete failed:', error);
+        alert('Could not delete the listing. Check the console for details.');
+      },
+    });
   }
 
   ngOnDestroy(): void {
