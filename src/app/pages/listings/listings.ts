@@ -11,7 +11,6 @@ import {
 import { Listing } from '../../models/listing.models';
 import { ListingType } from '../../models/listing.models';
 import { ListingService } from '../../services/listing';
-import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ListingCard } from '../../components/listing-card/listing-card';
 import { FavoritesService } from '../../services/favorites';
 import {
@@ -36,8 +35,6 @@ type StatusFilter = ListingStatus | 'active' | 'all';
   imports: [
     Header,
     MoonMap,
-    CurrencyPipe,
-    DatePipe,
     ListingCard,
     ReactiveFormsModule,
     FormsModule,

@@ -8,7 +8,7 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ListingService } from '../../services/listing';
 import { Coordinates } from '../../models/listing.models';
 import { Listing, ListingStatus } from '../../models/listing.models';
@@ -22,7 +22,7 @@ import { ImageService } from '../../services/image';
 import { ProfileService } from '../../services/profile';
 
 @Component({
-  imports: [Header, ReactiveFormsModule, RouterLink, RouterLinkActive, MoonMap, Footer],
+  imports: [Header, ReactiveFormsModule, RouterLink, MoonMap, Footer],
   selector: 'app-publish',
   styleUrl: './publish.css',
   templateUrl: './publish.html',
